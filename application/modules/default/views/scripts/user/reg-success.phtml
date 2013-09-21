@@ -1,0 +1,17 @@
+<?php
+
+?>
+<div class="memberRegistry">
+	<div class="title">
+		<?php echo $this->Title;?>
+	</div>
+	<div class="registryForm">
+	<?php
+	if(count($this->userInfo) == 0){ 
+	?>
+		<p style="font-size: 16px; padding: 20px 0 10px; color: #1D437C; text-align: center;">Bạn đã kích hoạt tài khoản thành công. Bây giờ bạn có thể <a href="<?php echo $this->baseUrl('login.html')?>" rel="nofollow">đăng nhập</a> vào quản lý tài khoản</p>
+	<?php
+	} 
+	?>
+	</div>
+</div>

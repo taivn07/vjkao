@@ -1,0 +1,148 @@
+<?php
+	//----------------------- INPUT ELEMENTS -------------------//
+	$lang_code		= $this->Item['lang_code'];
+	$name 			= $this->Item['name'];
+	$picture 		= '';
+	if($this->Item['picture'] != ''){
+		//$picture	= '<img src="' . $this->Item['picture'] . '" style="width:100px;">';
+		$imgName = explode('/editor-upload/images/', $this->Item['picture']);
+		$picture	= '<img src="' . APPLICATION_URL . '/default/public/view-image/width/100/height/100/images/' . $imgName[1] . '">';
+	}
+	$status 		= $this->Item['status'];
+	if($status == 1){
+		$status = $this->cmsIconButton('Đang được hiển thị', $this->imgUrl . '/admin/tick.png');
+	}else{
+		$status = $this->cmsIconButton('Đã tắt hiển thị', $this->imgUrl . '/admin/publish_x.png');
+	}
+	
+	$order 			= $this->Item['order'];
+	$selectCategory	= $this->Item['category_name'];
+	
+	$created_by 	= $this->Item['user_name'];
+	$created 		= Zend_Locale_Format::getDateTime($this->Item['created'],array('date_format'=>'yyyy-MM-dd HH:mm:ss'));
+	
+	$modified_by 	= $this->Item['modified_by'];
+	$modified 		= Zend_Locale_Format::getDateTime($this->Item['modified'],array('date_format'=>'yyyy-MM-dd HH:mm:ss'));
+	$author 		= $this->Item['author'];
+	$synopsis		= $this->Item['synopsis'];
+	
+	$content 		= htmlspecialchars_decode($this->Item['content']);
+	
+	$arrInput = array(
+				array('label' => 'Ngôn ngữ','input' => $lang_code),
+				array('label' => 'Tiêu đề','input' => $name),
+				array('label' => 'Hình ảnh minh họa','input' => $picture),
+				array('label' => 'Thuộc danh mục','input' => $selectCategory),
+				array('label' => 'Hiển thị','input' => $status),
+				array('label' => 'Thứ tự','input' => $order),
+				array('label' => 'Tác giả','input' => $author),
+				array('label' => 'Tạo bởi','input' => $created_by),
+				array('label' => 'Ngày tạo','input' => $created['day'].'/'.$created['month'].'/'.$created['year'].' '.$created['hour'].':'.$created['minute'].':'.$created['second']),
+				array('label' => 'Chỉnh sửa bởi','input' => $modified_by),
+				array('label' => 'Ngày chỉnh sửa','input' => $modified['day'].'/'.$modified['month'].'/'.$modified['year'].' '.$modified['hour'].':'.$modified['minute'].':'.$modified['second']),
+				array('label' => 'Giới thiệu ngắn:','input' => $synopsis, 'style' => 'margin-top: 22px;margin-left: 50px;'),
+				array('label' => 'Nội dung','input' => $content, 'style' => 'margin-top: 22px;margin-left: 50px;'),
+			);
+	
+	//--------------------- Blocks ---------------------
+	$option 			= array('Không','Có');
+	$blockNoiBat 		= $this->Item['block_noibat'];
+	if($blockNoiBat == 1){
+		$blockNoiBat = $this->cmsIconButton('Đang kích hoạt', $this->imgUrl . '/admin/tick.png');
+	}else{
+		$blockNoiBat = $this->cmsIconButton('Không kích hoạt', $this->imgUrl . '/admin/publish_x.png');
+	}
+	
+	$blockHot 		= $this->Item['block_hot'];
+	if($blockHot == 1){
+		$blockHot = $this->cmsIconButton('Đang kích hoạt', $this->imgUrl . '/admin/tick.png');
+	}else{
+		$blockHot = $this->cmsIconButton('Không kích hoạt', $this->imgUrl . '/admin/publish_x.png');
+	}
+	
+	$arrBlock = array(
+			array('label' => 'Tin nổi bật','input' => $blockNoiBat),
+			array('label' => 'Tin hot','input' => $blockHot),
+	);
+
+	//--------------------- Meta Options ---------------------
+	$alias 				= $this->formText ( 'alias', $this->Item['alias'], array ('style' => 'width:319px;' ) );
+	$tags		 		= $this->formTextarea('tags',$this->Item['tags'],array('rows'=>2,'cols'=>47));
+	$meta_title 		= $this->formTextarea('meta_title',$this->Item['meta_title'],array('rows'=>2,'cols'=>47));
+	$meta_description 	= $this->formTextarea('meta_description',$this->Item['meta_description'],array('rows'=>3,'cols'=>47));
+	$meta_keywords 		= $this->formTextarea('meta_keywords',$this->Item['meta_keywords'],array('rows'=>3,'cols'=>47));
+	
+	$arrMeta = array(
+			array('label' => 'Liên kết tĩnh','input' => $alias),
+			array('label' => 'Tags','input' => $tags,'desc'=>'Mỗi Tags phân biệt nhau với dấu phẩy','style'=>'text-align: right'),
+			array('label' => 'Meta Title','input' => $meta_title),
+			array('label' => 'Meta Description','input' => $meta_description),
+			array('label' => 'Meta Keywords','input' => $meta_keywords),
+		);
+	
+	//-------------------- SESSAGES ERROR ------------------
+	if(count($this->messageError)>0){
+		$errors = $this->formErrors($this->messageError,array('id'=>'errors'));
+	}
+?>
+<form name="appForm" method="post" action="" enctype="multipart/form-data">
+	<?php echo $this->render('admin-album/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-album/sublink/index.php');?>
+	<?php echo $errors;?>
+
+	<!-- BEGIN: CONTENT -->
+	<div id="element-box">
+		<div class="t">
+			<div class="t">
+				<div class="t"></div>
+			</div>
+		</div>
+		<div class="m">
+			<!-- BEGIN: ELEMENT BOX -->
+			<div class="width-60 fltlft">
+				<fieldset class="adminform">
+					<legend>Chi tiết</legend>
+					<ul class="adminformlist">
+						<?php echo $this->partialLoop('row.php', $arrInput);?>
+					</ul>
+				</fieldset>
+			</div>
+			<div class="width-40 fltrt">
+				<div id="pane-sliders" class="pane-sliders">
+				
+					<div class="panel">
+						<h3 id="metadata-options" class="title pane-toggler-down"><a href="javascript:void(0);"><span>Sản phẩm thuộc các block</span></a></h3>
+						<div class="panel_content">
+							<fieldset class="panelform">
+								<ul class="adminformlist">
+									<?php echo $this->partialLoop('row.php', $arrBlock);?>
+								</ul>
+							</fieldset>
+						</div>
+					</div>
+					
+					<div class="panel">
+						<h3 id="metadata-options" class="title pane-toggler-down"><a href="javascript:void(0);"><span>Cấu hình dữ liệu nâng cao</span></a></h3>
+						<div class="panel_content">
+							<fieldset class="panelform">
+								<ul class="adminformlist">
+									<?php echo $this->partialLoop('row.php', $arrMeta);?>
+								</ul>
+							</fieldset>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			<div class="clr"></div>
+			<!-- END: ELEMENT BOX -->
+		</div>
+		<div class="b">
+			<div class="b">
+				<div class="b"></div>
+			</div>
+		</div>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

@@ -1,0 +1,67 @@
+<div class="block_thongTinTaiKhoan">
+	<form name="appForm" method="post" action="" enctype="multipart/form-data">
+		<div class="block_title">
+			<?php echo $this->Title;?>
+		</div>
+		<div class="block_content">
+			<table class="userlist">
+				<tr>
+					<th width="25">STT</th>
+					<th width="70">Hình ảnh</th>
+					<th>Tên sản phẩm</th>
+					<th>Giá</th>
+				</tr>
+				<?php
+					$totalPrice = 0;
+					foreach ($this->Item['product'] as $key => $val){
+						$id 			= $val['product_id'];
+						$name 			= $val['product_name'];
+						$alias 			= $val['alias'];
+						$cat_id 		= $val['cat_id'];
+						$shop_id		= $val['shop_id'];
+						$quantity		= $val['quantity'];
+						$picture		= $val['picture'];
+						$thumb			= $val['thumb'];
+						if($thumb != ''){
+							$picture = $thumb;
+						}
+						$units_money	= $val['units_money'];
+						$price = '';
+						if($val['price'] != 0){
+							$price = Zend_Locale_Format::toNumber($val['price'],array('precision' => 0)) . ' ' . $units_money;
+						}
+							
+						$thanhtien = Zend_Locale_Format::toNumber($quantity * $val['price'],array('precision' => 0)) . ' ' . $units_money;
+						$totalPrice += $quantity * $val['price'];
+							
+						$urlOptions = array (
+							'module' => 'shopping',
+							'controller' => 'index',
+							'action' => 'detail',
+							'tcat' => $val ['category_alias'],
+							'title' => $val ['alias'],
+							'cid' => $val ['cat_id'],
+							'id' => $val ['product_id'] );
+						$linkDetial = $this->url( $urlOptions, 'shop-detail' );
+						
+						$alias = '<p class="smallsub">(Alias: ' . $val['alias'] . ' )</p>';
+						$name 	= '<b><a href="' . $linkDetial . '" target="_blank">' . $name . '</a></b>';
+						$classRow = 'row1';
+						if($key % 2 == 0)
+							$classRow = 'row0';
+								
+				?>
+				<tr class="<?php echo $classRow;?>">
+					<td align="center"><?php echo $key + 1;?></td>
+					<td align="center"><img src="<?php echo $picture;?>" style="width: 66px;"></td>
+					<td align="left"><?php echo $name;?></td>
+					<td align="center"><?php echo $price;?></td>
+				</tr>
+				<?php
+					} 
+				?>
+			</table>
+			<div class="clr"></div>
+		</div>
+	</form>
+</div>

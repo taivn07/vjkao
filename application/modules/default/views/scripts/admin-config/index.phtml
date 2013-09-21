@@ -1,0 +1,251 @@
+<?php
+	//----------------------- INPUT ELEMENTS -------------------//
+
+	$config_sitename 		= $this->formText('config_sitename',$this->siteSettings['config_site']['sitename'], array ('class' => 'txtlong active'));
+	
+	$option 		= array('Không','Có');
+	if(isset($this->siteSettings['config_site']['offline'])){
+		$config_offline = $this->siteSettings['config_site']['offline'];
+	}else{
+		$config_offline = 0;
+	}
+	$config_offline 		= $this->formRadio('config_offline',$config_offline,null,$option, ' ');
+	$config_offline_message = $this->formTextarea('config_offline_message',$this->siteSettings['config_site']['offline_message'],array('rows'=>2,'class'=>'textarea'));
+	
+	$config_site_domain 	= $this->formText ( 'config_site_domain', $this->siteSettings['config_site']['site_domain'], array ('class' => 'txtlong') );
+	$config_site_url 		= $this->formText ( 'config_site_url', $this->siteSettings['config_site']['site_url'], array ('class' => 'txtlong') );
+	$config_site_dir 		= $this->formText ( 'config_site_dir', $this->siteSettings['config_site']['site_dir'], array ('class' => 'txtlong') );
+	
+	$logo					= '<div><img src="' . $this->imgUrl . '/no-avatar.png" id="image_config_site_logo" class="hinh-anh"></div>';
+	if(!empty($this->siteSettings['config_site']['site_logo'])){
+		$logo				= '<div><img src="' . $this->siteSettings['config_site']['site_logo'] . '" id="image_config_site_logo" class="hinh-anh"></div>';
+	}
+	$config_site_logo 		= $this->cmsUserFiles('config_site_logo', $this->siteSettings['config_site']['site_logo'], 'Chọn ảnh', 'images', $options = array('class' => 'txtfile') ) . $logo ;
+	
+	$language = new Zend_Session_Namespace('language');
+	$lang_code = $language->lang;
+	if(isset($this->Item['lang_code'])){
+		$lang_code = $this->Item['lang_code'];
+	}
+	$selectLanguages 		= $this->formSelect('config_site_language_default',$lang_code,null,$this->slbLanguages);
+	$config_site_cache 		= $this->formText ( 'config_site_cache', $this->siteSettings['config_site']['site_cache'], array ('class' => 'txtshort') );
+	
+	$arrConfigSite = array(
+				array('label' => 'Tên Site','input' => $config_sitename),
+				array('label' => 'Ngưng hoạt động site','input' => $config_offline),
+				array('label' => 'Nội dung thông báo','input' => $config_offline_message),
+				array('label' => 'Tên miền site','input' => $config_site_domain),
+				array('label' => 'Đường dẫn site','input' => $config_site_url),
+				array('label' => 'Thư mục chứa site','input' => $config_site_dir),
+				array('label' => 'Logo','input' => $config_site_logo),
+				array('label' => 'Ngôn ngữ mặc định','input' => $selectLanguages,'desc' => 'Ngôn ngữ mặc định của hệ thống'),
+				array('label' => 'Thời gian cache','input' => $config_site_cache,'desc' => 'Giây'),
+			);
+	
+	$meta_description 	= $this->formTextarea('meta_description',$this->siteSettings['config_meta']['description'],array('rows'=>2,'class'=>'textarea'));
+	$meta_keywords 		= $this->formTextarea('meta_keywords',$this->siteSettings['config_meta']['keywords'],array('rows'=>2,'class'=>'textarea'));
+	$meta_refresh 		= $this->formText ( 'meta_refresh', $this->siteSettings['config_meta']['refresh'], array ('class' => 'txtshort') );
+	$slbRobots			= array(
+									'index, follow, all' => 'Index, Follow, All',
+									'noindex, follow' => 'No index, follow',
+									'index, nofollow' => 'Index, No follow',
+									'noindex, nofollow' => 'No index, no follow',
+							);
+	$meta_robots		= $this->formSelect('meta_robots',$this->siteSettings['config_meta']['robots'],array(),$slbRobots);
+	$meta_language 		= $this->formText ( 'meta_language', $this->siteSettings['config_meta']['language'], array ('style' => 'width:200px;') );
+	$meta_content_language 	= $this->formText ( 'meta_content_language', $this->siteSettings['config_meta']['content_language'], array ('style' => 'width:200px;') );
+	$meta_author 		= $this->formText ( 'meta_author', $this->siteSettings['config_meta']['author'], array ('style' => 'width:200px;') );
+	$meta_revisit_after	= $this->formText ( 'meta_revisit_after', $this->siteSettings['config_meta']['revisit_after'], array ('class' => 'txtshort') );
+	$meta_copyright 	= $this->formText ( 'meta_copyright', $this->siteSettings['config_meta']['copyright'], array ('class' => 'txtlong') );
+	$meta_classification = $this->formTextarea('meta_classification',$this->siteSettings['config_meta']['classification'],array('rows'=>2,'class'=>'textarea'));
+	$arrConfigMeta = array(
+				array('label' => 'Meta Description','input' => $meta_description),
+				array('label' => 'Meta Keywords','input' => $meta_keywords),
+				array('label' => 'Thời gian tải lại trang','input' => $meta_refresh,'desc'=>'Giây'),
+				array('label' => 'Robots','input' => $meta_robots),
+				array('label' => 'Meta Language','input' => $meta_language),
+				array('label' => 'Content Language','input' => $meta_content_language),
+				array('label' => 'Meta Author','input' => $meta_author),
+				array('label' => 'Meta Revisit Afte','input' => $meta_revisit_after),
+				array('label' => 'Meta Copyright','input' => $meta_copyright),
+				array('label' => 'Meta Classification','input' => $meta_classification),
+			);
+	
+	$company_name 		= $this->formText ( 'company_name', $this->siteSettings['config_company']['name'], array ('class' => 'textlong') );
+	$company_address 	= $this->formText ( 'company_address', $this->siteSettings['config_company']['address'], array ('class' => 'textlong') );
+	$company_tell 		= $this->formText ( 'company_tell', $this->siteSettings['config_company']['tell'], array ('class' => 'textlong') );
+	$company_fax 		= $this->formText ( 'company_fax', $this->siteSettings['config_company']['fax'], array ('class' => 'textlong') );
+	$company_hotline 	= $this->formText ( 'company_hotline', $this->siteSettings['config_company']['hotline'], array ('class' => 'textlong') );
+	$company_email 		= $this->formText ( 'company_email', $this->siteSettings['config_company']['email'], array ('class' => 'textlong') );
+	$company_slogan		= $this->formText ( 'company_slogan', $this->siteSettings['config_company']['slogan'], array ('class' => 'textlong') );
+	$company_yahoo		= $this->formText ( 'company_yahoo', $this->siteSettings['config_company']['yahoo'], array ('class' => 'textlong') );
+	$company_skype		= $this->formText ( 'company_skype', $this->siteSettings['config_company']['skype'], array ('class' => 'textlong') );
+	$company_facebook	= $this->formText ( 'company_facebook', $this->siteSettings['config_company']['facebook'], array ('class' => 'textlong') );
+	$company_google		= $this->formText ( 'company_google', $this->siteSettings['config_company']['google'], array ('class' => 'textlong') );
+	$company_youtube	= $this->formText ( 'company_youtube', $this->siteSettings['config_company']['youtube'], array ('class' => 'textlong') );
+	$company_twitter	= $this->formText ( 'company_twitter', $this->siteSettings['config_company']['twitter'], array ('class' => 'textlong') );
+	
+	$arrCompany = array(
+			array('label' => 'Tên doanh nghiệp','input' => $company_name),
+			array('label' => 'Địa chỉ','input' => $company_address),
+			array('label' => 'Điện thoại','input' => $company_tell),
+			array('label' => 'Fax','input' => $company_fax),
+			array('label' => 'Hotline','input' => $company_hotline),
+			array('label' => 'Email','input' => $company_email),
+			array('label' => 'Slogan','input' => $company_slogan),
+			array('label' => 'Yahoo','input' => $company_yahoo),
+			array('label' => 'Skype','input' => $company_skype),
+			array('label' => 'Link Facebook','input' => $company_facebook),
+			array('label' => 'Link Google','input' => $company_google),
+			array('label' => 'Link Youtube','input' => $company_youtube),
+			array('label' => 'Link Twitter','input' => $company_twitter),
+		);
+	
+	$option 		= array('Không','Có');
+	if(isset($this->siteSettings['config_mail']['status'])){
+		$mail_status = $this->siteSettings['config_mail']['status'];
+	}else{
+		$mail_status = 0;
+	}
+	$mail_status		= $this->formRadio('mail_status',$mail_status,null,$option, ' ');
+	$slbMailer			= array(
+			'mail' => 'PHP Mail',
+			'smtp' => 'SMTP',
+	);
+	$mail_mailer 		= $this->formSelect('mail_mailer',$this->siteSettings['config_mail']['mailer'],array(),$slbMailer);
+	$mail_mailfrom 		= $this->formText ( 'mail_mailfrom', $this->siteSettings['config_mail']['mailfrom'], array ('style' => 'width:200px;') );
+	$mail_fromname 		= $this->formText ( 'mail_fromname', $this->siteSettings['config_mail']['fromname'], array ('style' => 'width:200px;') );
+	$mail_tomail 		= $this->formText ( 'mail_tomail', $this->siteSettings['config_mail']['tomail'], array ('style' => 'width:200px;') );
+	$option 		= array('Không','Có');
+	if(isset($this->siteSettings['config_mail']['smtpauth'])){
+		$mail_smtpauth = $this->siteSettings['config_mail']['smtpauth'];
+	}else{
+		$mail_smtpauth = 0;
+	}
+	$mail_smtpauth 		= $this->formRadio('mail_smtpauth',$mail_smtpauth,null,$option, ' ');
+	
+	$slbSecurity		= array(
+			'none' => 'None',
+			'ssl' => 'SSL',
+			'tls' => 'TLS',
+	);
+	$mail_smtpsecure 	= $this->formSelect('mail_smtpsecure',$this->siteSettings['config_mail']['smtpsecure'],array(),$slbSecurity);
+	$mail_smtpport 		= $this->formText('mail_smtpport', $this->siteSettings['config_mail']['smtpport'], array ('style' => 'width:50px;') );
+	$mail_smtpuser 		= $this->formText('mail_smtpuser', $this->siteSettings['config_mail']['smtpuser'], array ('style' => 'width:200px;') );
+	$mail_smtppass 		= $this->formPassword('mail_smtppass', $this->siteSettings['config_mail']['smtppass'], array ('style' => 'width:200px;','aria-invalid'=>"false") );
+	$mail_smtphost 		= $this->formText('mail_smtphost', $this->siteSettings['config_mail']['smtphost'], array ('style' => 'width:200px;') );
+	$arrEmail = array(
+			array('label' => 'Cho phép gửi mail','input' => $mail_status),
+			array('label' => 'Mailer','input' => $mail_mailer),
+			array('label' => 'From email','input' => $mail_mailfrom,'desc' => 'Email gửi thông báo'),
+			array('label' => 'From name','input' => $mail_fromname,'desc' => 'Tên người gửi'),
+			array('label' => 'To email','input' => $mail_tomail,'desc' => 'Email nhận thông báo'),
+			array('label' => 'SMTP Authentication','input' => $mail_smtpauth),
+			array('label' => 'SMTP Security','input' => $mail_smtpsecure),
+			array('label' => 'SMTP Port','input' => $mail_smtpport),
+			array('label' => 'SMTP Username','input' => $mail_smtpuser,'desc' => 'Tài khoản đăng nhập'),
+			array('label' => 'SMTP Password','input' => '<input type="password" value="'.$this->siteSettings['config_mail']['smtppass'].'" id="mail_smtppass" name="mail_smtppass" style="width:200px">','desc' => 'Mật khẩu đăng nhập'),
+			array('label' => 'SMTP Host','input' => $mail_smtphost),
+	);
+	
+	/********* FTP ************/
+	$option 		= array('Không','Có');
+	if(isset($this->siteSettings['config_ftp']['status'])){
+		$ftp_status = $this->siteSettings['config_ftp']['status'];
+	}else{
+		$ftp_status = 0;
+	}
+	$ftp_status		= $this->formRadio('ftp_status',$ftp_status,null,$option, ' ');
+	$ftp_host 		= $this->formText('ftp_host', $this->siteSettings['config_ftp']['host'], array ('style' => 'width:200px;') );
+	$ftp_port 		= $this->formText('ftp_port', $this->siteSettings['config_ftp']['port'], array ('style' => 'width:200px;') );
+	$ftp_username	= $this->formText('ftp_username', $this->siteSettings['config_ftp']['username'], array ('style' => 'width:200px;') );
+	$ftp_password	= $this->formPassword('ftp_password', $this->siteSettings['config_ftp']['password'], array ('style' => 'width:200px;','aria-invalid'=>"false") );
+
+	$arrFtp = array(
+			array('label' => 'Sử dụng FTP','input' => $ftp_status),
+			array('label' => 'FTP Host','input' => $ftp_host),
+			array('label' => 'FTP Port','input' => $ftp_port),
+			array('label' => 'FTP Username','input' => $ftp_username),
+			array('label' => 'FTP Password','input' => '<input type="password" value="'.$this->siteSettings['config_ftp']['password'].'" id="ftp_password" name="ftp_password" style="width:200px">'),
+	);
+	
+	$google_analytics = $this->formText('google_analytics', $this->siteSettings['config_google']['analytics'], array ('class' => 'txtlong') ); 
+	$google_webmaster_tools = $this->formText('google_webmaster_tools', $this->siteSettings['config_google']['webmaster_tools'], array ('class' => 'txtlong') ); 
+	$arrGoogle = array(
+			array('label' => 'Google Analytics','input' => $google_analytics,'desc'=>'Chỉ lấy mã setAccount. Để biết thêm hãy vào mục trợ giúp'),
+			array('label' => 'Webmaster Tool','input' => $google_webmaster_tools,'desc'=>'Chỉ lấy mã content. Để biết thêm hãy vào mục trợ giúp'),
+	);
+	
+	//-------------------- SESSAGES ERROR ------------------
+	if(isset($this->arrParam['type']) == 'ok'){
+		$message = '<div class="message">Cập nhật dữ liệu thành công</div>';
+	}
+?>
+<form name="appForm" method="post" action="" enctype="multipart/form-data">
+	<?php echo $this->render('admin-config/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-config/sublink/index.php');?>
+	<?php echo $message;?>
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<div class="width-60 fl">
+			<fieldset class="adminform">
+				<legend>Cấu hình Site</legend>
+				<table class="adminformlist">
+					<?php echo $this->partialLoop('row.php', $arrConfigSite);?>
+				</table>
+			</fieldset>
+			
+			<fieldset class="adminform">
+				<legend>Cấu hình Meta-Tags</legend>
+				<table class="adminformlist">
+					<?php echo $this->partialLoop('row.php', $arrConfigMeta);?>
+				</table>
+			</fieldset>
+			
+			<fieldset class="adminform">
+				<legend>Google tools</legend>
+				<table class="adminformlist">
+					<?php echo $this->partialLoop('row.php', $arrGoogle);?>
+				</table>
+			</fieldset>
+		</div>
+		<div class="width-40 fr">
+			<div id="pane-sliders" class="pane-sliders">
+				<div class="panel">
+					<h3 id="metadata-options" class="title pane-toggler-down"><a href="javascript:void(0);"><span>Thông tin doanh nghiệp</span></a></h3>
+					<div class="panel_content">
+						<fieldset class="panelform">
+							<table class="panelformlist">
+								<?php echo $this->partialLoop('row.php', $arrCompany);?>
+							</table>
+						</fieldset>
+					</div>
+				</div>
+				<div class="panel" style="margin-top: 15px;">
+					<h3 id="metadata-options" class="title pane-toggler-down"><a href="javascript:void(0);"><span>Cấu hình gửi mail</span></a></h3>
+					<div class="panel_content">
+						<fieldset class="panelform">
+							<table class="panelformlist">
+								<?php echo $this->partialLoop('row.php', $arrEmail);?>
+							</table>
+						</fieldset>
+					</div>
+				</div>
+				<div class="panel" style="margin-top: 15px;">
+					<h3 id="metadata-options" class="title pane-toggler-down"><a href="javascript:void(0);"><span>Cấu hình FTP</span></a></h3>
+					<div class="panel_content">
+						<fieldset class="panelform">
+							<table class="panelformlist">
+								<?php echo $this->partialLoop('row.php', $arrFtp);?>
+							</table>
+						</fieldset>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="clr"></div>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

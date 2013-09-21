@@ -1,0 +1,239 @@
+<?php
+	//----------------------- INPUT ELEMENTS -------------------//
+	$ssFilter 		= $this->arrParam['ssFilter'];
+	$selectLanguages = $ssFilter['lang_code'] . $this->formHidden('lang_code',$ssFilter['lang_code']);
+	$name 			= $this->formText ( 'name', $this->Item['name'], array ('class' => 'txtlong active', 'onchange'=>"get_alias()" ) );
+	$picture		= '<div><img src="' . $this->imgUrl . '/no-avatar.png" id="image_picture" class="hinh-anh"></div>';
+	if(!empty($this->Item['picture'])){
+		$picture	= '<div><img src="' . $this->Item['picture'] . '" id="image_picture" class="hinh-anh"></div>';
+	}
+	$picture 		= $this->cmsUserFiles('picture', $this->Item['picture'], 'Chọn ảnh', 'images', $options = array('class' => 'txtfile') ) . $picture ;
+	$option 		= array('Không','Có');
+	$status 		= $this->formRadio('status',$this->Item['status'],null,$option, ' ');
+	
+	if(isset($this->Item['order'])){
+		$order = $this->Item['order'];
+	}else{
+		$order = 255;
+	}
+	$order 			= $this->formText ( 'order', $order, array ('class' => 'short' ) );
+	$parents		= $this->cmsSelect('parents',$this->Item['parents'],$this->slbCategory,array('style'=>'min-width:200px;'));
+	$content 		= $this->cmsEditor('content',htmlspecialchars_decode($this->Item['content']),array('toolbar'=>'MyToolbar', 'language'=>'vi'));
+
+	$arrInput = array(
+				array('label' => 'Chọn ngôn ngữ','input' => $selectLanguages),
+				array('label' => 'Tên danh mục','input' => $name),
+				array('label' => 'Hình ảnh','input' => $picture),
+				array('label' => 'Thuộc danh mục','input' => '<div id="category">' . $parents . '</div>'),
+				array('label' => 'Hiển thị','input' => $status),
+				array('label' => 'Thứ tự','input' => $order),
+				array('label' => 'Nội dung','input' => $content,'cols' => 2,'style' => 'padding-top:0;'),
+			);
+	
+	//--------------------- Blocks ---------------------
+	$option 			= array('Không','Có');
+	if(isset($this->Item['block_left'])){
+		$trangthai = $this->Item['block_left'];
+	}else{
+		$trangthai = 0;
+	}
+	$blockLeft		= $this->formRadio('block_left',$trangthai,null,$option, ' ');
+	
+	if(isset($this->Item['block_right'])){
+		$trangthai = $this->Item['block_right'];
+	}else{
+		$trangthai = 0;
+	}
+	$blockRight			= $this->formRadio('block_right',$trangthai,null,$option, ' ');
+	
+	if(isset($this->Item['block_body'])){
+		$trangthai = $this->Item['block_body'];
+	}else{
+		$trangthai = 0;
+	}
+	$blockBody			= $this->formRadio('block_body',$trangthai,null,$option, ' ');
+	
+	$arrBlock = array(
+			array('label' => 'Cột trái','input' => $blockLeft),
+			array('label' => 'Cột phải','input' => $blockRight),
+			array('label' => 'Trang chủ','input' => $blockBody),
+	);
+	
+	//--------------------- Meta Options ---------------------	
+	$alias 				= $this->formText ( 'alias', $this->Item['alias'], array ('class' => 'textlong') );
+	$tags		 		= $this->formTextarea('tags',$this->Item['tags'],array('rows'=>2,'class' => 'txtalong'));
+	$meta_title 		= $this->formTextarea('meta_title',$this->Item['meta_title'],array('rows'=>2,'class' => 'txtalong'));
+	$meta_description 	= $this->formTextarea('meta_description',$this->Item['meta_description'],array('rows'=>3,'class' => 'txtalong'));
+	$meta_keywords 		= $this->formTextarea('meta_keywords',$this->Item['meta_keywords'],array('rows'=>3,'class' => 'txtalong'));
+	
+	$arrMeta = array(
+			array('label' => 'Liên kết tĩnh','input' => $alias),
+			array('label' => 'Meta Title','input' => $meta_title),
+			array('label' => 'Meta Description','input' => $meta_description),
+			array('label' => 'Meta Keywords','input' => $meta_keywords),
+	);
+	
+	//-------------------- SESSAGES ERROR ------------------
+	if(count($this->messageError)>0){
+		$errors = $this->formErrors($this->messageError,array('id'=>'errors'));
+	}
+?>
+<form name="appForm" method="post" action="" enctype="multipart/form-data">
+	<?php echo $this->render('admin-category/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-category/sublink/index.php');?>
+	<?php echo $errors;?>
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<div class="width-60 fl">
+			<script>
+				$(document).ready(function() {
+					$(".tabs-nav li:first a").addClass('selected');
+					$(".tabs:first").css('display','block');
+				    $(".tabs-nav li a").click(function() {
+				        $(".tabs-nav li a").removeClass('selected');
+				        $(this).addClass('selected');
+				        $(".tabs").css('display','none');
+				        $($(this).attr("rel")).css('display','block');
+				        
+				    	return false;
+				    });
+				});
+			</script>
+			<ul class="tabs-nav clearfix">
+				<li><a rel="#tabs-1" href="javascript:void(0)">Thông tin chung</a></li>
+				<!-- <li><a rel="#tabs-2" href="javascript:void(0)">Thuộc tính</a></li> -->
+				<li><a rel="#tabs-3" href="javascript:void(0)">Hình ảnh</a></li>
+				<!-- <li><a rel="#tabs-4" href="javascript:void(0)">Video</a></li> -->
+			</ul>
+			<fieldset class="adminform tabs" id="tabs-1">
+				<table class="adminformlist">
+					<?php echo $this->partialLoop('row.php', $arrInput);?>
+				</table>
+			</fieldset>
+			<fieldset class="adminform tabs" id="tabs-2">
+				<ul class="adminformlist">
+					<li>Thuộc tính</li>
+				</ul>
+			</fieldset>
+			<fieldset class="adminform tabs" id="tabs-3">
+				<ul class="adminformlist" id="imagelist">
+				<?php
+					$numberImage = 0;
+					if($this->Item['picture_multi'] != ''){
+						$this->Item['picture_multi'] = unserialize($this->Item['picture_multi']);
+					}else{
+						$this->Item['picture_multi'] = array();
+					}
+					if(count($this->Item['picture_multi']) > 0){
+						$numberImage = count($this->Item['picture_multi']);
+						foreach($this->Item['picture_multi'] AS $key => $val){
+				?>
+					<li id="picture<?php echo $key;?>">
+						<script type="text/javascript">
+						function openKCFinder<?php echo $key;?>(field) {
+							$('#formLoading').removeClass().addClass('loading').fadeIn();
+							window.KCFinder = {
+								callBack: function(url) {
+									field.value = url;
+									window.KCFinder = null;
+									document.getElementById('image_picture_multi<?php echo $key;?>').src = url;
+								}
+							};
+							window.open('<?php echo SCIPTS_URL . '/media_files/browse.php?type=images&lng=vi';?>', 'kcfinder_textbox','status=0, toolbar=0, location=0, menubar=0, directories=0,resizable=1, scrollbars=0, width=950, height=450' );
+							$('#formLoading').removeClass().fadeOut();
+						}</script>
+						<div>
+							<input value="<?php echo $val[0];?>" type="text" name="picture_multi[]" id="picture_multi<?php echo $key;?>" class="txtfile"><a href="javascript:void(0);" onclick="openKCFinder<?php echo $key;?>(appForm.picture_multi<?php echo $key;?>)" class="btnMedia">Chọn ảnh</a><span class="pdl20">Thứ tự <input type="text" name="orderImage[]" style="width: 50px;" value="<?php echo $val[1];?>"></span><span class="pdl20"><a href="javascript:void(0);" onclick="javascript:Delete(<?php echo $key;?>);">[Xóa]</a></span>
+						</div>
+						<div><img src="<?php echo $val[0];?>" style="width: 60px;" id="image_picture_multi<?php echo $key;?>"></div>
+						<div class="clr"></div>
+					</li>
+				<?php
+					}
+				} 
+				?>
+				</ul>
+				<div class="fr">
+					<a href="javascript:void(0);" onclick="creatImage()" class="btnMedia">Thêm ảnh</a>
+				</div>
+				<input type="hidden" name="numberImage" id="numberImage" value="<?php echo $numberImage;?>">
+				<script type="text/javascript">
+					function creatImage(){
+						//alert('hic');
+						var picture = '<li id="picture{i}">'+
+							'<script type="text/javascript">'+
+							'function openKCFinder{i}(field) {'+
+								'$(\'#formLoading\').removeClass().addClass(\'loading\').fadeIn();'+
+								'window.KCFinder = {'+
+									'callBack: function(url) {'+
+										'field.value = url;'+
+										'window.KCFinder = null;'+
+										'document.getElementById(\'image_picture_multi{i}\').src = url;'+
+									'}'+
+								'};'+
+								'window.open(\'<?php echo SCIPTS_URL . '/media_files/browse.php?type=images&lng=vi';?>\', \'kcfinder_textbox\',\'status=0, toolbar=0, location=0, menubar=0, directories=0,resizable=1, scrollbars=0, width=950, height=450\');'+
+								'$(\'#formLoading\').removeClass().fadeOut();'+
+							'}<\/script>'+
+							'<div>'+
+								'<input value="" type="text" name="picture_multi[]" id="picture_multi{i}" class="txtfile">'+
+								'<a href="javascript:void(0);" onclick="openKCFinder{i}(appForm.picture_multi{i})" class="btnMedia">Chọn ảnh</a>'+
+								'<span class="pdl20">Thứ tự <input type="text" name="orderImage[]" style="width: 50px;" value="0"></span>'+
+								'<span class="pdl20">'+
+									'<a href="javascript:void(0);" onclick="javascript:Delete({i});">[Xóa]</a>'+
+								'</span>'+
+							'</div>'+
+							'<div class="clr"></div>'+
+							'<div><img src="<?php echo $this->imgUrl . '/no-avatar.png';?>" id="image_picture_multi{i}" class="hinh-anh" style="width: 60px;"></div>'+
+						'</li>';
+						var i = parseInt($('#numberImage').val());
+						var str = picture;
+						str = str.replace(/{i}/gi,i);
+						str = str.replace(/{i2}/gi,i+1);
+						$('#imagelist').append(str);
+						$('#numberImage').val(i+1);
+					}
+					function Delete(i) {
+						$('#picture'+i).remove();
+					}
+				</script>
+			</fieldset>
+			<fieldset class="adminform tabs" id="tabs-4">
+				<ul class="adminformlist">
+					<li>Video</li>
+				</ul>
+			</fieldset>
+		</div>
+		<div class="width-40 fr">
+
+			<div id="pane-sliders" class="pane-sliders">
+				
+				<div class="panel">
+					<h3 id="metadata-options" class="title pane-toggler-down"><a href="javascript:void(0);"><span>Danh mục thuộc các block</span></a></h3>
+					<div class="panel_content">
+						<fieldset class="panelform">
+							<table class="panelformlist">
+								<?php echo $this->partialLoop('row.php', $arrBlock);?>
+							</table>
+						</fieldset>
+					</div>
+				</div>
+				
+				<div class="panel">
+					<h3 id="metadata-options" class="title pane-toggler-down"><a href="javascript:void(0);"><span>Metadata Options</span></a></h3>
+					<div class="panel_content">
+						<fieldset class="panelform">
+							<table class="panelformlist">
+								<?php echo $this->partialLoop('row.php', $arrMeta);?>
+							</table>
+						</fieldset>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		<div class="clr"></div>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

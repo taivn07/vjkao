@@ -1,0 +1,136 @@
+<?php
+	//Xay dung tim kiem
+	$ssFilter 		= $this->arrParam['ssFilter'];
+	$page = '';
+	if(isset($this->arrParam['page'])){
+		$page = '/page/' . $this->arrParam['page'];
+	}
+	$action_link 	= $this->baseUrl($this->currentController . '/filter/type/order');
+	$lblName 		= $this->cmsLinkSort('Tên thuộc tính','pa.name',$ssFilter,$this->imgUrl . '/admin',$action_link);
+	$lblCategoryName= $this->cmsLinkSort('Nhóm thuộc tính','category_name',$ssFilter,$this->imgUrl . '/admin',$action_link);
+	$lblID 			= $this->cmsLinkSort('ID','pa.id',$ssFilter,$this->imgUrl . '/admin',$action_link);
+	$lblStatus 		= $this->cmsLinkSort('Status','pa.status',$ssFilter,$this->imgUrl . '/admin',$action_link);
+	$lblOrder 		= $this->cmsLinkSort('Order','pa.order',$ssFilter,$this->imgUrl . '/admin',$action_link);
+	$lblLanguage	= $this->cmsLinkSort('Ngôn ngữ','pa.lang_code',$ssFilter,$this->imgUrl . '/admin',$action_link);
+	
+	$keywords = $this->formText('keywords',$ssFilter['keywords'],array('class'=>'txtshort'));
+	
+	$linkSearch = $this->baseUrl($this->currentController . '/filter/type/search/key/1');
+	$btnSerach = $this->formButton('search-now','Tìm',array('onclick'=>"OnSubmitForm('" .$linkSearch . "')"));
+	
+	$linkResetSearch = $this->baseUrl($this->currentController . '/filter/type/search/key/0');
+	$btnResetSerach = $this->formButton('clear-keywords','Xóa',array('onclick'=>"OnSubmitForm('" .$linkResetSearch ."')"));
+	
+	$strSearch = $keywords . ' ' . $btnSerach . ' ' . $btnResetSerach;
+	
+	//---------------------GROUP SELECTBOX --------------------//
+	$linkSlbAttributeCategory = $this->baseUrl($this->currentController . '/filter/type/cat_id');
+	$selectAttributeCategory = $this->formSelect('cat_id',$ssFilter['cat_id'],array('onchange'=>"OnSubmitForm('" .$linkSlbAttributeCategory ."')"),$this->slbAttributeCategory);
+
+	$selectLanguages = $this->slbLanguages;
+	$linkSlbLanguages = $this->baseUrl($this->currentController . '/filter/type/lang');
+	$selectLanguages = $this->formSelect('lang_code',$ssFilter['lang_code'],array('onchange'=>"OnSubmitForm('" .$linkSlbLanguages ."')"),$selectLanguages);
+	
+	$strSearchRight = $selectAttributeCategory . ' ' .$selectLanguages;
+?>
+<form name="appForm" method="post" action="">
+	<?php echo $this->render('admin-attribute/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-attribute/sublink/index.php');?>	
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<div class="block_filter">
+			<div class="fl">
+				<?php echo $strSearch;?>
+			</div>
+			<div class="fr">
+				<?php echo $strSearchRight;?>
+			</div>
+			<div class="clr"></div>
+		</div>
+		<table class="adminlist">
+			<tr>
+				<th width="30">#</th>
+				<th width="43">
+					<input type="checkbox" name="checkbox" id="checkbox" onclick="checkedAll()">
+				</th>
+				<th><?php echo $lblName;?></th>
+				<th><?php echo $lblCategoryName;?></th>
+				<th width="60"><?php echo $lblStatus;?></th>
+				<th width="60"><?php echo $lblOrder;?></th>
+				<th width="70">Control</th>
+				<th width="70"><?php echo $lblLanguage;?></th>
+				<th width="34"><?php echo $lblID;?></th>
+			</tr>
+			<?php
+				foreach ($this->Items as $key => $val){
+					$id 			= $val['id'];
+					$name 			= $val['name'];
+					$lang_code		= $val['lang_code'];
+					$category_name	= $val['category_name'];
+					
+					$status 		= $val['status'];
+					if($status == 1){
+						$linkStatus = $this->baseUrl($this->currentController . '/status/type/0/id/' . $id . $page);
+						$status = $this->cmsIconButton('Kích vào để tắt', $this->imgUrl . '/admin/tick.png', $linkStatus);
+					}else{
+						$linkStatus = $this->baseUrl($this->currentController . '/status/type/1/id/' . $id . $page);
+						$status = $this->cmsIconButton('Kích vào để bật', $this->imgUrl . '/admin/publish_x.png', $linkStatus);
+					}
+					
+					$order 			= $this->formText('order[' . $val['id'] . ']', $val['order'], array('style'=>'width: 30px; text-align: center;'));
+					
+					$linkInfo		= $this->baseUrl($this->currentController . '/info/id/' . $id . $page);
+					$btnInfo		= $this->cmsIconButton('Xem thông tin', $this->imgUrl . '/admin/icon_info.png', $linkInfo);
+					
+					$linkEdit		= $this->baseUrl($this->currentController . '/edit/id/' . $id . $page);
+					$btnEdit		= $this->cmsIconButton('Sửa', $this->imgUrl . '/admin/icon_edit.png', $linkEdit);
+					
+					$linkDelete		= $this->baseUrl($this->currentController . '/delete/id/' . $id . $page);
+					$btnDelete		= $this->cmsIconButton('Xóa', $this->imgUrl . '/admin/publish_r.png', $linkDelete);
+					
+					$strIconButton 	= $btnEdit . ' ' . $btnDelete;
+					
+					$alias = '<p class="smallsub">(Alias: ' . $val['alias'] . ' )</p>';
+					$name 	= '<b><a href="' . $linkEdit . '">' . $name . '</a></b>';
+					
+					$cid 			= $this->formCheckbox('cid[]',$val['id']);
+					
+					$classRow = 'row1';
+					if($key % 2 == 0)
+						$classRow = 'row0';
+						
+			?>
+			<tr class="<?php echo $classRow;?>">
+				<td align="center"><?php echo $key + 1;?></td>
+				<td align="center"><?php echo $cid;?></td>
+				<td align="left"><?php echo $name;?></td>
+				<td align="center"><?php echo $category_name;?></td>
+				<td align="center"><?php echo $status;?></td>
+				<td align="center"><?php echo $order;?></td>
+				<td align="center"><?php echo $strIconButton;?></td>
+				<td align="center"><?php echo $lang_code;?></td>
+				<td align="center"><?php echo $id;?></td>
+			</tr>
+			<?php
+				} 
+			?>
+			<tr class="tbl_footer">
+				<td colspan="12">
+					<div class="container">
+						<div class="pagination">
+							<?php
+								$currentUrl = $this->baseUrl($this->currentController . '/index');
+								echo $this->paginationControl($this->paginator,'Sliding','pagination.phtml',array('currentUrl'=>$currentUrl)); 
+							?>
+							<div class="limit"></div>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<div class="clr"></div>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

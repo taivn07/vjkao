@@ -1,0 +1,129 @@
+<?php
+	//----------------------- INPUT ELEMENTS -------------------//
+	$ssFilter 		= $this->arrParam['ssFilter'];
+	$selectLanguages = $ssFilter['lang_code'] . $this->formHidden('lang_code',$ssFilter['lang_code']);
+	$name 			= $this->formText ( 'name', $this->Item['name'], array ('class' => 'txtlong active', 'onchange'=>"get_alias()") );
+	$picture		= '<div><img src="' . $this->imgUrl . '/no-avatar.png" id="image_picture" class="hinh-anh"></div>';
+	if(!empty($this->Item['picture'])){
+		$picture	= '<div><img src="' . $this->Item['picture'] . '" id="image_picture" class="hinh-anh"></div>';
+	}
+	$picture 		= $this->cmsUserFiles('picture', $this->Item['picture'], 'Chọn ảnh', 'images', $options = array('class' => 'txtfile') ) . $picture;
+	$option 		= array('Không','Có');
+	if(isset($this->Item['status'])){
+		$trangthai = $this->Item['status'];
+	}else{
+		$trangthai = 1;
+	}
+	$status 		= $this->formRadio('status',$trangthai,null,$option, ' ');
+	if(isset($this->Item['order'])){
+		$order = $this->Item['order'];
+	}else{
+		$order = 255;
+	}
+	$order 			= $this->formText ('order', $order, array ('class' => 'txtshort' ) );
+	$selectCategory	= $this->cmsSelect('cat_id',$this->Item['cat_id'],$this->slbCategory,array('size'=>0,'style'=>'min-width:200px;'));
+	$author 		= $this->formText ( 'author', $this->Item['author'], array ('class' => 'txtmedium') );
+	$synopsis		= $this->formTextarea('synopsis', $this->Item['synopsis'],array('rows'=>4,'class'=>'textarea'));
+	
+	$content 		= $this->cmsEditor('content',htmlspecialchars_decode($this->Item['content']),array('toolbar'=>'MyToolbar', 'language'=>'vi'));
+	
+	$arrInput = array(
+				array('label' => 'Chọn ngôn ngữ','input' => $selectLanguages),
+				array('label' => 'Tiêu đề','input' => $name, 'desc' => '<span class="red">*</span>'),
+				array('label' => 'Hình ảnh minh họa','input' => $picture),
+				array('label' => 'Thuộc danh mục','input' => '<div id="category">' . $selectCategory . '</div>'),
+				array('label' => 'Hiển thị','input' => $status),
+				array('label' => 'Thứ tự','input' => $order),
+				array('label' => 'Tác giả','input' => $author),
+				array('label' => 'Giới thiệu ngắn','input' => $synopsis, 'cols' => 2,'style' => 'padding-top:0;'),
+				array('label' => 'Nội dung','input' => $content, 'cols' => 2,'style' => 'padding-top:0;'),
+			);
+	
+	//--------------------- Blocks ---------------------
+	$option 			= array('Không','Có');
+	if(isset($this->Item['block_noibat'])){
+		$trangthai = $this->Item['block_noibat'];
+	}else{
+		$trangthai = 0;
+	}
+	$blockNoiBat		= $this->formRadio('block_noibat',$trangthai,null,$option, ' ');
+	
+	if(isset($this->Item['block_hot'])){
+		$trangthai = $this->Item['block_hot'];
+	}else{
+		$trangthai = 0;
+	}
+	$blockHot 			= $this->formRadio('block_hot',$trangthai,null,$option, ' ');
+	
+	$arrBlock = array(
+			array('label' => 'Tin nổi bật','input' => $blockNoiBat),
+			array('label' => 'Tin hot','input' => $blockHot),
+	);
+
+	//--------------------- Meta Options ---------------------
+	$alias 				= $this->formText ( 'alias', $this->Item['alias'], array ('class' => 'textlong' ) );
+	$tags		 		= $this->formTextarea('tags',$this->Item['tags'],array('rows'=>2,'class' => 'txtalong'));
+	$meta_title 		= $this->formTextarea('meta_title',$this->Item['meta_title'],array('rows'=>2,'class' => 'txtalong'));
+	$meta_description 	= $this->formTextarea('meta_description',$this->Item['meta_description'],array('rows'=>3,'class' => 'txtalong'));
+	$meta_keywords 		= $this->formTextarea('meta_keywords',$this->Item['meta_keywords'],array('rows'=>3,'class' => 'txtalong'));
+	
+	$arrMeta = array(
+			array('label' => 'Liên kết tĩnh','input' => $alias),
+			array('label' => 'Tags','input' => $tags,'desc'=>'Mỗi Tags phân biệt nhau với dấu phẩy'),
+			array('label' => 'Meta Title','input' => $meta_title),
+			array('label' => 'Meta Description','input' => $meta_description),
+			array('label' => 'Meta Keywords','input' => $meta_keywords),
+		);
+	
+	//-------------------- SESSAGES ERROR ------------------
+	if(count($this->messageError)>0){
+		$errors = $this->formErrors($this->messageError,array('id'=>'errors'));
+	}
+?>
+<form name="appForm" method="post" action="" enctype="multipart/form-data">
+	<?php echo $this->render('admin-item/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-item/sublink/index.php');?>
+	<?php echo $errors;?>
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<div class="width-60 fl">
+			<fieldset class="adminform">
+				<legend>Chi tiết</legend>
+				<table class="adminformlist">
+					<?php echo $this->partialLoop('row.php', $arrInput);?>
+				</table>
+			</fieldset>
+		</div>
+		<div class="width-40 fr">
+			<div id="pane-sliders" class="pane-sliders">
+				
+				<div class="panel">
+					<h3 id="metadata-options" class="title pane-toggler-down"><a href="javascript:void(0);"><span>Danh mục thuộc các block</span></a></h3>
+					<div class="panel_content">
+						<fieldset class="panelform">
+							<table class="panelformlist">
+								<?php echo $this->partialLoop('row.php', $arrBlock);?>
+							</table>
+						</fieldset>
+					</div>
+				</div>
+				
+				<div class="panel">
+					<h3 id="metadata-options" class="title pane-toggler-down"><a href="javascript:void(0);"><span>Metadata Options</span></a></h3>
+					<div class="panel_content">
+						<fieldset class="panelform">
+							<table class="panelformlist">
+								<?php echo $this->partialLoop('row.php', $arrMeta);?>
+							</table>
+						</fieldset>
+					</div>
+				</div>
+					
+			</div>
+		</div>
+		<div class="clr"></div>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

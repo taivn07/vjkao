@@ -1,0 +1,43 @@
+<?php echo $this->render('html/header.php');?>
+	<?php 
+		$siteConfig = Zend_Registry::get('siteConfig');
+	?>
+    <div class="content">
+    	<div class="width_wrapper clearfix">
+    		<?php echo $this->blkMenu('top_menu','top_menu');?>
+    		<?php echo $this->blkHeader();?>
+    		<?php echo $this->blkMenu('main_menu','main_menu');?>
+			<div class="main_content">
+				<div class="left_content">
+            		<?php echo $this->blkProductCategory('view2');?>
+            		<?php echo $this->blkArticleLeft();?>
+            		<?php echo $this->blkAds('thanh-toan',10);?>
+            		<?php echo $this->blkThongKe();?>
+            		<?php echo $this->blkAds('left',2);?>
+            	</div>
+    			<div class="center_content">
+    				<div class="center_khung">
+	    				<?php echo $this->layout()->content;?>
+    				</div>
+    			</div>
+    			<div class="right_content">
+    				<?php echo $this->blkHoTro('view2');?>
+    				<?php echo $this->blkCart();?>
+    				<?php echo $this->blkProductBanChay();?>
+    				<?php echo $this->blkArticleRight();?>
+    				<?php echo $this->blkTienich();?>
+    				<?php echo $this->blkAds('right',3);?>
+    			</div>
+    			<div class="clr"></div>
+            </div>
+            <?php echo $this->blkFooter();?>
+    	</div>
+    </div>
+
+<?php echo $this->blkAds('cuon-phai',8);?>
+<?php echo $this->blkAds('cuon-trai',7);?>
+<?php echo $this->blkAds('goc-phai',9);?>
+<script type="text/javascript">
+	do_scroll('.block_adsScroll','.scroll_l','.scroll_r');
+</script>    
+<?php echo $this->render('html/footer.php');?>

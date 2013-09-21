@@ -1,0 +1,72 @@
+<?php
+
+	$htmlPage = '';
+	if(!empty($this->arrParam['manu'])){
+		$htmlPage .= '&manu=' . $this->arrParam['manu'];
+	}
+	if(!empty($this->arrParam['min'])){
+		$htmlPage .= '&min=' . $this->arrParam['min'];
+	}
+	if(!empty($this->arrParam['max'])){
+		$htmlPage .= '&max=' . $this->arrParam['max'];
+	}
+
+	$linkStart 		= $this->currentUrl . '?page=' . $this->first . $htmlPage;
+	$linkPrevious 	= $this->currentUrl . '?page=' . $this->previous . $htmlPage;
+	$linkNext 		= $this->currentUrl . '?page=' . $this->next . $htmlPage;
+	$linkEnd 		= $this->currentUrl . '?page=' . $this->last . $htmlPage;
+	
+	$current		= $this->current;
+	$pageCount		= $this->pageCount;
+	
+	$strPage = '';
+	foreach ($this->pagesInRange as $key){
+		if( $this->current == $key ){
+			$strPage .= '<span class="active">' . $key . '</span>';
+		}else{
+			$linkPage = $this->currentUrl . '?page=' . $key . $htmlPage;
+			$strPage .= '<span class="link"><a href="' . $linkPage . '" title="Page ' . $key . '">' . $key . '</a></span>';
+		}
+	}
+	
+	$page = 'Page ' . $this->current . ' Of ' . $this->last;
+?>
+<?php
+	if($pageCount > 1){ 
+?>
+<div id="paging">
+	<div>
+		<?php
+			if($current == $this->first)
+			{ 
+		?>
+		
+		<?php
+			}else{ 
+		?>
+		<span class="start"><a href="<?php echo $linkStart;?>" title="Start">Đầu</a></span>
+		<span class="prev"><a href="<?php echo $linkPrevious;?>" title="Prev">Lùi</a></span>
+		<?php
+			} 
+		?>
+		<?php echo $strPage;?>
+		<?php
+			if($current == $pageCount)
+			{ 
+		?>
+		
+		<?php
+			}else{
+		?>
+		<span class="next"><a href="<?php echo $linkNext;?>" title="Next">Tiếp</a></span>
+		<span class="end"><a href="<?php echo $linkEnd;?>" title="End">Cuối</a></span>
+		<?php 
+			}
+		?>
+		<div class="clr"></div>
+	</div>
+	<div class="clr"></div>
+</div>
+<?php
+	} 
+?>

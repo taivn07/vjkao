@@ -1,0 +1,45 @@
+<?php
+	//----------------------- INPUT ELEMENTS -------------------//
+	$ssFilter 		= $this->arrParam['ssFilter'];
+	$linkSlbLanguages = $this->baseUrl($this->currentController . '/ajax-category/id/' . $this->Item['id'] . '/cat_id/' . $this->Item['cat_id']);
+	$selectLanguages= $this->formSelect('lang_code',$ssFilter['lang_code'],array('onchange'=>"loadCategory(this.value)"),$this->slbLanguages);
+	$params		= $this->formTextarea('params', $this->Item['params'],array('rows'=>4,'cols'=>113,'style'=>'width:99%'));
+	$content 		= $this->cmsEditor('content',htmlspecialchars_decode($this->Item['content']),array('toolbar'=>'MyToolbar', 'language'=>'vi'));
+	
+	$arrInput = array(
+				array('label' => 'Nội dung','input' => $content, 'cols' => 2,'style' => 'padding-top:0;'),
+				array('label' => 'Ghi chú','input' => $params, 'cols' => 2,'style' => 'padding-top:0;'),
+			);
+	
+	//-------------------- SESSAGES ERROR ------------------
+	if(count($this->messageError)>0){
+		$errors = $this->formErrors($this->messageError,array('id'=>'errors'));
+	}
+?>
+<form name="appForm" method="post" action="" enctype="multipart/form-data">
+<script type="text/javascript">
+	function loadCategory(lang){
+		if(lang != ''){
+			$.get('<?php echo $linkSlbLanguages . '/lang/'?>'+lang,getData);
+		}
+	}
+	function getData(data){
+		$('div#category').html(data);
+	}
+</script>
+	<?php echo $this->render('admin-block/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php //echo $this->render('admin-block/sublink/index.php');?>
+	<?php echo $errors;?>
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<fieldset class="adminform">
+			<legend>Cấu hình Module</legend>
+			<table class="adminformlist">
+				<?php echo $this->partialLoop('row.php', $arrInput);?>
+			</table>
+		</fieldset>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

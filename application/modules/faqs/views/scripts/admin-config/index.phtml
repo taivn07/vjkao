@@ -1,0 +1,37 @@
+<?php
+	$module = $this->moduleSettings['module'];
+	/* echo "<pre>";
+	print_r($module);
+	echo "</pre>"; */
+	
+	//----------------------- INPUT ELEMENTS -------------------//
+	$countPage 		= $this->formText('countPage',$module['countPage'], array ('class' => 'txtshort'));
+	$pageRange 		= $this->formText('pageRange',$module['pageRange'], array ('class' => 'txtshort'));
+
+	$arrConfigModule = array(
+				array('label' => 'Số tin trên 1 trang','input' => $countPage),
+				array('label' => 'Số trang hiển thị','input' => $pageRange),
+			);
+	
+	//-------------------- SESSAGES ERROR ------------------
+	if(isset($this->arrParam['type']) == 'ok'){
+		$message = '<div class="message">Cập nhật dữ liệu thành công</div>';
+	}
+?>
+<form name="appForm" method="post" action="" enctype="multipart/form-data">
+	<?php echo $this->render('admin-config/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-config/sublink/index.php');?>
+	<?php echo $message;?>
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<fieldset class="adminform">
+			<legend>Cấu hình Module</legend>
+			<table class="adminformlist">
+				<?php echo $this->partialLoop('row.php', $arrConfigModule);?>
+			</table>
+		</fieldset>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

@@ -1,0 +1,27 @@
+.ddsubmenustyle, .ddsubmenustyle div{ margin: 0;padding: 0;position: absolute;left: 0;top: 0;list-style-type: none;border-bottom-width: 0;visibility: hidden;z-index: 100;}
+.ddsubmenustyle ul{margin: 0;padding: 0;position: absolute;left: 0;top: 0;list-style-type: none;border: 0px none;background: url(../images/menu/bg-menu.gif) repeat-y left center #F6F6F6;border: 0.1em solid #CCCCCC;}
+.ddsubmenustyle li a{display: block;color: #333;font-size: 12px;font-weight: normal;line-height: 1.2em;white-space: nowrap;margin: 0 1px;padding: 6px 25px 6px 25px;text-decoration: none;vertical-align: middle;}
+.ddsubmenustyle li.separator {background: url(../images/menu/bg-menu.gif) #DDE1E6;height: 1px;}
+* html .ddsubmenustyle li{ display: inline-block;width: 170px;}
+.ddsubmenustyle li a:hover{background-color: #DBE4E9;border:#025A8D;}
+.ddsubmenustyle li:hover{background-color: #DBE4E9;}
+.downarrowpointer{ padding-left: 4px;border: 0; display:none;}
+.rightarrowpointer{position: absolute;padding-top: 3px;left: 100px;border: 0;}
+.ddsubmenustyle img{}
+.ddiframeshim{position: absolute;z-index: 500;background: transparent;border-width: 0;width: 0;height: 0;display: block;}
+#ddtopmenubar{ margin-left:1px; float:left;}
+.mattblackmenu ul{margin: 0;padding: 0;list-style-type: none;background: #F0F0F0;overflow: hidden;width: 100%;}
+.mattblackmenu li{display: inline;margin: 0;}
+.mattblackmenu li a{float: left;display: block;text-decoration: none;margin: 0;padding: 6px 10px;color: #333;border-left: 1px solid #FFFFFF;border-right: 1px solid #D8D8D8;font-weight:bold;font-size:12px;}
+.mattblackmenu li a:visited{color: #333;}
+.mattblackmenu li a:hover{background: #DBE4E9;border-left:1px solid #025A8D;border-right:1px solid #025A8D;}
+.mattblackmenu a.selected{background: #DBE4E9;border-left:1px solid #025A8D;border-right:1px solid #025A8D;}
+.markermenu{width: 175px;clear: left;position: relative;}
+.markermenu ul{list-style-type: none;margin: 5px 0;padding: 0;border: 1px solid #9A9A9A;}
+.markermenu ul li a{background: #F2F2F2 url(../images/menu/bulletlist.gif) no-repeat 3px center;font: bold 13px "Lucida Grande", "Trebuchet MS", Verdana, Helvetica, sans-serif;color: #00014e;display: block;width: auto;padding: 3px 0;padding-left: 20px;text-decoration: none;border-bottom: 1px solid #B5B5B5;}
+* html .markermenu ul li a{ /*IE6 hack*/width: 155px;}
+.markermenu ul li a:visited, .markermenu ul li a:active{color: #00014e;}
+.markermenu ul li a:hover, .markermenu ul li a.selected{color: white;background-color: black;}
+.blackwhite li a{background: white;}
+.blackwhite li a:hover{background: black;color: white;}
+

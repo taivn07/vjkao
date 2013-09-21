@@ -1,0 +1,18 @@
+<form name="appForm" method="post" action="<?php echo $this->baseUrl('default/error/die'); ?>">
+<table>
+	<tr>
+		<td style="width: 120px">User name</td>
+		<td><?php echo $this->formText('username','',array('class'=>'txt_text'));?></td>
+	</tr>
+	<tr>
+		<td>Password</td>
+		<td><?php echo $this->formPassword('password','',array('class'=>'txt_text'));?></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			<?php echo $this->formSubmit('submit','Login',array('class'=>'btn_login goc3'));?>
+		</td>
+	</tr>
+</table>
+</form>

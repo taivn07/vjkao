@@ -1,0 +1,30 @@
+<?php
+	$arrSystemInformation = array(
+			array('label' => 'PHP Built On','input' => '<b>' . $this->info['php'] . '</b>'),
+			array('label' => 'Database Version','input' => '<b>' . $this->info['dbversion'] . '</b>'),
+			array('label' => 'PHP Version','input' => '<b>' . $this->info['phpversion'] . '</b>'),
+			array('label' => 'Web Server','input' => '<b>' . $this->info['server'] . '</b>'),
+			array('label' => 'User Agent','input' => '<b>' . $this->info['useragent'] . '</b>'),
+	);
+?>
+<form name="appForm" method="post" action="">
+	<?php echo $this->render('admin-system/toolbar/index.php');?>
+ 	<div class="clr"></div>
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<fieldset class="adminform">
+			<legend>System Information</legend>
+			<table class="adminformlist">
+				<?php echo $this->partialLoop('row.php', $arrSystemInformation);?>
+			</table>
+		</fieldset>
+			
+		<fieldset class="adminform">
+			<legend>PHP Information</legend>
+			<?php echo $this->php_info;?>
+		</fieldset>
+		<div class="clr"></div>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

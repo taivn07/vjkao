@@ -1,0 +1,92 @@
+<?php
+	//----------------------- INPUT ELEMENTS -------------------//
+	$ssFilter 		= $this->arrParam['ssFilter'];
+	$name 			= $this->formText ('name', $this->Item['name'], array ('class' => 'txtlong active'));
+	$style 			= $this->formText ('style', $this->Item['style'], array ('class' => 'txtlong'));
+	$title 			= $this->formText ('title', $this->Item['title'], array ('class' => 'txtlong'));
+	$url 			= $this->formText ('url', $this->Item['url'], array ('class' => 'txtlong'));
+	
+	$slbHtml = array(
+			'p' => 'P',
+			'h1'=> 'H1',
+			'h2'=> 'H2',
+			'h3'=> 'H3',
+			'h4'=> 'H4',
+			'h5'=> 'H5',
+			'h6'=> 'H6',
+	);
+	$selectHtml = $this->formSelect('html',$this->Item['html'],array(),$slbHtml);
+	
+	$slbTarget = array(
+			'_self' => 'Tại trang (_self)',
+			'_blank'=> 'Cửa sổ mới (_blank)',
+			'_top'=> 'Cửa sổ trên cùng (_top)',
+			'_parent'=> 'Cửa sổ cha (_parent)',
+	);
+	$selectTarget = $this->formSelect('target',$this->Item['target'],array(),$slbTarget);
+	
+	$option 		= array('Không','Có');
+	if(isset($this->Item['status'])){
+		$trangthai = $this->Item['status'];
+	}else{
+		$trangthai = 1;
+	}
+	$status 		= $this->formRadio('status',$trangthai,null,$option, ' ');
+	
+	if(isset($this->Item['order'])){
+		$order = $this->Item['order'];
+	}else{
+		$order = 255;
+	}
+	$order 			= $this->formText ('order', $order, array ('class' => 'txtshort' ) );
+	$content		= $this->formTextarea('content', $this->Item['content'],array('rows'=>4,'cols'=>112,'style' => 'width:717px;'));
+	
+	$arrInput = array(
+				array('label' => 'Name','input' => $name, 'desc' => 'Nội dung hiển thị'),
+				array('label' => 'Html','input' => $selectHtml),
+				array('label' => 'Style','input' => $style, 'desc' => 'Mã CSS'),
+				array('label' => 'Target','input' => $selectTarget),
+				array('label' => 'Title','input' => $title, 'desc' => 'Tên chú thích'),
+				array('label' => 'Url','input' => $url, 'desc' => 'Link liên kết'),
+				array('label' => 'Hiển thị','input' => $status),
+				array('label' => 'Thứ tự','input' => $order),
+			);
+	
+	//-------------------- SESSAGES ERROR ------------------
+	if(count($this->messageError)>0){
+		$errors = $this->formErrors($this->messageError,array('id'=>'errors'));
+	}
+?>
+<form name="appForm" method="post" action="" enctype="multipart/form-data">
+	<?php echo $this->render('backlink/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $errors;?>
+
+	<!-- BEGIN: CONTENT -->
+	<div id="element-box">
+		<div class="t">
+			<div class="t">
+				<div class="t"></div>
+			</div>
+		</div>
+		<div class="m">
+			<!-- BEGIN: ELEMENT BOX -->
+			<div>
+				<fieldset class="adminform">
+					<legend>Chi tiết</legend>
+					<ul class="adminformlist">
+						<?php echo $this->partialLoop('row.php', $arrInput);?>
+					</ul>
+				</fieldset>
+			</div>
+			<div class="clr"></div>
+			<!-- END: ELEMENT BOX -->
+		</div>
+		<div class="b">
+			<div class="b">
+				<div class="b"></div>
+			</div>
+		</div>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

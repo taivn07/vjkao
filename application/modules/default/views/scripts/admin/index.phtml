@@ -1,0 +1,178 @@
+<div class="app_content goc10 bgtrang">
+	<div class="cpanel-left">
+		<div class="cpanel">
+			<div class="icon-wrapper">
+				<div class="icon">
+					<a href="<?php echo $this->baseUrl('article/admin-item/add');?>">
+						<img src="<?php echo $this->imgUrl . '/header/icon-48-article-add.png';?>">
+						<span>Thêm bài viết mới</span>
+					</a>
+				</div>
+			</div>
+			<div class="icon-wrapper">
+				<div class="icon">
+					<a href="<?php echo $this->baseUrl('article/admin-item/index');?>">
+						<img src="<?php echo $this->imgUrl . '/header/icon-48-article.png';?>">
+						<span>Quản lý bài viết</span>
+					</a>
+				</div>
+			</div>
+			<div class="icon-wrapper">
+				<div class="icon">
+					<a href="<?php echo $this->baseUrl('article/admin-category/index');?>">
+						<img src="<?php echo $this->imgUrl . '/header/icon-48-category.png';?>">
+						<span>Danh mục bài viết</span>
+					</a>
+				</div>
+			</div>
+			<div class="icon-wrapper">
+				<div class="icon">
+					<a href="<?php echo $this->baseUrl('default/admin-media/index');?>">
+						<img src="<?php echo $this->imgUrl . '/header/icon-48-media.png';?>">
+						<span>Quản lý Media</span>
+					</a>
+				</div>
+			</div>
+			<div class="icon-wrapper">
+				<div class="icon">
+					<a href="<?php echo $this->baseUrl('default/admin-menu/index/type/main_menu');?>">
+						<img src="<?php echo $this->imgUrl . '/header/icon-48-menumgr.png';?>">
+						<span>Quản lý Menu</span>
+					</a>
+				</div>
+			</div>
+			<div class="icon-wrapper">
+				<div class="icon">
+					<a href="<?php echo $this->baseUrl('default/admin-info/edit');?>">
+						<img src="<?php echo $this->imgUrl . '/header/icon-48-user-edit.png';?>">
+						<span>Thông tin tài khoản</span>
+					</a>
+				</div>
+			</div>
+			<div class="icon-wrapper">
+				<div class="icon">
+					<a href="<?php echo $this->baseUrl('default/admin-user/index');?>">
+						<img src="<?php echo $this->imgUrl . '/header/icon-48-user.png';?>">
+						<span>Quản lý thành viên</span>
+					</a>
+				</div>
+			</div>
+			<div class="icon-wrapper">
+				<div class="icon">
+					<a href="<?php echo $this->baseUrl('default/admin-contact/index');?>">
+						<img src="<?php echo $this->imgUrl . '/header/icon-48-contacts.png';?>">
+						<span>Quản lý liên hệ</span>
+					</a>
+				</div>
+			</div>
+			<div class="icon-wrapper">
+				<div class="icon">
+					<a href="<?php echo $this->baseUrl('default/admin-ads/index');?>">
+						<img src="<?php echo $this->imgUrl . '/header/icon-48-banner.png';?>">
+						<span>Quản lý quảng cáo</span>
+					</a>
+				</div>
+			</div>
+			<!-- 
+			<div class="icon-wrapper">
+				<div class="icon">
+					<a href="<?php echo $this->baseUrl('default/admin-language/index');?>">
+						<img src="<?php echo $this->imgUrl . '/header/icon-48-language.png';?>">
+						<span>Quản lý ngôn ngữ</span>
+					</a>
+				</div>
+			</div>
+			 -->
+			<div class="icon-wrapper">
+				<div class="icon">
+					<a href="<?php echo $this->baseUrl('default/admin-system/index');?>">
+						<img src="<?php echo $this->imgUrl . '/header/icon-48-user-profile.png';?>">
+						<span>Thông tin hệ thống</span>
+					</a>
+				</div>
+			</div>
+			
+			<div class="icon-wrapper">
+				<div class="icon">
+					<a href="<?php echo $this->baseUrl('default/admin-config/index');?>">
+						<img src="<?php echo $this->imgUrl . '/header/icon-48-config.png';?>">
+						<span>Cấu hình hệ thống</span>
+					</a>
+				</div>
+			</div>
+			
+			<div class="icon-wrapper">
+				<div class="icon">
+					<a href="<?php echo $this->baseUrl('default/admin-link/index');?>">
+						<img src="<?php echo $this->imgUrl . '/header/icon-48-links.png';?>">
+						<span>Quản lý liên kết</span>
+					</a>
+				</div>
+			</div>
+			<!-- 
+			<div class="icon-wrapper">
+				<div class="icon">
+					<a href="#">
+						<img src="<?php echo $this->imgUrl . '/header/icon-48-themes.png';?>">
+						<span>Giao diện</span>
+					</a>
+				</div>
+			</div>
+			 -->
+			 <div class="clr"></div>
+		</div>
+
+	</div>
+	<div class="cpanel-right">
+		<div id="pane-sliders" class="pane-sliders">
+			<div class="panel">
+				<h3 id="metadata-options" class="title pane-toggler-down"><a href="javascript:void(0);"><span>Thông tin chung</span></a></h3>
+				<div class="panel_content">
+					<table class="adminlist">
+						<tr>
+							<th scope="row" width="200"><a href="<?php echo $this->baseUrl('default/admin-user/index');?>">Tổng số thành viên</a></th>
+							<td align="left" style="padding-left: 20px;"><?php echo $this->totalUser;?></td>
+						</tr>
+						<tr>
+							<th scope="row" width="200"><a href="<?php echo $this->baseUrl('article/admin-category/index');?>">Tổng số danh mục bài viết</a></th>
+							<td align="left" style="padding-left: 20px;"><?php echo $this->totalCategoryArticle;?></td>
+						</tr>
+						<tr>
+							<th scope="row" width="200"><a href="<?php echo $this->baseUrl('article/admin-item/index');?>">Tổng số bài viết</a></th>
+							<td align="left" style="padding-left: 20px;"><?php echo $this->totalArticle;?></td>
+						</tr>
+						<tr>
+							<th scope="row" width="200"><a href="<?php echo $this->baseUrl('/shopping/admin-category/index');?>">Tổng số danh mục sản phẩm</a></th>
+							<td align="left" style="padding-left: 20px;"><?php echo $this->totalCategoryProduct;?></td>
+						</tr>
+						<tr>
+							<th scope="row" width="200"><a href="<?php echo $this->baseUrl('/shopping/admin-item/index');?>">Tổng số sản phẩm</a></th>
+							<td align="left" style="padding-left: 20px;"><?php echo $this->totalProduct;?></td>
+						</tr>
+						<tr>
+							<th scope="row" width="200"><a href="<?php echo $this->baseUrl('/shopping/admin-bill/index');?>">Tổng số đơn đặt hàng</a></th>
+							<td align="left" style="padding-left: 20px;">
+								Đã xem: <?php echo $this->totalInvoiceOn;?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<?php if($this->totalInvoiceOff > 0){?>
+								Chưa xem: <a href="<?php echo $this->baseUrl('shopping/admin-bill/index');?>" class="do">(<?php echo $this->totalInvoiceOff;?>)</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<?php }?>
+								Tất cả: <?php echo $this->totalInvoiceAll;?>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row" width="200"><a href="<?php echo $this->baseUrl('/default/admin-contact/index');?>">Tổng số liên hệ</a></th>
+							<td align="left" style="padding-left: 20px;">
+								Đã xem: <?php echo $this->totalContactOn;?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<?php if($this->totalContactOff > 0){?>
+								Chưa xem: <a href="<?php echo $this->baseUrl('default/admin-contact/index');?>" class="do">(<?php echo $this->totalContactOff;?>)</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<?php }?>
+								Tất cả: <?php echo $this->totalContactAll;?>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="clr"></div>
+</div>

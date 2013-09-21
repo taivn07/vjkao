@@ -1,0 +1,99 @@
+<div class="block_thongTinTaiKhoan">
+	<div class="block_title"><?php echo $this->Title;?></div>
+	<div class="block_content">
+		<?php		
+			$user_name 			= $this->Item['user_name'];
+			$password 			= '<a href="'.$this->baseUrl('default/user/password').'">Đổi mật khẩu</a>';
+			$member_hoten 		= $this->Item['member_hoten'];
+			$member_ngaysinh 	= $this->Item['member_ngaysinh'];
+			$member_gioitinh 	= $this->Item['member_gioitinh'];
+			$member_honnhan 	= $this->Item['member_honnhan'];
+			$member_avatar		= $this->imgUrl . '/user/user-img.jpg';
+			if($this->Item['member_avatar'] != ''){
+				$member_avatar		= FILE_URL . '/users/img450x450/' . $this->Item['member_avatar'];
+			}
+			
+			$member_diachi 	= $this->Item['member_diachi'];
+			$member_tinh 		= $this->city['name'];
+			$member_dienthoai 	= $this->Item['member_dienthoai'];
+			$member_email 		= $this->Item['member_email'];
+			?>
+			<div class="item">
+				<div class="item_title">Thông tin đăng nhập</div>
+				<div class="item_content">
+					<table style="width: 100%">
+						<tr>
+							<td style="width: 150px;" class="label"><b>Email Đăng nhập: </b></td>
+							<td><?php echo $user_name;?></td>
+						</tr>
+						<tr>
+							<td class="label"><b>Mật khẩu: </b></td>
+							<td><?php echo $password;?></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			
+			<div class="item">
+				<div class="item_title">Thông tin cá nhân</div>
+				<div class="item_content">
+					<table style="width: 100%">
+						<tr>
+							<td class="tbUser-row" width="140" valign="top" style="padding-top:8px">
+								<img width="130" class="userImg" alt="avatar" src="<?php echo $member_avatar;?>">
+							</td>
+							<td valign="top" style="padding-left: 10px;">
+								<table style="width: 100%">
+									<tr>
+										<td style="width: 150px;" class="label"><b>Họ và tên:</b></td>
+										<td><?php echo $member_hoten;?></td>
+									</tr>
+									<tr>
+										<td class="label"><b>Ngày sinh:</b></td>
+										<td><?php echo $member_ngaysinh;?></td>
+									</tr>
+									<tr>
+										<td class="label"><b>Giới tính:</b></td>
+										<td><?php echo $member_gioitinh;?></td>
+									</tr>
+									<tr>
+										<td class="label"><b>Tình trạng hôn nhân:</b></td>
+										<td><?php echo $member_honnhan;?></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			
+			<div class="item">
+				<div class="item_title">Thông tin liên hệ</div>
+				<div class="item_content">
+					<table style="width: 100%">
+						<tr>
+							<td style="width: 150px;" class="label"><b>Địa chỉ:</b></td>
+							<td><?php echo $member_diachi;?></td>
+						</tr>
+						<tr>
+							<td class="label"><b>Tính/Thành phố:</b></td>
+							<td><?php echo $member_tinh;?></td>
+						</tr>
+						<tr>
+							<td class="label"><b>Số điện thoại:</b></td>
+							<td><?php echo $member_dienthoai;?></td>
+						</tr>
+						<tr>
+							<td class="label"><b>Email:</b></td>
+							<td><?php echo $member_email;?></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			
+			<div class="block_botton">
+				<?php echo $this->formButton('btn_edit','Sửa thông tin',array('class'=>'user_button goc10 mrl10', 'onclick' => "window.location.href = '".$this->baseUrl('default/user/edit')."'"));?>
+			</div>
+			<div class="clr"></div>
+	</div>
+</div>

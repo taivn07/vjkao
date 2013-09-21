@@ -1,0 +1,87 @@
+<?php
+	//----------------------- INPUT ELEMENTS -------------------//
+	$ssFilter 		= $this->arrParam['ssFilter'];
+	$selectLanguages = $ssFilter['lang_code'] . $this->formHidden('lang_code',$ssFilter['lang_code']);
+	$name 			= $this->formText ( 'name', $this->Item['name'], array ('class' => 'txtlong active', 'onchange'=>"get_alias()") );
+	$picture		= '<div><img src="' . $this->imgUrl . '/no-avatar.png" id="image_picture" class="hinh-anh"></div>';
+	if(!empty($this->Item['picture'])){
+		$picture	= '<div><img src="' . $this->Item['picture'] . '" id="image_picture" class="hinh-anh"></div>';
+	}
+	$picture 		= $this->cmsUserFiles('picture', $this->Item['picture'], 'Chọn ảnh', 'file', $options = array('class' => 'txtfile') ) . $picture;
+	$url 			= $this->formText ( 'url', $this->Item['url'], array ('class' => 'txtlong', 'onchange'=>"get_alias()") );
+	$option 		= array('Không','Có');
+	if(isset($this->Item['status'])){
+		$trangthai = $this->Item['status'];
+	}else{
+		$trangthai = 1;
+	}
+	$status 		= $this->formRadio('status',$trangthai,null,$option, ' ');
+	
+	if(isset($this->Item['order'])){
+		$order = $this->Item['order'];
+	}else{
+		$order = 255;
+	}
+	$order 			= $this->formText ('order', $order, array ('class' => 'txtshort' ) );
+	
+	$width 			= $this->formText ('width', $this->Item['width'], array ('class' => 'txtshort' ) );
+	$height			= $this->formText ('height', $this->Item['height'], array ('class' => 'txtshort' ) );
+	
+	$selectCategory	= $this->cmsSelect('cat_id',$this->Item['cat_id'],$this->slbCategory,array('size'=>0,'style'=>'min-width:200px;'));
+	
+	$slbType = array(
+			'image' => 'Image',
+			'flash'=> 'Flash',
+	);
+	$selectType = $this->formSelect('type',$this->Item['type'],array(),$slbType);
+	
+	$slbTarget = array(
+			'_self' => 'Tại trang (_self)',
+			'_blank'=> 'Cửa sổ mới (_blank)',
+			'_top'=> 'Cửa sổ trên cùng (_top)',
+			'_parent'=> 'Cửa sổ cha (_parent)',
+	);
+	$selectTarget = $this->formSelect('target',$this->Item['target'],array(),$slbTarget);
+	
+	$slbModule = array(
+			'default' => 'Mặc định',
+			'article'=> 'Bài viết',
+			'shopping'=> 'Shop',
+	);
+	$selectModule = $this->formSelect('module_ads',$this->Item['module'],array(),$slbModule);
+	
+	$arrInput = array(
+				array('label' => 'Tiêu đề','input' => $name, 'desc' => '<span class="red">*</span>'),
+				array('label' => 'Hình ảnh','input' => $picture,'style' => 'margin-left: 152px;'),
+				array('label' => 'Kiểu','input' => $selectType),
+				array('label' => 'Đích đến','input' => $selectTarget),
+				array('label' => 'Liên kết','input' => $url),
+				array('label' => 'Kích thước','input' => 'Chiều rộng ' . $width . ' Chiều cao ' . $height,'desc' => 'Đơn vị tính "px"'),
+				array('label' => 'Vị trí','input' => '<div id="category">' . $selectCategory . '</div>'),
+				array('label' => 'Hiển thị ở module','input' => '<div id="category">' . $selectModule . '</div>'),
+				array('label' => 'Hiển thị','input' => $status),
+				array('label' => 'Thứ tự','input' => $order),
+			);
+	
+	//-------------------- SESSAGES ERROR ------------------
+	if(count($this->messageError)>0){
+		$errors = $this->formErrors($this->messageError,array('id'=>'errors'));
+	}
+?>
+<form name="appForm" method="post" action="" enctype="multipart/form-data">
+	<?php echo $this->render('admin-ads/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-ads/sublink/index.php');?>
+	<?php echo $errors;?>
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<fieldset class="adminform">
+			<legend>Chi tiết</legend>
+			<table class="adminformlist">
+				<?php echo $this->partialLoop('row.php', $arrInput);?>
+			</table>
+		</fieldset>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

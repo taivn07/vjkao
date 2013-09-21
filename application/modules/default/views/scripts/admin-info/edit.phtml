@@ -1,0 +1,64 @@
+<?php
+	//----------------------- INPUT ELEMENTS -------------------//
+	$group_id		= $this->formHidden('group_id',$this->Item['group_id']);
+	$status 		= $this->formHidden ( 'status', $this->Item['status']);
+	$user_name		= $this->formHidden('user_name',$this->Item['user_name']);
+	$user_name 		= $this->Item['user_name'] . $user_name . $group_id . $status;
+	$alias			= $this->formText('alias',$this->Item['alias'], array ('class' => 'txtmedium' ));
+	if(!empty($this->Item['user_avatar'])){
+		$urlAvatar 	= FILE_URL . '/users/img100x100/' . $this->Item['user_avatar'];
+		$imgAvatar	= '<br><img src="' . $urlAvatar . '"><br>' . $this->Item['user_avatar'];
+	}
+	
+	$current_user_avatar = $this->formHidden('current_user_avatar',$this->Item['user_avatar']);
+	
+	$user_avatar 	= $this->formFile ( 'user_avatar', array ('style' => 'width:250px;' ) ) . $imgAvatar . $current_user_avatar;
+	
+	
+	$password 		= $this->formPassword('password', '', array ('class' => 'txtshort' ) );
+	$email 			= $this->formText ( 'email', $this->Item['email'], array ('class' => 'txtmedium' ) );
+	$first_name 	= $this->formText ( 'first_name', $this->Item['first_name'], array ('class' => 'txtmedium' ) );
+	$last_name 		= $this->formText ( 'last_name', $this->Item['last_name'], array ('class' => 'txtmedium' ) );
+	$birthday 		= $this->formText ( 'birthday', $this->Item['birthday'], array ('class' => 'txtshort' ) );
+	
+	$sign = $this->cmsEditor('sign',htmlspecialchars_decode($this->Item['sign']),array('toolbar'=>'Full', 'language'=>'vi'));
+
+	$arrInput = array(
+				array('label' => 'User name','input' => $user_name),
+				array('label' => 'Avatar','input' => $user_avatar,'desc' => 'Kích thước từ 2-1000KB. Các định dạng jpg,gif,png', 'style' => 'margin-left: 151px;'),
+				array('label' => 'Password','input' => '<a href="'.$this->baseUrl('/default/admin-info/password').'">Đổi mật khẩu</a>'),
+				array('label' => 'Email','input' => $email),
+				array('label' => 'First name','input' => $first_name),
+				array('label' => 'Last name','input' => $last_name),
+				array('label' => 'Birthday','input' => $birthday,'desc' => 'Định dạng: YYYY-mm-dd(năm - tháng - ngày)'),
+				array('label' => 'Bút danh','input' => $alias),
+				array('label' => 'Chữ ký','input' => $sign, 'cols' => 2, 'style' => 'padding-top: 0;'),
+			);
+	
+	//-------------------- SESSAGES ERROR ------------------
+	if(count($this->messageError)>0){
+		$errors = $this->formErrors($this->messageError,array('id'=>'errors'));
+	}
+	
+	if(isset($this->arrParam['save']) == 'ok'){
+		$message = '<div class="message">Cập nhật dữ liệu thành công</div>';
+	}
+?>
+<form name="appForm" method="post" action="" enctype="multipart/form-data">
+	<?php echo $this->render('admin-info/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-info/sublink/index.php');?>
+	<?php echo $errors;?>
+	<?php echo $message;?>
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<fieldset class="adminform">
+			<legend>Chi tiết</legend>
+			<table class="adminformlist">
+				<?php echo $this->partialLoop('row.php', $arrInput);?>
+			</table>
+		</fieldset>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

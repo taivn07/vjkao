@@ -1,0 +1,34 @@
+<?php
+	//----------------------- INPUT ELEMENTS -------------------//
+	$comment_id		= $this->formHidden('comment_id',$this->Item['id']);	
+	$content_hidden	= $this->formHidden('content',$this->Item['content']);	
+	$content 		= htmlspecialchars_decode($this->Item['content']);
+	$content_reply		= $this->formTextarea('content_reply', '',array('rows'=>4,'cols'=>113));
+	
+	$arrInput = array(
+				array('label' => 'Nội dung','input' => $content . $comment_id . $content_hidden),
+				array('label' => 'Trả lời','input' => $content_reply),
+			);
+	
+	//-------------------- SESSAGES ERROR ------------------
+	if(count($this->messageError)>0){
+		$errors = $this->formErrors($this->messageError,array('id'=>'errors'));
+	}
+?>
+<form name="appForm" method="post" action="" enctype="multipart/form-data">
+	<?php echo $this->render('admin-comment/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-comment/sublink/index.php');?>
+	<?php echo $errors;?>
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<fieldset class="adminform">
+			<legend>Chi tiết</legend>
+			<table class="adminformlist">
+				<?php echo $this->partialLoop('row.php', $arrInput);?>
+			</table>
+		</fieldset>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

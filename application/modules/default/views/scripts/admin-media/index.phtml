@@ -1,0 +1,18 @@
+<?php
+	$typeMedia = 'images';
+	if(isset($this->arrParam['type'])){
+		$typeMedia = $this->arrParam['type'];
+	}
+	$linkMedia = SCIPTS_URL . '/media_files/browse.php?type=' . $typeMedia . '&lng=vi';
+?>
+<form name="appForm" method="post" action="">
+	<?php echo $this->render('admin-media/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-media/sublink/index.php');?>	
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<iframe width="100%" height="100%" src="<?php echo $linkMedia; ?>" name="media_manager" id="media_manager" style="height: 450px; border: 0;"></iframe>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

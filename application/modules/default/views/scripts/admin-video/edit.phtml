@@ -1,0 +1,63 @@
+<?php
+	//----------------------- INPUT ELEMENTS -------------------//
+	$ssFilter 		= $this->arrParam['ssFilter'];
+	$selectLanguages = $ssFilter['lang_code'] . $this->formHidden('lang_code',$ssFilter['lang_code']);
+	$name 			= $this->formText ( 'name', $this->Item['name'], array ('class' => 'txtlong active', 'onchange'=>"get_alias()") );
+	$picture		= '<img src="' . $this->Item['picture'] . '" style="max-width:100px;">';
+	$picture 		= $this->cmsUserFiles('picture', $this->Item['picture'], 'Chọn ảnh', 'file', $options = array('class' => 'txtfile') ) . '<br>' .$picture ;
+	$file	 		= $this->cmsUserFiles('file', $this->Item['file'], 'Chọn File', 'file', $options = array('class' => 'txtfile') ) ;
+	
+	$option 		= array('Không','Có');
+	if(isset($this->Item['status'])){
+		$trangthai = $this->Item['status'];
+	}else{
+		$trangthai = 1;
+	}
+	$status 		= $this->formRadio('status',$trangthai,null,$option, ' ');
+	
+	if(isset($this->Item['order'])){
+		$order = $this->Item['order'];
+	}else{
+		$order = 255;
+	}
+	$order 			= $this->formText ('order', $order, array ('class' => 'txtshort' ) );
+	
+	$slbModule = array(
+			'default' => 'Mặc định',
+			'article'=> 'Bài viết',
+			'shopping'=> 'Shop',
+	);
+	$selectModule = $this->formSelect('module_video',$this->Item['module'],array(),$slbModule);
+	
+	$arrInput = array(
+				//array('label' => 'Chọn ngôn ngữ','input' => $selectLanguages),
+				array('label' => 'Tiêu đề','input' => $name, 'desc' => '<span class="red">*</span>'),
+				array('label' => 'Hình ảnh','input' => $picture, 'style' => 'margin-left: 151px;'),
+				array('label' => 'Chọn File','input' => $file,'desc' => 'Có thể lấy link từ youtube'),
+				array('label' => 'Hiển thị ở module','input' => '<div id="category">' . $selectModule . '</div>'),
+				array('label' => 'Hiển thị','input' => $status),
+				array('label' => 'Thứ tự','input' => $order),
+			);
+	
+	//-------------------- SESSAGES ERROR ------------------
+	if(count($this->messageError)>0){
+		$errors = $this->formErrors($this->messageError,array('id'=>'errors'));
+	}
+?>
+<form name="appForm" method="post" action="" enctype="multipart/form-data">
+	<?php echo $this->render('admin-video/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-video/sublink/index.php');?>
+	<?php echo $errors;?>
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<fieldset class="adminform">
+			<legend>Chi tiết</legend>
+			<table class="adminformlist">
+				<?php echo $this->partialLoop('row.php', $arrInput);?>
+			</table>
+		</fieldset>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

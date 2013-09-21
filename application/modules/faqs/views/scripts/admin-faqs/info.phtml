@@ -1,0 +1,52 @@
+<?php
+	//----------------------- INPUT ELEMENTS -------------------//
+	$lang_code		= $this->Item['lang_code'];
+	$name 			= $this->Item['name'];
+	$email 			= $this->Item['email'];
+	$title 			= $this->Item['title'];
+	$date 			= $this->Item['date'];
+	$hits 			= $this->Item['hits'];
+	$id 			= $this->Item['id'];
+	
+	$status 		= $this->Item['status'];
+	if($status == 1){
+		$status = $this->cmsIconButton('Đang được hiển thị', $this->imgUrl . '/admin/tick.png');
+	}else{
+		$status = $this->cmsIconButton('Đã tắt hiển thị', $this->imgUrl . '/admin/publish_x.png');
+	}
+	
+	$order 			= $this->Item['order'];
+	$selectCategory	= $this->Item['category_name'];
+	
+	$content 		= htmlspecialchars_decode($this->Item['content']);
+	
+	$arrInput = array(
+				array('label' => 'Ngôn ngữ','input' => $lang_code),
+				array('label' => 'Họ tên','input' => $name),
+				array('label' => 'Email','input' => $email),
+				array('label' => 'Thuộc danh mục','input' => $selectCategory),
+				array('label' => 'Hiển thị','input' => $status),
+				array('label' => 'Thứ tự','input' => $order),
+				array('label' => 'Ngày gửi','input' => $date),
+				array('label' => 'Lượt xem','input' => $hits),
+				array('label' => '<b>Tiêu đề</b>','input' => $title),
+				array('label' => '<b>Nội dung</b>','input' => $content),
+			);
+?>
+<form name="appForm" method="post" action="" enctype="multipart/form-data">
+	<?php echo $this->render('admin-faqs/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-faqs/sublink/index.php');?>
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<fieldset class="adminform">
+		<legend>Chi tiết</legend>
+			<table class="adminformlist">
+				<?php echo $this->partialLoop('row.php', $arrInput);?>
+			</table>
+			<a href="<?php echo $this->baseUrl('/faqs/admin-reply/index/faqs_id/' . $id);?>" class="btnMedia" style="margin-left: 0;">Trả lời câu hỏi này</a>
+		</fieldset>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

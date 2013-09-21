@@ -1,0 +1,143 @@
+<?php
+	//Xay dung tim kiem
+	$ssFilter 		= $this->arrParam['ssFilter'];
+	$page = '';
+	if(isset($this->arrParam['page'])){
+		$page = '/page/' . $this->arrParam['page'];
+	}
+	$action_link 	= $this->baseUrl($this->currentController . '/filter/type/order');
+	$lblName 		= $this->cmsLinkSort('Họ tên','c.name',$ssFilter,$this->imgUrl . '/admin',$action_link);
+	
+	$lblID 			= $this->cmsLinkSort('ID','c.id',$ssFilter,$this->imgUrl . '/admin',$action_link);
+	
+	$lblStatus 		= $this->cmsLinkSort('Status','c.status',$ssFilter,$this->imgUrl . '/admin',$action_link);
+	$lblPhone		= $this->cmsLinkSort('Điện thoại','c.phone',$ssFilter,$this->imgUrl . '/admin',$action_link);
+	$lblEmail		= $this->cmsLinkSort('Email','c.email',$ssFilter,$this->imgUrl . '/admin',$action_link);
+	$lblCreated		= $this->cmsLinkSort('Ngày gửi','c.created',$ssFilter,$this->imgUrl . '/admin',$action_link);
+	$lblIP			= $this->cmsLinkSort('IP','c.ip',$ssFilter,$this->imgUrl . '/admin',$action_link);
+	$lblLanguage	= $this->cmsLinkSort('Ngôn ngữ','c.lang_code',$ssFilter,$this->imgUrl . '/admin',$action_link);
+	
+	$keywords = $this->formText('keywords',$ssFilter['keywords'],array('class'=>'txtshort'));
+	
+	$selectLanguages = $this->slbLanguages;
+	$linkSlbLanguages = $this->baseUrl($this->currentController . '/filter/type/lang');
+	$selectLanguages = $this->formSelect('lang_code',$ssFilter['lang_code'],array('onchange'=>"OnSubmitForm('" .$linkSlbLanguages ."')"),$selectLanguages);
+	
+	$linkSearch = $this->baseUrl($this->currentController . '/filter/type/search/key/1');
+	$btnSerach = $this->formButton('search-now','Tìm',array('onclick'=>"OnSubmitForm('" .$linkSearch . "')"));
+	
+	$linkResetSearch = $this->baseUrl($this->currentController . '/filter/type/search/key/0');
+	$btnResetSerach = $this->formButton('clear-keywords','Xóa',array('onclick'=>"OnSubmitForm('" .$linkResetSearch ."')"));
+	
+	$strSearch = $keywords . ' ' . $btnSerach . ' ' . $btnResetSerach;
+
+	$strSearchRight = $selectLanguages;
+?>
+<form name="appForm" method="post" action="">
+	<?php echo $this->render('admin-contact/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-contact/sublink/index.php');?>	
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<div class="block_filter">
+			<div class="fl">
+				<?php echo $strSearch;?>
+			</div>
+			<div class="fr">
+				<?php echo $strSearchRight;?>
+			</div>
+			<div class="clr"></div>
+		</div>
+		<table class="adminlist">
+			<tr>
+				<th width="20">#</th>
+				<th width="20">
+					<input type="checkbox" name="checkbox" id="checkbox" onclick="checkedAll()">
+				</th>
+				<th><?php echo $lblName;?></th>
+				<th><?php echo $lblPhone;?></th>
+				<th><?php echo $lblEmail;?></th>
+				<th><?php echo $lblCreated;?></th>
+				<th><?php echo $lblIP;?></th>
+				<th width="60"><?php echo $lblStatus;?></th>
+				<th width="70">Control</th>
+				<th width="70"><?php echo $lblLanguage;?></th>
+				<th width="34"><?php echo $lblID;?></th>
+			</tr>
+			<?php
+				foreach ($this->Items as $key => $val){
+					$id 			= $val['id'];
+					$name 			= $val['name'];
+					$tel 			= $val['tel'];
+					$fax			= $val['fax'];
+					$phone			= $val['phone'];
+					$address		= $val['address'];
+					$email			= $val['email'];
+					$created		= $val['created'];
+					$ip				= $val['ip'];
+					$lang_code		= $val['lang_code'];
+					
+					$status 		= $val['status'];
+					if($status == 1){
+						$linkStatus = $this->baseUrl($this->currentController . '/status/type/0/id/' . $id . $page);
+						$status = $this->cmsIconButton('Kích vào để tắt', $this->imgUrl . '/admin/tick.png', $linkStatus);
+					}else{
+						$linkStatus = $this->baseUrl($this->currentController . '/status/type/1/id/' . $id . $page);
+						$status = $this->cmsIconButton('Kích vào để bật', $this->imgUrl . '/admin/publish_x.png', $linkStatus);
+					}
+					
+					$linkInfo		= $this->baseUrl($this->currentController . '/info/id/' . $id . $page);
+					$btnInfo		= $this->cmsIconButton('Xem thông tin', $this->imgUrl . '/admin/icon_info.png', $linkInfo);
+					
+					$linkEdit		= $this->baseUrl($this->currentController . '/edit/id/' . $id . $page);
+					$btnEdit		= $this->cmsIconButton('Sửa', $this->imgUrl . '/admin/icon_edit.png', $linkEdit);
+					
+					$linkDelete		= $this->baseUrl($this->currentController . '/delete/id/' . $id . $page);
+					$btnDelete		= $this->cmsIconButton('Xóa', $this->imgUrl . '/admin/publish_r.png', $linkDelete);
+					
+					$strIconButton 	= $btnInfo . ' ' . $btnDelete;
+					
+					$alias = '<p class="smallsub">(Alias: ' . $val['alias'] . ' )</p>';
+					$name 	= '<b><a href="' . $linkInfo . '">' . $name . '</a></b>';
+					
+					$cid 			= $this->formCheckbox('cid[]',$val['id']);
+					
+					$classRow = 'row1';
+					if($key % 2 == 0)
+						$classRow = 'row0';
+						
+			?>
+			<tr class="<?php echo $classRow;?>">
+				<td align="center"><?php echo $key + 1;?></td>
+				<td align="center"><?php echo $cid;?></td>
+				<td align="left"><?php echo $name;?></td>
+				<td align="center"><?php echo $phone;?></td>
+				<td align="center"><?php echo $email;?></td>
+				<td align="center"><?php echo $created;?></td>
+				<td align="center"><?php echo $ip;?></td>
+				<td align="center"><?php echo $status;?></td>
+				<td align="center"><?php echo $strIconButton;?></td>
+				<td align="center"><?php echo $lang_code;?></td>
+				<td align="center"><?php echo $id;?></td>
+			</tr>
+			<?php
+				} 
+			?>
+			<tr class="tbl_footer">
+				<td colspan="12">
+					<div class="container">
+						<div class="pagination">
+							<?php
+								$currentUrl = $this->baseUrl($this->currentController . '/index');
+								echo $this->paginationControl($this->paginator,'Sliding','pagination.phtml',array('currentUrl'=>$currentUrl)); 
+							?>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<div class="clr"></div>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

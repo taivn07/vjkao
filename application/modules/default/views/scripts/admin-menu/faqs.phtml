@@ -1,0 +1,30 @@
+<?php
+	$slbTarget = array (
+				'_self' => 'Tại trang (_self)',
+				'_blank' => 'Cửa sổ mới (_blank)'
+				);
+	$target = $this->formSelect ( 'target', $this->Item ['target'], array (), $slbTarget );
+	
+	$option 		= array('Không','Có');
+	if(isset($this->Item['auto_submenu'])){
+		$trangthai = $this->Item['auto_submenu'];
+	}else{
+		$trangthai = 1;
+	}
+	$autoSubMenu 		= $this->formRadio('auto_submenu',$trangthai,null,$option, ' ');
+	
+	$selectCategory = $this->cmsSelect('cat_id',$this->Item ['cat_id'],$this->slbCategory,array('size'=>10,'style'=>'min-width:200px;'));
+	
+	$arrOptions = array (
+						array ('label' => 'Chọn danh mục', 'input' => $selectCategory ),
+						array ('label' => 'Đích đến', 'input' => $target ),
+						array ('label' => 'Lấy danh mục con', 'input' => $autoSubMenu,'desc'=>'Tự động lấy tất cả các danh mục con của nó'),
+						);
+?>
+
+<div class="title_option" style="padding-top: 10px; padding-bottom: 0;">Cấu	hình menu</div>
+<div class="content_option">
+	<table class="adminformlist">
+		<?php echo $this->partialLoop('row.php', $arrOptions);?>
+	</table>
+</div>

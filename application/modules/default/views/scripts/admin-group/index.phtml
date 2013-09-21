@@ -1,0 +1,136 @@
+<?php
+	//Xay dung tim kiem
+	$ssFilter 		= $this->arrParam['ssFilter'];
+	$page = '';
+	if(isset($this->arrParam['page'])){
+		$page = '/page/' . $this->arrParam['page'];
+	}
+	$action_link 	= $this->baseUrl($this->currentController . '/filter/type/order');
+	$lblGroupName 	= $this->cmsLinkSort('Group name','g.group_name',$ssFilter,$this->imgUrl . '/admin',$action_link);
+	$lblID 			= $this->cmsLinkSort('ID','g.id',$ssFilter,$this->imgUrl . '/admin',$action_link);
+	$lblMember 		= $this->cmsLinkSort('Member','members',$ssFilter,$this->imgUrl . '/admin',$action_link);
+	$lblStatus 		= $this->cmsLinkSort('Status','g.status',$ssFilter,$this->imgUrl . '/admin',$action_link);
+	$lblACP 		= $this->cmsLinkSort('ACP','g.group_acp',$ssFilter,$this->imgUrl . '/admin',$action_link);
+	$lblOrder 		= $this->cmsLinkSort('Order','g.order',$ssFilter,$this->imgUrl . '/admin',$action_link);
+	
+	$keywords = $this->formText('keywords',$ssFilter['keywords'],array('class'=>'txtshort'));
+	
+	$linkSearch = $this->baseUrl($this->currentController . '/filter/type/search/key/1');
+	$btnSerach = $this->formButton('search-now','Tìm',array('onclick'=>"OnSubmitForm('" .$linkSearch . "')"));
+	
+	$linkResetSearch = $this->baseUrl($this->currentController . '/filter/type/search/key/0');
+	$btnResetSerach = $this->formButton('clear-keywords','Xóa',array('onclick'=>"OnSubmitForm('" .$linkResetSearch ."')"));
+	
+	$strSearch = $keywords . ' ' . $btnSerach . ' ' . $btnResetSerach;
+	$strSearchRight = '';
+?>
+<form name="appForm" method="post" action="">
+	<?php echo $this->render('admin-group/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-group/sublink/index.php');?>	
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<div class="block_filter">
+			<div class="fl">
+				<?php echo $strSearch;?>
+			</div>
+			<div class="fr">
+				<?php echo $strSearchRight;?>
+			</div>
+			<div class="clr"></div>
+		</div>
+		<table class="adminlist">
+			<tr>
+				<th width="20">#</th>
+				<th width="20">
+					<input type="checkbox" name="checkbox" id="checkbox" onclick="checkedAll()">
+				</th>
+				<th><?php echo $lblGroupName;?></th>
+				<th width="89"><?php echo $lblStatus;?></th>
+				<th width="83"><?php echo $lblACP;?></th>
+				<th width="86"><?php echo $lblOrder;?></th>
+				<th width="77"><?php echo $lblMember;?></th>
+				<th width="90">Control</th>
+				<th width="34"><?php echo $lblID;?></th>
+			</tr>
+			<?php					
+				foreach ($this->Items as $key => $val){
+					$id 			= $val['id'];
+					$group_name 	= $val['group_name'];
+					
+					$status 		= $val['status'];
+					if($status == 1){
+						$linkStatus = $this->baseUrl($this->currentController . '/status/type/0/id/' . $id . $page);
+						$status = $this->cmsIconButton('Kích vào để tắt', $this->imgUrl . '/admin/tick.png', $linkStatus);
+					}else{
+						$linkStatus = $this->baseUrl($this->currentController . '/status/type/1/id/' . $id . $page);
+						$status = $this->cmsIconButton('Kích vào để bật', $this->imgUrl . '/admin/publish_x.png', $linkStatus);
+					}
+					
+					$group_acp 		= $val['group_acp'];
+					if($group_acp == 1){
+						$linkStatusAcp = $this->baseUrl($this->currentController . '/status-acp/type/0/id/' . $id . $page);
+						$group_acp = $this->cmsIconButton('Kích vào để tắt', $this->imgUrl . '/admin/tick.png',$linkStatusAcp);
+					}else{
+						$linkStatusAcp = $this->baseUrl($this->currentController . '/status-acp/type/1/id/' . $id . $page);
+						$group_acp = $this->cmsIconButton('Kích vào để bật', $this->imgUrl . '/admin/publish_x.png',$linkStatusAcp);
+					}
+					
+					$members		= $val['members'];
+					$order 			= $this->formText('order[' . $val['id'] . ']', $val['order'], array('style'=>'width: 30px; text-align: center;'));
+					
+					$linkInfo		= $this->baseUrl($this->currentController . '/info/id/' . $id . $page);
+					$btnInfo		= $this->cmsIconButton('Xem thông tin', $this->imgUrl . '/admin/icon_info.png', $linkInfo);
+					
+					$linkEdit		= $this->baseUrl($this->currentController . '/edit/id/' . $id . $page);
+					$btnEdit		= $this->cmsIconButton('Sửa', $this->imgUrl . '/admin/icon_edit.png', $linkEdit);
+					
+					$linkDelete		= $this->baseUrl($this->currentController . '/delete/id/' . $id . $page);
+					$btnDelete		= $this->cmsIconButton('Xóa', $this->imgUrl . '/admin/publish_r.png', $linkDelete);
+					
+					$strIconButton 	= $btnInfo . ' ' . $btnEdit . ' ' . $btnDelete;
+					if($id == 1 || $id == 2 || $id == 3 || $id == 4){
+						$strIconButton 	= $btnInfo . ' ' . $btnEdit;
+					}
+					
+					$group_name 	= '<a href="' . $linkEdit . '">' . $group_name . '</a>';
+					
+					$cid 			= $this->formCheckbox('cid[]',$val['id']);
+					
+					$classRow = 'row1';
+					if($key % 2 == 0)
+						$classRow = 'row0';
+					
+			?>
+			<tr class="<?php echo $classRow;?>">
+				<td align="center"><?php echo $key + 1;?></td>
+				<td align="center"><?php echo $cid;?></td>
+				<td align="left"><b><?php echo $group_name;?></b></td>
+				<td align="center"><?php echo $status;?></td>
+				<td align="center"><?php echo $group_acp;?></td>
+				<td align="center"><?php echo $order;?></td>
+				<td align="center"><?php echo $members;?></td>
+				<td align="center"><?php echo $strIconButton;?></td>
+				<td align="center"><?php echo $id;?></td>
+			</tr>
+			<?php
+				} 
+			?>
+			<tr class="tbl_footer">
+				<td colspan="12">
+					<div class="container">
+						<div class="pagination">
+							<?php
+								$currentUrl = $this->baseUrl($this->currentController . '/index');
+								echo $this->paginationControl($this->paginator,'Sliding','pagination.phtml',array('currentUrl'=>$currentUrl)); 
+							?>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<div class="clr"></div>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

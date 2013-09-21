@@ -1,0 +1,63 @@
+<?php
+	if(count($this->Items) > 0){
+?>
+<div class="s_content">
+	<table style="width: 100%">
+	<?php
+		foreach ($this->Items as $key => $val){
+			$name = $val['name'];
+		$code = '';
+		if($val['code'] != ''){
+			$code = '<p class="code">'.$this->language['productMaSanPham'].': ' . $val['code'] . '</p>';
+		}
+		$picture = '<img class="img" src="' . $val['picture'] . '" alt="'.$val['name'].'"/>';
+			
+		$synopsis = $val['synopsis'];
+		$units_money = $val['units_money'];
+		$price = '';
+		$selloff = '';
+		if($val['price'] != 0){
+			if($val['selloff'] == 0){
+				$price = Zend_Locale_Format::toNumber($val['price'],array('precision' => 0)) . ' ' . $units_money;
+			}else{
+				$selloff = ($val['price']) - ($val['price'] * ($val['selloff']/100));
+				$selloff = Zend_Locale_Format::toNumber($selloff,array('precision' => 0)) . ' ' . $units_money;
+				$price = '<p>'.$selloff.'</p>';
+				$price .= '<p class="price_old">'.Zend_Locale_Format::toNumber($val['price'],array('precision' => 0)) . ' ' . $units_money.'</p>';
+			}
+		}else{
+			$price = $this->language['lienHe'];
+		}
+		$khuyenmai = '';
+		if($val['khuyenmai'] != ''){
+			$khuyenmai = '<li class="pb_plus"><b style="color:#ff0000">'.$this->language['productKhuyenMai'].':</b> <span data-tooltip="khuyenmai20879">'.$val['khuyenmai'].'</span></li>';
+		}
+		$addCart = '';
+		if($moduleConfig['showAddCart'] == 1){
+			$linkCart = $this->baseUrl('shopping/index/add-item/id/' . $val['id']);
+			$addCart = '<div class="pb_add_cart"><a href="'.$linkCart.'" title="'.$this->language['productDatHang'].' '.$name.'">'.$this->language['productDatHang'].'</a></div>';
+		}
+				
+		$urlOptions = array (
+				'module' => 'shopping',
+				'controller' => 'index',
+				'action' => 'detail',
+				'tcat' => $val ['category_alias'],
+				'title' => $val ['alias'],
+				'cid' => $val ['cat_id'],
+				'id' => $val ['id'] );
+		$linkDetial = $this->url( $urlOptions, 'shop-detail' );
+	?>
+	<tr class="item">
+		<td class="image" valign="middle"><a href="<?php echo $linkDetial;?>" title="<?php echo $name;?>"><?php echo $picture;?></a></td>
+		<td class="title" valign="middle"><a href="<?php echo $linkDetial;?>" title="<?php echo $name;?>"><?php echo $name;?></a></td>
+		<td class="price" align="right" valign="middle"><?php echo $price;?></td>
+	</tr>
+	<?php
+		} 
+	?>
+	</table>
+</div>
+<?php
+	}
+?>

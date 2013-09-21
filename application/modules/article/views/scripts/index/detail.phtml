@@ -1,0 +1,151 @@
+<?php
+	$urlOptions = array ('module' => 'article', 'controller' => 'index', 'action' => 'detail', 
+				'cid' => $this->arrParam['cid'], 
+				'tcat' => $this->arrParam['tcat'], 
+				'title' => $this->arrParam['title'], 
+				'id' => $this->arrParam['id'] );
+	$linkDetial = $this->url ( $urlOptions, 'article-detail' )
+?>
+<div class="module_article">
+	<div class="module_title clearfix">
+		<span class="icon"></span>
+		<h1 class="title"><a href="<?php echo $linkDetial;?>" title="<?php echo $this->Item['name'];?>"><?php echo $this->Item['name'];?></a></h1>
+	</div>
+	<div class="module_content line180">
+	<?php
+		if($this->moduleConfig['showMxh'] == 1){
+			$this->blkMxh();
+		}
+	?>
+	<?php 
+		if($this->moduleConfig['showSynopsis'] == 1){
+			echo '<div class="mota">' . nl2br($this->Item ['synopsis']) . '</div>';
+		}
+	?>
+	<?php
+		$name = $this->Item ['name'];
+		$content = htmlspecialchars_decode ( $this->Item ['content'] );
+		echo $content;
+	?>
+	<?php 
+		if($this->moduleConfig['showAuthor'] == 1){
+			echo '<div class="author">' . $this->Item ['author'] . '</div>';
+		}
+	?>
+	<?php 
+		if($this->moduleConfig['showTags'] == 1){
+			if($this->Item ['tags'] != ''){
+				$tags = explode(',', $this->Item ['tags']);
+				echo '<div class="tags">Tags: ';
+				foreach ($tags AS $key => $val){
+					$keyword = @trim($val);
+					if($key == 0){
+						echo '<span><a href="'.$this->baseUrl($this->arrParam['module'] . '/public/tags/key/' . $keyword).'" title="' . $keyword . '">' . $keyword . '</a></span>';
+					}else{
+						echo '<span>, <a href="'.$this->baseUrl($this->arrParam['module'] . '/public/tags/key/' . $keyword).'" title="' . $keyword . '">' . $keyword . '</a></span>';
+					}
+				} 
+				echo '</div>';
+			}
+		}
+	?>
+	</div>
+	<div class="module_bottom"></div>
+</div>
+
+<?php
+	if($this->moduleConfig['showComment'] == 1){
+?>
+<div class="module_article" id="comment">
+	<div class="module_title clearfix">
+		<span class="icon"></span>
+		<div class="title"><?php echo $this->language['articleBinhLuanBaiViet'];?></div>
+	</div>
+	<div class="module_content">
+		<?php
+		if($this->moduleConfig['typeComment'] == 'facebook'){
+			echo $this->blkComment('facebook',array('url' => $linkDetial));
+		}else{
+			echo $this->blkComment('default',array('c_module' => $this->arrParam['module'], 'c_id' => $this->arrParam['id']));
+		}
+		?>
+	</div>
+	<div class="module_bottom"></div>
+</div>
+<?php
+	}
+?>
+
+<?php
+if (count ( $this->itemNew ) > 0) {
+?>
+<div class="module_article">
+	<div class="module_title clearfix">
+		<span class="icon"></span>
+		<div class="title"><?php echo $this->language['articleMoiHon'];?></div>
+	</div>
+	<div class="module_content">
+		<ul class="articleKhac">
+		<?php
+		foreach ( $this->itemNew as $key => $val ) {
+			$name = $val ['name'];
+		
+			$urlOptions = array ('module' => 'article', 'controller' => 'index', 'action' => 'detail', 'cid' => $val ['cat_id'], 'tcat' => $val ['category_alias'], 'title' => $val ['alias'], 'id' => $val ['id'] );
+			$linkDetial = $this->url ( $urlOptions, 'article-detail' );
+			
+			$created = '';
+			if($this->moduleConfig['showDate'] == 1){
+				$created = new Zend_Date($val['created'],'dd-MM-YY h:s:i');
+				$created = '<span class="date">(' . $created . ')</span>';
+			}
+		?>
+			<li>
+				<h4 class="title"><a href="<?php echo $linkDetial;?>" title="<?php echo $name;?>"><?php echo $name;?></a> <?php echo $created;?></h4>
+			</li>
+		<?php
+		}
+		?>
+		</ul>
+	</div>
+	<div class="module_bottom"></div>
+</div>
+<?php
+}
+?>
+
+<?php
+	if (count ( $this->itemOld ) > 0) {
+?>
+<div class="module_article">
+	<div class="module_title clearfix">
+		<span class="icon"></span>
+		<div class="title"><?php echo $this->language['articleCuHon'];?></div>
+	</div>
+	<div class="module_content pd10">
+		<ul class="articleKhac">
+		<?php
+		foreach ( $this->itemOld as $key => $val ) {
+			$name = $val ['name'];
+																			
+			$urlOptions = array ('module' => 'article', 'controller' => 'index', 'action' => 'detail', 'cid' => $val ['cat_id'], 'tcat' => $val ['category_alias'], 'title' => $val ['alias'], 'id' => $val ['id'] );
+			$linkDetial = $this->url ( $urlOptions, 'article-detail' );
+			
+			$created = '';
+			if($this->moduleConfig['showDate'] == 1){
+				$created = new Zend_Date($val['created'],'dd-MM-YY h:s:i');
+				$created = '<span class="date">(' . $created . ')</span>';
+			}
+		?>
+			<li>
+				<h4 class="title"><a href="<?php echo $linkDetial;?>" title="<?php echo $name;?>"><?php echo $name;?></a> <?php echo $created;?></h4>
+			</li>
+		<?php
+		}
+		?>
+		</ul>
+	</div>
+	<div class="module_bottom"></div>
+</div>
+<?php
+																	}
+																	?>

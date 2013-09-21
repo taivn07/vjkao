@@ -1,0 +1,65 @@
+<?php
+	$category_name 		= $this->category['name'];
+	$category_picture 	= $this->category['picture'];
+	$category_content 	= htmlspecialchars_decode($this->category['content']);
+?>
+<div class="module_gallery">
+	<div class="module_title clearfix">
+		<span class="icon"></span>
+		<h1 class="title"><?php echo $this->category['name'];?></h1>
+	</div>
+	<div class="module_content">
+		<div class="line180 pd5">
+			<?php echo $category_content;?>
+			<div class="clr"></div>
+		</div>
+		<ul class="listGallery clearfix">
+			<?php
+			foreach ($this->Items AS $key => $val){
+				$name = $val ['name'];
+				$picture = '<img class="img" src="' . $val ['picture'] . '" alt="' . $val ['name'] . '"/>';
+				if($val ['thumb'] != ''){
+					$picture = '<img class="img" src="' . $val ['picture'] . '" alt="' . $val ['name'] . '"/>';
+				}
+				$synopsis = nl2br($val ['synopsis']);
+							
+				$urlOptions = array ('module' => 'gallery', 'controller' => 'index', 'action' => 'detail', 'cid' => $val ['cat_id'], 'tcat' => $val ['category_alias'], 'title' => $val ['alias'], 'id' => $val ['id'] );
+				$linkDetial = $this->url ( $urlOptions, 'gallery-detail' );
+			?>
+			<li>
+				<div class="item">
+					<a href="<?php echo $linkDetial;?>" title="<?php echo $name;?>"> 
+						<?php echo $picture;?>
+					</a>
+					<?php
+					if($this->moduleConfig['showTitleAlbum'] == 1){ 
+					?>
+					<div class="info">
+						<h4 class="title">
+							<a href="<?php echo $linkDetial;?>" title="<?php echo $name;?>"><?php echo $name;?></a>
+						</h4>
+					</div>
+					<?php
+					} 
+					?>
+				</div>
+			</li>
+			<?php
+			} 
+			?>
+		</ul>
+		<?php
+			if (! empty ( $this->arrParam ['cid'] )) {
+				$urlOptions = array('module'=>'gallery','controller'=>'index','action'=>'category',
+						'cid'=>$this->arrParam['cid'],
+						'alias'=>$this->arrParam['alias'],
+				);
+				$currentUrl = $this->url($urlOptions,'gallery-category');
+			} else {
+				$currentUrl = $this->baseUrl ('gallery.html');
+			}
+			echo $this->paginationControl ( $this->paginator, 'Sliding', 'pagination-index.phtml', array ('currentUrl' => $currentUrl ) );
+		?>
+	</div>
+	<div class="module_bottom"></div>
+</div>

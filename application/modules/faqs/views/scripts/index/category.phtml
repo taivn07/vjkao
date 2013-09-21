@@ -1,0 +1,138 @@
+<?php
+	$category_name 		= $this->category['name'];
+	$category_picture 	= $this->category['picture'];
+	$category_content 	= htmlspecialchars_decode($this->category['content']);
+?>
+<div class="module_faqs">
+	<div class="module_title clearfix">
+		<span class="icon"></span>
+		<h1 class="title"><?php echo $this->category['name'];?></h1>
+	</div>
+	<div class="module_content pd5">
+		<?php
+		if($this->arrParam['save'] == 'ok'){
+			echo '<div class="note">' . $this->language['faqsHoanThanh'] . '</div>';
+		}
+		// -------------------- SESSAGES ERROR ------------------
+		if(count($this->messageError)>0){
+			foreach ($this->messageError AS $key => $val){
+				echo '<div class="listError" id="'.$key.'" rel="' . $val . '"></div>';
+			}
+		}
+		?>
+		<div class="faqs_form">
+			<form name="frmFaqs" id="frmFaqs" method="post">
+			<?php
+				$name = $this->formText ( 'name', $this->Item ['name'], array ('class' => 'form_text', 'placeholder' => $this->language['hoTen'])) . '<div class="view_error" id="view_name"></div>';
+				$email = $this->formText ( 'email', $this->Item ['email'], array ('class' => 'form_text', 'placeholder' => $this->language['email'])) . '<div class="view_error" id="view_email"></div>';
+				$title = $this->formText ( 'title', $this->Item ['title'], array ('class' => 'form_text textlong', 'placeholder' => $this->language['tieuDe'])) . '<div class="view_error" id="view_title"></div>';
+				$content = $this->formTextarea ( 'content', $this->Item ['content'], array ('rows' => 4, 'class' => 'content_text', 'placeholder' => $this->language['noiDung'])) . '<div class="view_error" id="view_content"></div>';
+				$captcha = $this->captcha;
+				$txtCaptcha = $this->formText ( 'captcha', '', array ('class' => 'form_text', 'placeholder' => $this->language['captcha'])) . '<div class="view_error" id="view_captcha"></div>';
+				$txtID = $this->formHidden ( 'captchaID', $this->captcha_id );
+				$lang_code = $this->formHidden ( 'lang_code', $this->arrParam ['ssFilter'] ['lang_code'] );
+			?>
+				<table>
+					<tr>
+						<td><?php echo $name;?></td>
+						<td><?php echo $email;?></td>
+					</tr>
+					<tr>
+						<td colspan="2"><?php echo $title;?></td>
+					</tr>
+					<tr>
+						<td colspan="2"><?php echo $content;?></td>
+					</tr>
+					<tr>
+						<td colspan="2"><?php echo $txtCaptcha . $txtID . $lang_code;?></td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<?php echo $captcha;?>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<?php echo $this->formSubmit('btnSubmit',$this->language['gui'],array('class' => 'goc10 button'));?>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		<script type="text/javascript">
+			$("div.listError").each(function (i) {
+			    //alert($(this).attr('rel'));
+			    $('#view_' + $(this).attr('id')).html($(this).attr('rel'));
+			});
+		</script>
+		<?php
+		if(count($this->Items) > 0){ 
+		?>
+		<div class="listFAQs">
+			<table>
+			<?php
+			foreach ($this->Items AS $key => $val){
+				$name = $val ['name'];
+				$email = $val ['email'];
+				$title = $val ['title'];
+				$hits = $val['hits'];
+				$like = $val['like'];
+				$unlike = $val['unlike'];
+				$date = $val['date'];
+				$total_reply = $val['total_reply'];
+				
+				$tcat = 'faqs';
+				if(!empty($val ['category_alias'])){
+					$tcat = $val ['category_alias'];
+				}
+							
+				$urlOptions = array (
+						'module' => 'faqs', 
+						'controller' => 'index', 
+						'action' => 'detail', 
+						'cid' => $val ['cat_id'], 
+						'tcat' => $tcat, 
+						'title' => $val ['alias'], 
+						'id' => $val ['id'] );
+				$linkDetial = $this->url ( $urlOptions, 'faqs-detail' );
+			?>
+			<tr class="item clearfix">
+				<td class="number"><p class="stt"><?php echo $key + 1;?></p></td>
+				<td>
+					<h3 class="title">
+						<a href="<?php echo $linkDetial;?>" title="<?php echo $title;?>"><?php echo $title;?></a>
+					</h3>
+					<div class="name">
+						<span class="viewname"><?php echo $this->language['faqsGuiBoi'] . ': <b>' . $name . '</b>';?></span> 
+						<span class="date"><?php echo $date;?></span>
+					</div>
+					<div class="limit">
+						<span class="traloi"><?php echo $this->language['faqsTraLoi'];?> (<?php echo '<b class="do">' . $total_reply . '</b>';?>)</span> 
+						<span class="xem"><?php echo $this->language['faqsXem'];?> (<?php echo '<b class="do">' .  $hits . '</b>';?>)</span>
+					</div>
+				</td>
+			</tr>
+			<?php
+			} 
+			?>
+			</table>
+		</div>
+		<?php
+			if(!empty($this->arrParam['cid'])){
+					
+				$urlOptionsCategory = array('module'=>'faqs','controller'=>'index','action'=>'category',
+						'cid'=>$this->arrParam['cid'],
+						'alias'=>$this->arrParam['alias'],
+				);
+				$currentUrl = $this->url($urlOptionsCategory,'faqs-category');
+			}else{
+				$currentUrl = 'faqs.html';
+			}
+			echo $this->paginationControl($this->paginator,'Sliding','pagination-index.phtml',array('currentUrl'=>$currentUrl,'arrParam' => $this->arrParam));
+		?>
+		<?php
+		} 
+		?>
+	</div>
+	<div class="module_bottom"></div>
+</div>

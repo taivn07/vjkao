@@ -1,0 +1,24 @@
+<?php echo $this->doctype()?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <?php echo $this->headTitle()?>
+    <?php echo $this->headMeta()?>
+    <?php echo $this->headLink()?>
+	<?php echo $this->headScript()?>
+</head>
+<body class="body">
+	<div class="block_top goct10">
+        <span class="version">Version 5.0</span>
+        <span class="title">Phần mềm quản trị Website nCMS</span>
+    </div>
+
+	<div class="content gocb10">
+		<div class="border">
+			<div class="padding">
+                <?php echo $this->layout()->content;?>
+                <div class="clr"></div>
+			</div>
+			<div class="clr"></div>
+		</div>
+	</div>
+	<?php echo $this->render('html/footer.php');?>

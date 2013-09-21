@@ -1,0 +1,88 @@
+<div class="module_contact">
+	<div class="module_title clearfix">
+		<span class="icon"></span>
+		<h1 class="title"><?php echo $this->language['lienHe'];?></h1>
+	</div>
+	<div class="module_content">
+		<?php
+			// -------------------- SESSAGES ERROR ------------------
+			if(count($this->messageError)>0){
+				foreach ($this->messageError AS $key => $val){
+					echo '<div class="listError" id="'.$key.'" rel="' . $val . '"></div>';
+				}
+			}
+		?>
+		<form action="" method="post" name="frmContact">
+			<div class="info pdt10 pdb10 line180">
+				<?php echo htmlspecialchars_decode($this->ContactInfo['content']);?>
+			</div>
+				<?php
+				$name = $this->formText ( 'name', $this->Item ['name'], array ('class' => 'txtlong goc7' ) ) . '<div class="view_error" id="view_name"></div>';
+				$address = $this->formText ( 'address', $this->Item ['address'], array ('class' => 'txtlong goc7' ) ) . '<div class="view_error" id="view_address"></div>';
+				$tel = $this->formText ( 'tel', $this->Item ['tel'], array ('class' => 'txtlong goc7' ) ) . '<div class="view_error" id="view_tel"></div>';
+				$fax = $this->formText ( 'fax', $this->Item ['fax'], array ('class' => 'txtlong goc7' ) ) . '<div class="view_error" id="view_fax"></div>';
+				$phone = $this->formText ( 'phone', $this->Item ['phone'], array ('class' => 'txtlong goc7' ) ) . '<div class="view_error" id="view_phone"></div>';
+				$email = $this->formText ( 'email', $this->Item ['email'], array ('class' => 'txtlong goc7' ) ) . '<div class="view_error" id="view_email"></div>';
+				$content = $this->formTextarea ( 'content', $this->Item ['content'], array ('rows' => 5, 'cols' => 47,'class' => 'goc7') ) . '<div class="view_error" id="view_content"></div>';
+				$captcha = $this->captcha;
+				$txtCaptcha = $this->formText ( 'captcha', '', array ('class' => 'txtshort goc7' ) ) . '<div class="view_error" id="view_captcha"></div>';
+				$txtID = $this->formHidden ( 'captchaID', $this->captcha_id );
+				$lang_code = $this->formHidden ( 'lang', $this->arrParam ['ssFilter'] ['lang_code'] );
+				?>
+			<div style="padding: 10px 0; font-size: 16px; font-weight: bold; color: #189ad7;">
+				<?php echo $this->language['guiLienHe'];?>
+			</div>
+			<table class="tblContact">
+				<tr>
+					<td class="label"><?php echo $this->language['hoTen'];?><span class="red">(*)</span></td>
+					<td><?php echo $name;?></td>
+				</tr>
+				<tr>
+					<td class="label"><?php echo $this->language['diaChi'];?><span class="red">(*)</span></td>
+					<td><?php echo $address;?></td>
+				</tr>
+				<tr>
+					<td class="label"><?php echo $this->language['dienThoai'];?></td>
+					<td><?php echo $tel;?></td>
+				</tr>
+				<tr>
+					<td class="label"><?php echo $this->language['fax'];?></td>
+					<td><?php echo $fax;?></td>
+				</tr>
+				<tr>
+					<td class="label"><?php echo $this->language['phone'];?><span class="red">(*)</span></td>
+					<td><?php echo $phone;?></td>
+				</tr>
+				<tr>
+					<td class="label"><?php echo $this->language['email'];?></td>
+					<td><?php echo $email;?></td>
+				</tr>
+				<tr>
+					<td class="label"><?php echo $this->language['noiDung'];?><span class="red">(*)</span></td>
+					<td><?php echo $content;?></td>
+				</tr>
+				<tr>
+					<td class="label"><?php echo $this->language['captcha'];?></td>
+					<td><?php echo $txtCaptcha . $txtID . $lang_code;?></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<?php echo $captcha;?>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><?php echo $this->formSubmit('btnSubmit',$this->language['gui'],array('class' => 'goc10 button'));?></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div class="module_bottom"></div>
+	<script type="text/javascript">
+		$("div.listError").each(function (i) {
+		    //alert($(this).attr('rel'));
+		    $('#view_' + $(this).attr('id')).html($(this).attr('rel'));
+		});
+	</script>
+</div>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE tmx SYSTEM "tmx14.dtd">
+    <tmx version="1.4">
+       <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence"
+               adminlang="en-us" srclang="de-at" o-tmf="abc"
+               creationtool="XYZTool" >
+       </header>
+       <body>
+           <tu tuid="Value is required and can't be empty">
+               <tuv xml:lang="vi"><seg>Giá trị này không được để trống</seg></tuv>
+           </tu>
+           <tu tuid="Invalid type given. String, integer, float, boolean or array expected">
+               <tuv xml:lang="vi"><seg>Không thuộc các kiểu hợp lệ như chuỗi, số nguyên, float, boolean hay mảng</seg></tuv>
+           </tu>
+           <tu tuid="No record matching '%value%' was found">
+               <tuv xml:lang="vi"><seg>'%value%' không tồn tại trong cơ sở dữ liệu</seg></tuv>
+           </tu>
+           <tu tuid="A record matching '%value%' was found">
+               <tuv xml:lang="vi"><seg>'%value%' Đã tồn tại trong cơ sở dữ liệu</seg></tuv>
+           </tu>
+           <tu tuid="File '%value%' has a false extension">
+               <tuv xml:lang="vi"><seg>Tập tin '%value%' không đúng định dạng</seg></tuv>
+           </tu>
+           <tu tuid="File '%value%' is not readable or does not exist">
+               <tuv xml:lang="vi"><seg>Tập tin '%value%' không thể đọc được hoặc không tồn tại</seg></tuv>
+           </tu>
+           <tu tuid="Invalid type given. String expected">
+               <tuv xml:lang="vi"><seg>Chuỗi dữ liệu không hợp lệ</seg></tuv>
+           </tu>
+           <tu tuid="'%value%' is no valid email address in the basic format local-part@hostname">
+               <tuv xml:lang="vi"><seg>'%value%' không hợp lệ</seg></tuv>
+           </tu>
+           <tu tuid="'%hostname%' is no valid hostname for email address '%value%'">
+               <tuv xml:lang="vi"><seg>'%hostname%' không hợp lệ cho địa chỉ email '%value%'</seg></tuv>
+           </tu>
+           <tu tuid="'%hostname%' does not appear to have a valid MX record for the email address '%value%'">
+               <tuv xml:lang="vi"><seg>'%hostname%' không có bản ghi MX hợp lệ cho địa chỉ email '%value%'</seg></tuv>
+           </tu>
+           <tu tuid="'%hostname%' is not in a routable network segment. The email address '%value%' should not be resolved from public network">
+               <tuv xml:lang="vi"><seg>'%hostname%' is not in a routable network segment. The email address '%value%' should not be resolved from public network</seg></tuv>
+           </tu>
+           <tu tuid="'%localPart%' can not be matched against dot-atom format">
+               <tuv xml:lang="vi"><seg>'%localPart%' không phù hợp với định dang dot-atom</seg></tuv>
+           </tu>
+           <tu tuid="'%localPart%' can not be matched against quoted-string format">
+               <tuv xml:lang="vi"><seg>'%localPart%' không phù hợp với định dạng quoted-string</seg></tuv>
+           </tu>
+           <tu tuid="'%localPart%' is no valid local part for email address '%value%'">
+               <tuv xml:lang="vi"><seg>'%localPart%' không phải là local part hợp lệ cho địa chỉ email '%value%'</seg></tuv>
+           </tu>
+           <tu tuid="'%value%' exceeds the allowed length">
+               <tuv xml:lang="vi"><seg>'%value%' vượt quá độ dài cho phép</seg></tuv>
+           </tu>
+           <tu tuid="Invalid type given. String, integer, array or Zend_Date expected">
+               <tuv xml:lang="vi"><seg>Không đúng với kiểu: Chuỗi, số nguyên, mảng hay Zend_Date</seg></tuv>
+           </tu>
+           <tu tuid="'%value%' does not appear to be a valid date">
+               <tuv xml:lang="vi"><seg>'%value%' không hợp lệ với định dạng ngày tháng</seg></tuv>
+           </tu>
+           <tu tuid="'%value%' does not fit the date format '%format%'">
+               <tuv xml:lang="vi"><seg>'%value%' không hợp lệ với định dạng '%format%'</seg></tuv>
+           </tu>
+           <tu tuid="'%value%' does not match against pattern '%pattern%'">
+               <tuv xml:lang="vi"><seg>'%value%' không hợp lệ với định dạng '%pattern%'</seg></tuv>
+           </tu>
+           <tu tuid="'%value%' is less than %min% characters long">
+               <tuv xml:lang="vi"><seg>Phải lớn hơn %min% ký tự</seg></tuv>
+           </tu>
+           <tu tuid="'%value%' is more than %max% characters long">
+               <tuv xml:lang="vi"><seg>Phải nhỏ hơn %max% ký tự</seg></tuv>
+           </tu>
+           
+       </body>
+    </tmx>
+    
+    
+    
+    
+    
+    
+    
+    

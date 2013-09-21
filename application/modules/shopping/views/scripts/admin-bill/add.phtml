@@ -1,0 +1,176 @@
+<?php
+	//----------------------- INPUT ELEMENTS -------------------//
+	$ssFilter 		= $this->arrParam['ssFilter'];
+	$linkSlbLanguages = $this->baseUrl($this->currentController . '/ajax-category');
+	$selectLanguages = $this->formSelect('lang_code',$ssFilter['lang_code'],array('onchange'=>"loadCategory(this.value)"),$this->slbLanguages);
+	//$code 			= $this->formText ( 'code', $this->Item['code'], array ('class' => 'txtshort') );
+	$name 			= $this->formText ( 'name', $this->Item['name'], array ('class' => 'txtlong active', 'onchange'=>"get_alias()") );
+	$picture 		= $this->cmsUserFiles('picture', $this->Item['picture'], 'Chọn ảnh', 'images', $options = array('class' => 'txtfile') ) ;
+	$option 		= array('Không','Có');
+	if(isset($this->Item['status'])){
+		$trangthai = $this->Item['status'];
+	}else{
+		$trangthai = 1;
+	}
+	$status 		= $this->formRadio('status',$trangthai,null,$option, ' ');
+	if(isset($this->Item['order'])){
+		$order = $this->Item['order'];
+	}else{
+		$order = 255;
+	}
+	$order 			= $this->formText ('order', $order, array ('class' => 'txtshort' ) );
+	$selectCategory	= $this->cmsSelect('cat_id',$this->Item['cat_id'],$this->slbCategory,array('size'=>0,'style'=>'min-width:200px;'));
+	$address		= $this->formText ('address', $this->Item['address'], array ('class' => 'txtlong'));
+	$tel			= $this->formText ('tel', $this->Item['tel'], array ('class' => 'txtlong'));
+	$phone			= $this->formText ('phone', $this->Item['phone'], array ('class' => 'txtlong'));
+	$email			= $this->formText ('email', $this->Item['email'], array ('class' => 'txtlong'));
+	$yahoo			= $this->formText ('yahoo', $this->Item['yahoo'], array ('class' => 'txtlong'));
+	$skype			= $this->formText ('skype', $this->Item['skype'], array ('class' => 'txtlong'));
+	//$synopsis		= $this->formTextarea('synopsis', $this->Item['synopsis'],array('rows'=>4,'cols'=>112,'style' => 'width:717px;'));
+	
+	$content 		= $this->cmsEditor('content',htmlspecialchars_decode($this->Item['content']),array('toolbar'=>'MyToolbar', 'language'=>'vi'));
+	
+	$arrInput = array(
+				array('label' => 'Chọn ngôn ngữ','input' => $selectLanguages),
+				array('label' => 'Tiêu đề','input' => $name, 'desc' => '<span class="red">*</span>'),
+				array('label' => 'Hình ảnh minh họa','input' => $picture),
+				array('label' => 'Thuộc danh mục','input' => '<div id="category">' . $selectCategory . '</div>'),
+				array('label' => 'Địa chỉ','input' => $address),
+				array('label' => 'Số điện thoại','input' => $tel),
+				array('label' => 'Di động','input' => $phone),
+				array('label' => 'Email','input' => $email),
+				array('label' => 'Yahoo','input' => $yahoo),
+				array('label' => 'Skype','input' => $skype),
+				array('label' => 'Hiển thị','input' => $status),
+				array('label' => 'Thứ tự','input' => $order),
+				array('label' => 'Nội dung','input' => $content, 'style' => 'margin-top: 22px;'),
+			);
+	
+	//--------------------- Blocks ---------------------
+	$option 			= array('Không','Có');
+	if(isset($this->Item['block_noibat'])){
+		$trangthai = $this->Item['block_noibat'];
+	}else{
+		$trangthai = 0;
+	}
+	$blockNoiBat		= $this->formRadio('block_noibat',$trangthai,null,$option, ' ');
+	
+	if(isset($this->Item['block_moi'])){
+		$trangthai = $this->Item['block_moi'];
+	}else{
+		$trangthai = 0;
+	}
+	$blockMoi 			= $this->formRadio('block_moi',$trangthai,null,$option, ' ');
+	
+	if(isset($this->Item['block_hot'])){
+		$trangthai = $this->Item['block_hot'];
+	}else{
+		$trangthai = 0;
+	}
+	$blockHot 			= $this->formRadio('block_hot',$trangthai,null,$option, ' ');
+	
+	if(isset($this->Item['block_banchay'])){
+		$trangthai = $this->Item['block_banchay'];
+	}else{
+		$trangthai = 0;
+	}
+	$blockBanChay		= $this->formRadio('block_banchay',$trangthai,null,$option, ' ');
+	
+	$arrBlock = array(
+			array('label' => 'Shop nổi bật','input' => $blockNoiBat),
+			/* array('label' => 'Sản phẩm mới','input' => $blockMoi),
+			array('label' => 'Sản phẩm hot','input' => $blockHot),
+			array('label' => 'Sản phẩm bán chạy','input' => $blockBanChay), */
+	);
+
+	//--------------------- Meta Options ---------------------
+	$alias 				= $this->formText ( 'alias', $this->Item['alias'], array ('style' => 'width:319px;' ) );
+	$tags		 		= $this->formTextarea('tags',$this->Item['tags'],array('rows'=>2,'cols'=>47,'style' => 'width:318px;'));
+	$meta_title 		= $this->formTextarea('meta_title',$this->Item['meta_title'],array('rows'=>2,'cols'=>47,'style' => 'width:318px;'));
+	$meta_description 	= $this->formTextarea('meta_description',$this->Item['meta_description'],array('rows'=>3,'cols'=>47,'style' => 'width:318px;'));
+	$meta_keywords 		= $this->formTextarea('meta_keywords',$this->Item['meta_keywords'],array('rows'=>3,'cols'=>47,'style' => 'width:318px;'));
+	
+	$arrMeta = array(
+			array('label' => 'Liên kết tĩnh','input' => $alias),
+			array('label' => 'Tags','input' => $tags,'desc'=>'Mỗi Tags phân biệt nhau với dấu phẩy','style'=>'text-align: right'),
+			array('label' => 'Meta Title','input' => $meta_title),
+			array('label' => 'Meta Description','input' => $meta_description),
+			array('label' => 'Meta Keywords','input' => $meta_keywords),
+		);
+	
+	//-------------------- SESSAGES ERROR ------------------
+	if(count($this->messageError)>0){
+		$errors = $this->formErrors($this->messageError,array('id'=>'errors'));
+	}
+?>
+<form name="appForm" method="post" action="" enctype="multipart/form-data">
+<script type="text/javascript">
+	function loadCategory(lang){
+		if(lang != ''){
+			$.get('<?php echo $linkSlbLanguages . '/lang/'?>'+lang,getData);
+		}
+	}
+	function getData(data){
+		$('div#category').html(data);
+	}
+</script>
+	<?php echo $this->render('admin-shop/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-shop/sublink/index.php');?>
+	<?php echo $errors;?>
+
+	<!-- BEGIN: CONTENT -->
+	<div id="element-box">
+		<div class="t">
+			<div class="t">
+				<div class="t"></div>
+			</div>
+		</div>
+		<div class="m">
+			<!-- BEGIN: ELEMENT BOX -->
+			<div class="width-60 fltlft">
+				<fieldset class="adminform">
+					<legend>Chi tiết</legend>
+					<ul class="adminformlist">
+						<?php echo $this->partialLoop('row.php', $arrInput);?>
+					</ul>
+				</fieldset>
+			</div>
+			<div class="width-40 fltrt">
+				<div id="pane-sliders" class="pane-sliders">
+				
+					<div class="panel">
+						<h3 id="metadata-options" class="title pane-toggler-down"><a href="javascript:void(0);"><span>Shop thuộc các block</span></a></h3>
+						<div class="panel_content">
+							<fieldset class="panelform">
+								<ul class="adminformlist">
+									<?php echo $this->partialLoop('row.php', $arrBlock);?>
+								</ul>
+							</fieldset>
+						</div>
+					</div>
+					
+					<div class="panel">
+						<h3 id="metadata-options" class="title pane-toggler-down"><a href="javascript:void(0);"><span>Cấu hình dữ liệu nâng cao</span></a></h3>
+						<div class="panel_content">
+							<fieldset class="panelform">
+								<ul class="adminformlist">
+									<?php echo $this->partialLoop('row.php', $arrMeta);?>
+								</ul>
+							</fieldset>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			<div class="clr"></div>
+			<!-- END: ELEMENT BOX -->
+		</div>
+		<div class="b">
+			<div class="b">
+				<div class="b"></div>
+			</div>
+		</div>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

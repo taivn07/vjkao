@@ -1,0 +1,57 @@
+<?php
+// -------------------- SESSAGES ERROR ------------------
+if (count ( $this->messageError ) > 0) {
+	$errors = $this->formErrors ( $this->messageError, array ('id' => 'errors' ) );
+}
+$language = new Zend_Session_Namespace ( 'language' );
+$lang_code = $language->lang;
+if (isset ( $this->Item ['lang_code'] )) {
+	$lang_code = $this->Item ['lang_code'];
+}
+$selectLanguages = $this->formSelect ( 'lang_code', $lang_code, null, $this->slbLanguages );
+?>
+<form name="appForm" method="post" action=""
+	enctype="multipart/form-data">
+	<!-- BEGIN: CONTENT -->
+	<div class="block_login goc7">
+		<!-- BEGIN: ELEMENT BOX -->
+		<h1>Đăng nhập vào hệ thống</h1>
+		<?php echo $errors;?>
+		<div class="section-box goc7">
+			<div class="loginform">
+				<table style="width: 100%">
+					<tr>
+						<td style="width: 120px">Tài khoản</td>
+						<td><?php echo $this->formText('user_name','',array('class'=>'txt_text'));?></td>
+					</tr>
+					<tr>
+						<td>Mật khẩu</td>
+						<td><?php echo $this->formPassword('password','',array('class'=>'txt_text'));?></td>
+					</tr>
+					<tr>
+						<td>Ngôn ngữ</td>
+						<td>
+							<?php echo $selectLanguages;?>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<?php echo $this->formSubmit('submit','Đăng nhập',array('class'=>'btn_login goc3'));?>
+						</td>
+					</tr>
+				</table>
+				<div class="clr"></div>
+			</div>
+		</div>
+
+		<p>
+			<a href="<?php echo $this->baseUrl('');?>">Quay trở lại trang chủ.</a>
+		</p>
+		<div class="lock"></div>
+		<div class="clr"></div>
+		<!-- END: ELEMENT BOX -->
+		<br>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

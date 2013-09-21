@@ -1,0 +1,20 @@
+<?php
+	$url		= $this->formText ( 'url', base64_decode($this->Item['url']), array ('style' => 'width: 319px;') );
+	$slbTarget = array (
+				'_self' => 'Tại trang (_self)',
+				'_blank' => 'Cửa sổ mới (_blank)'
+				);
+	$target = $this->formSelect ( 'target', $this->Item ['target'], array (), $slbTarget );
+	
+	$arrOptions = array (
+						array ('label' => 'Liên kết Url', 'input' => $url ),
+						array ('label' => 'Đích đến', 'input' => $target ),
+						);
+?>
+
+<div class="title_option" style="padding-top: 10px; padding-bottom: 0;">Cấu	hình menu</div>
+<div class="content_option">
+	<table class="adminformlist">
+		<?php echo $this->partialLoop('row.php', $arrOptions);?>
+	</table>
+</div>

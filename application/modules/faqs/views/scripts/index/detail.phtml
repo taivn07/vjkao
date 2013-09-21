@@ -1,0 +1,141 @@
+<?php
+	$name 		= $this->Item['name'];
+	$email 		= $this->Item['email'];
+	$title 		= $this->Item['title'];
+	$content 	= nl2br($this->Item['content']);
+	$date 		= $this->Item['date'];
+	$hits 		= $this->Item['hits'];
+	$category_name 	= $this->Item['category_name'];
+?>
+<div class="module_faqs">
+	<div class="module_title clearfix">
+		<span class="icon"></span>
+		<h1 class="title"><?php echo $this->language['faqsChiTietCauHoi'];?></h1>
+	</div>
+	<div class="module_content pd5">
+		<div class="line180 pd5">
+			<h3 class="view_title"><?php echo $title;?></h3>
+			<div class="view_content"><?php echo $content;?></div>
+			<div class="view_name">
+				<span class="name"><?php echo $this->language['faqsGuiBoi'] . ': <b>' . $name . '</b>';?></span> 
+				<span class="date"><?php echo $date;?></span>
+			</div>
+			<div class="clr"></div>
+		</div>
+		<?php
+		if(count($this->Items)>0){ 
+		?>
+		<div class="listFAQs">
+			<h3 class="title_reply"><?php echo $this->language['faqsDanhSachTraLoi'];?></h3>
+			<table>
+			<?php
+			foreach ($this->Items AS $key => $val){
+				$name = $val ['name'];
+				$email = $val ['email'];
+				$content = nl2br($val ['content']);
+				$date = $val['date'];
+			?>
+			<tr class="item clearfix">
+				<td class="number"><p class="stt"><?php echo $key + 1;?></p></td>
+				<td>
+					<div class="content">
+						<?php echo $content;?>
+					</div>
+					<div class="name">
+						<span class="viewname"><?php echo $this->language['faqsGuiBoi'] . ': <b>' . $name . '</b>';?></span> 
+						<span class="date"><?php echo $date;?></span>
+					</div>
+				</td>
+			</tr>
+			<?php
+			} 
+			?>
+			</table>
+		</div>
+
+		<?php
+			if (!empty($this->arrParam ['cid'] )) {
+				$urlOptions = array (
+						'module' => 'faqs',
+						'controller' => 'index',
+						'action' => 'detail',
+						'cid' => $this->arrParam['cid'],
+						'tcat' => $this->arrParam['tcat'],
+						'title' => $this->arrParam['title'],
+						'id' => $this->arrParam['id'] );
+				$currentUrl = $this->url ( $urlOptions, 'faqs-detail' );
+			} else {
+				$currentUrl = $this->baseUrl ( $this->currentController . '/' . $this->arrParam ['action'] );
+			}
+			echo $this->paginationControl ( $this->paginator, 'Sliding', 'pagination-index.phtml', array ('currentUrl' => $currentUrl ) );
+		?>
+		<?php
+		} 
+		?>
+	</div>
+	<div class="module_bottom"></div>
+</div>
+<?php
+	if(count($this->itemKhac)>0){ 
+?>
+<div class="module_faqs">
+	<div class="module_title clearfix">
+		<span class="icon"></span> 
+		<div class="title"><?php echo $this->language['faqsCauHoiKhac'];?></div>
+	</div>
+	<div class="module_content pd10">
+		<div class="listFAQs">
+			<table>
+			<?php
+			foreach ($this->itemKhac AS $key => $val){ 
+				$name = $val ['name'];
+				$email = $val ['email'];
+				$title = $val ['title'];
+				$hits = $val['hits'];
+				$like = $val['like'];
+				$unlike = $val['unlike'];
+				$date = $val['date'];
+				$total_reply = $val['total_reply'];
+				
+				$tcat = 'faqs';
+				if(!empty($val ['category_alias'])){
+					$tcat = $val ['category_alias'];
+				}
+					
+				$urlOptions = array (
+						'module' => 'faqs',
+						'controller' => 'index',
+						'action' => 'detail',
+						'cid' => $val ['cat_id'],
+						'tcat' => $tcat,
+						'title' => $val ['alias'],
+						'id' => $val ['id'] );
+				$linkDetial = $this->url ( $urlOptions, 'faqs-detail' );
+			?>
+				<tr class="item clearfix">
+					<td class="number"><p class="stt"><?php echo $key + 1;?></p></td>
+					<td>
+						<h3 class="title">
+							<a href="<?php echo $linkDetial;?>" title="<?php echo $title;?>"><?php echo $title;?></a>
+						</h3>
+						<div class="name">
+							<span class="viewname"><?php echo $this->language['faqsGuiBoi'] . ': <b>' . $name . '</b>';?></span> 
+							<span class="date"><?php echo $date;?></span>
+						</div>
+						<div class="limit">
+							<span class="traloi"><?php echo $this->language['faqsTraLoi'];?> (<?php echo '<b class="do">' . $total_reply . '</b>';?>)</span> 
+							<span class="xem"><?php echo $this->language['faqsXem'];?> (<?php echo '<b class="do">' .  $hits . '</b>';?>)</span>
+						</div>
+					</td>
+				</tr>
+			<?php
+			} 
+			?>
+			</table>
+		</div>
+	</div>
+	<div class="module_bottom"></div>
+</div>
+<?php
+	} 
+?>

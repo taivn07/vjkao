@@ -1,0 +1,66 @@
+<?php
+if ($this->totalItem > 0) { 
+?>
+<div class="module_article">
+	<div class="module_title clearfix">
+		<span class="icon"></span>
+		<h1 class="title">Tags: <?php echo $this->arrParam['key'];?></h1>
+	</div>
+	<div class="module_content">
+	<?php
+	foreach ( $this->Items as $key => $val ) {
+		$name = $val ['name'];
+		$picture = '<img class="img" src="' . $val ['thumb'] . '" alt="' . $val ['name'] . '"/>';
+		$synopsis = nl2br($val ['synopsis']);
+		
+		$created = '';
+		if($this->moduleConfig['showDate'] == 1){
+			$created = new Zend_Date($val['created'],'dd-MM-YY h:s:i');
+			$created = '<span class="date">' . $this->language['articleNgayDang'] . ': ' . $created . '</span>';
+		}
+		
+		$hits = '';
+		if($this->moduleConfig['showHits'] == 1){
+			$hits = '<span class="hits">' . $this->language['articleXem'] . ': ' . $val['hits'] . '</span>';
+		}
+		
+		$urlOptions = array ('module' => 'article', 'controller' => 'index', 'action' => 'detail', 'cid' => $val ['cat_id'], 'tcat' => $val ['category_alias'], 'title' => $val ['alias'], 'id' => $val ['id'] );
+		$linkDetial = $this->url ( $urlOptions, 'article-detail' );
+	?>
+		<div class="item">
+			<a href="<?php echo $linkDetial;?>" title="<?php echo $name;?>">
+				<?php echo $picture;?>
+			</a>
+			<div class="desc">
+				<h3 class="title">
+					<a href="<?php echo $linkDetial;?>" title="<?php echo $name;?>"><?php echo $name;?></a>
+				</h3>
+				<div>
+					<?php echo $created;?>
+					<?php echo $hits;?>
+				</div>
+				<div class="synopsis"><?php echo $synopsis;?></div>
+			</div>
+			<div class="readmore">
+				<a href="<?php echo $linkDetial;?>"><?php echo $this->language['xemThem']?></a>
+			</div>
+			<div class="clr"></div>
+		</div>
+		<?php
+			}
+		?>
+
+		<?php
+			if(!empty($this->arrParam['key'])){
+				$currentUrl = $this->baseUrl($this->arrParam['module'] . '/public/tags/key/' . $this->arrParam['key']);
+			}else{
+				$currentUrl = 'articles.html';
+			}
+			echo $this->paginationControl($this->paginator,'Sliding','pagination-index.phtml',array('currentUrl'=>$currentUrl,'arrParam' => $this->arrParam));
+		?>
+	</div>
+	<div class="module_bottom"></div>
+</div>
+<?php
+}
+?>

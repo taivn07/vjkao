@@ -1,0 +1,46 @@
+<?php
+	$group_name 	= $this->Item['group_name'];
+	$avatar 		= $this->Item['avatar'];
+	$ranking 		= $this->Item['ranking'];
+	
+	$group_acp	 	= $this->Item['group_acp'];
+	$group_default 	= $this->Item['group_default'];
+	
+	$created_by 	= $this->Item['created_by'];
+	$created 		= $this->Item['created'];
+	$modified_by 	= $this->Item['modified_by'];
+	$modified 		= $this->Item['modified'];
+	
+	$status 		= $this->Item['status'];
+	$order 			= $this->Item['order'];
+	
+	$arrInput = array(
+			array('label' => 'Tên nhóm','input' => $group_name),
+			array('label' => 'Avatar','input' => $avatar),
+			array('label' => 'Ranking','input' => $ranking),
+			array('label' => 'Cho phép vào admin','input' => $group_acp),
+			array('label' => 'Nhóm mặc định','input' => $group_default),
+			array('label' => 'Tạo bởi','input' => $created_by),
+			array('label' => 'Ngày tạo','input' => $created),
+			array('label' => 'Sửa bởi','input' => $modified_by),
+			array('label' => 'Ngày sửa','input' => $modified),
+			array('label' => 'Hiển thị','input' => $status),
+			array('label' => 'Thứ tự','input' => $order),
+	);
+?>
+<form name="appForm" method="post" action="">
+	<?php echo $this->render('admin-group/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-group/sublink/index.php');?>	
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<fieldset class="adminform">
+			<legend>Chi tiết</legend>
+			<table class="adminformlist">
+				<?php echo $this->partialLoop('row.php', $arrInput);?>
+			</table>
+		</fieldset>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

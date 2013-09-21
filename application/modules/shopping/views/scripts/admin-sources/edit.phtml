@@ -1,0 +1,58 @@
+<?php
+	//----------------------- INPUT ELEMENTS -------------------//
+	$ssFilter 		= $this->arrParam['ssFilter'];
+
+	$name 			= $this->formText ('name', $this->Item['name'], array ('class' => 'txtlong active'));
+	$address		= $this->formText ('address', $this->Item['address'], array ('class' => 'txtlong'));
+	$contact_name 	= $this->formText ('contact_name', $this->Item['contact_name'], array ('class' => 'txtlong'));
+	$contact_phone	= $this->formText ('contact_phone', $this->Item['contact_phone'], array ('class' => 'txtlong'));
+	$contact_email	= $this->formText ('contact_email', $this->Item['contact_email'], array ('class' => 'txtlong'));
+	
+	$option 		= array('Không','Có');
+	if(isset($this->Item['status'])){
+		$trangthai = $this->Item['status'];
+	}else{
+		$trangthai = 1;
+	}
+	$status 		= $this->formRadio('status',$trangthai,null,$option, ' ');
+	if(isset($this->Item['order'])){
+		$order = $this->Item['order'];
+	}else{
+		$order = 255;
+	}
+	$order 			= $this->formText ('order', $order, array ('class' => 'txtshort' ) );
+	$content 		= $this->cmsEditor('content',htmlspecialchars_decode($this->Item['content']),array('toolbar'=>'MyToolbar', 'language'=>'vi'));
+	
+	$arrInput = array(
+				array('label' => 'Tên nhà cung cấp','input' => $name, 'desc' => '<span class="red">*</span>'),
+				array('label' => 'Địa chỉ','input' => $address),
+				array('label' => 'Tên người liên hệ','input' => $contact_name),
+				array('label' => 'Số điện thoại','input' => $contact_phone),
+				array('label' => 'Email','input' => $contact_email),
+				array('label' => 'Hiển thị','input' => $status),
+				array('label' => 'Thứ tự','input' => $order),
+				array('label' => 'Nội dung','input' => $content),
+			);
+	
+	//-------------------- SESSAGES ERROR ------------------
+	if(count($this->messageError)>0){
+		$errors = $this->formErrors($this->messageError,array('id'=>'errors'));
+	}
+?>
+<form name="appForm" method="post" action="" enctype="multipart/form-data">
+	<?php echo $this->render('admin-sources/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-sources/sublink/index.php');?>
+	<?php echo $errors;?>
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<fieldset class="adminform">
+		<legend>Chi tiết</legend>
+			<table class="adminformlist">
+				<?php echo $this->partialLoop('row.php', $arrInput);?>
+			</table>
+		</fieldset>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

@@ -1,0 +1,103 @@
+<?php
+	//----------------------- INPUT ELEMENTS -------------------//
+	$name 			= $this->formText ( 'name', $this->Item['name'], array ('class' => 'txtlong active', 'onchange'=>"get_alias()") );
+	$picture		= '<div><img src="' . $this->imgUrl . '/no-avatar.png" id="image_picture" class="hinh-anh"></div>';
+	if(!empty($this->Item['picture'])){
+		$picture	= '<div><img src="' . $this->Item['picture'] . '" id="image_picture" class="hinh-anh"></div>';
+	}
+	$picture 		= $this->cmsUserFiles('picture', $this->Item['picture'], 'Chọn ảnh', 'images', $options = array('class' => 'txtfile') ) . $picture;
+	$option 		= array('Không','Có');
+	if(isset($this->Item['status'])){
+		$trangthai = $this->Item['status'];
+	}else{
+		$trangthai = 1;
+	}
+	$status 		= $this->formRadio('status',$trangthai,null,$option, ' ');
+	if(isset($this->Item['order'])){
+		$order = $this->Item['order'];
+	}else{
+		$order = 255;
+	}
+	$order 			= $this->formText ('order', $order, array ('class' => 'txtshort' ) );
+	$selectCategory	= $this->albumInfo['category_name'];
+	$selectAlbum	= $this->albumInfo['name'] . $this->formHidden('album_id',$this->arrParam['album_id']);
+	
+	$multi_image	= $this->formTextarea('multi_image',$this->Item['multi_image'],array('readonly' => 'readonly', 'rows' => 3, 'class' => 'multi_image'));
+	$btnImage		= '<a class="btnMedia" onclick="openKCFinderMulti(appForm.multi_image)" href="javascript:void(0);">Chọn ảnh</a>';
+	$btnXoa			= '<a class="btnMedia" onclick="btnXoa(appForm.multi_image)" href="javascript:void(0);">Xóa trắng</a>';
+	
+	$arrInput = array(
+				array('label' => 'Tiêu đề','input' => $name, 'desc' => '<span class="red">*</span>'),
+				array('label' => 'Chọn hình ảnh','input' => $multi_image),
+				array('label' => '','input' => $btnImage . $btnXoa, 'style' => 'text-align: right;'),
+				array('label' => '','input' => '<span class="xanh">Để thêm mới nhiều hình ảnh 1 lần. Khi chọn ảnh bạn nhấn và giữ <span class="red">Ctrl</span> và lựa chọn các hình ảnh cần thêm. Sau đó bấm <span class="red">Chuột phải</span> và nhấn <span class="red">Chọn</span></span>'),
+				array('label' => 'Thuộc danh mục','input' => '<div id="category">' . $selectCategory . '</div>'),
+				array('label' => 'Thuộc Album','input' => '<div id="category">' . $selectAlbum . '</div>'),
+				array('label' => 'Hiển thị','input' => $status),
+				array('label' => 'Thứ tự','input' => $order),
+			);
+
+	//--------------------- Meta Options ---------------------
+	$alias 				= $this->formText ( 'alias', $this->Item['alias'], array ('class' => 'textlong' ) );
+	
+	$arrMeta = array(
+			array('label' => 'Liên kết tĩnh','input' => $alias),
+		);
+	
+	//-------------------- SESSAGES ERROR ------------------
+	if(count($this->messageError)>0){
+		$errors = $this->formErrors($this->messageError,array('id'=>'errors'));
+	}
+?>
+<form name="appForm" method="post" action="" enctype="multipart/form-data">
+	<?php echo $this->render('admin-image/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-image/sublink/index.php');?>
+	<?php echo $errors;?>
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<div class="width-60 fl">
+			<fieldset class="adminform">
+				<legend>Chi tiết</legend>
+				<table class="adminformlist">
+					<?php echo $this->partialLoop('row.php', $arrInput);?>
+				</table>
+				<script type="text/javascript">
+				function openKCFinderMulti(textarea) {
+				    window.KCFinder = {
+				        callBackMultiple: function(files) {
+				            window.KCFinder = null;
+				            textarea.value = "";
+				            for (var i = 0; i < files.length; i++)
+				                textarea.value += files[i] + "\n";
+				        }
+				    };
+				    window.open('<?php echo SCIPTS_URL . '/media_files/browse.php?type=images&lng=vi';?>', 'kcfinder_multiple','status=0, toolbar=0, location=0, menubar=0, directories=0,resizable=1, scrollbars=0, width=950, height=450' );
+				}
+				function btnXoa(textarea) {
+					 textarea.value = "";
+				}
+				</script>
+			</fieldset>
+		</div>
+		<div class="width-40 fr">
+			<div id="pane-sliders" class="pane-sliders">
+					
+				<div class="panel">
+					<h3 id="metadata-options" class="title pane-toggler-down"><a href="javascript:void(0);"><span>Metadata Options</span></a></h3>
+					<div class="panel_content">
+						<fieldset class="panelform">
+							<table class="panelformlist">
+								<?php echo $this->partialLoop('row.php', $arrMeta);?>
+							</table>
+						</fieldset>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		<div class="clr"></div>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

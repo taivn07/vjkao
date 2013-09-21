@@ -1,0 +1,21 @@
+<?php
+	$number = 0;
+	$idArray = '';
+	if(isset($this->arrParam['type']) == 'multi-delete' && count($this->arrParam['cid']) > 0){
+		$number = count($this->arrParam['cid']);
+		$idArray = $this->formHidden('cid',implode(',', $this->arrParam['cid']));
+	}else
+	if(isset($this->arrParam['id'])){
+		$number = 1;
+	}
+?>
+<form name="appForm" method="post" action="">
+	<?php echo $this->render('admin-comment/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-comment/sublink/index.php');?>	
+
+	<div id="errors" class="errors">
+		Có <span style="font-size: 16px; color: red;"><strong><?php echo $number;?></strong></span> dữ liệu sẽ được xóa. Bạn có chắc chắn muốn xóa thật không?
+	</div>
+	<?php echo $idArray;?>
+</form>

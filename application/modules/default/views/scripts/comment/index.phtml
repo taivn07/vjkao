@@ -1,0 +1,73 @@
+<?php
+	$captcha = $this->captcha;
+	$txtCaptcha = $this->formText ( 'captcha', '', array ('class' => 'form_text', 'placeholder' => $this->language['captcha']) ) . '<div class="view_error" id="view_captcha"></div>';
+	$txtID = $this->formHidden ( 'captchaID', $this->captcha_id );
+	$lang_code = $this->formHidden ( 'lang', $this->arrParam ['ssFilter'] ['lang_code'] );
+	
+	$c_module = '';
+	if(!empty($this->arrParam['c_module'])){
+		$c_module = '/c_module/' . $this->arrParam['c_module'];
+	}
+	$c_id = '';
+	if(!empty($this->arrParam['c_id'])){
+		$c_id = '/c_id/' . $this->arrParam['c_id'];
+	}
+?>
+<?php
+	// -------------------- SESSAGES ERROR ------------------
+	if(count($this->messageError)>0){
+		foreach ($this->messageError AS $key => $val){
+			echo '<div class="listError" id="'.$key.'" rel="' . $val . '"></div>';
+		}
+	}
+?>
+<div class="frmComment">
+	<?php
+	if(!empty($this->note)){
+		echo '<div class="note">' . $this->note . '</div>';
+	}
+	?>
+	<form name="frmComment" id="frmComment" method="post">
+		<table>
+			<tr>
+				<td><?php echo $this->formText('txtName',$this->Item['txtName'],array('class' => 'form_text', 'placeholder' => $this->language['hoTen'])) . '<div class="view_error" id="view_txtName"></div>';?></td>
+				<td><?php echo $this->formText('txtEmail',$this->Item['txtEmail'],array('class' => 'form_text', 'placeholder' => $this->language['email'])) . '<div class="view_error" id="view_txtEmail"></div>';?></td>
+			</tr>
+			<tr>
+				<td colspan="3"><?php echo $this->formTextarea('txtContent',$this->Item['txtContent'],array('class' => 'content_text', 'placeholder' => $this->language['noiDung'])) . '<div class="view_error" id="view_txtContent"></div>';?></td>
+			</tr>
+			<tr>
+				<td><?php echo $txtCaptcha . $txtID . $lang_code;?></td>
+			</tr>
+			<tr>
+				<td><?php echo $captcha;?></td>
+			</tr>
+			<tr>
+				<td><?php echo $this->formButton('btnSubmit',$this->language['gui'],array('class' => 'goc10 button', 'onclick' => 'submitComment()'));?></td>
+			</tr>
+		</table>
+	</form>
+</div>
+<div class="list_comment"></div>
+<script type="text/javascript">
+	$('.list_comment').addClass('loadding');
+	$('.list_comment').load('<?php echo $this->baseUrl('default/comment/comment' . $c_module . $c_id);?>',resultload());
+	function resultload(){
+		$('.list_comment').removeClass('loadding');
+	}
+	function submitComment(){
+		$('.block_comment').load('<?php echo $this->baseUrl('default/comment/index' . $c_module . $c_id);?>',
+					$("#frmComment").serializeArray()
+				);
+	}
+	$("div.listError").each(function (i) {
+	    //alert($(this).attr('rel'));
+	    $('#view_' + $(this).attr('id')).html($(this).attr('rel'));
+	});
+	function loadPage(url){
+		$('.list_comment').load(url);
+	}
+</script>
+
+
+

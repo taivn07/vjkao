@@ -1,0 +1,60 @@
+<?php
+	//-------------------- SESSAGES ERROR ------------------
+	if(count($this->messageError)>0){
+		foreach ($this->messageError AS $key => $val){
+			echo '<div class="listError" id="'.$key.'" rel="' . $val . '"></div>';
+		}
+		
+		if(!empty($this->messageError[0])){
+			$msg = '<p class="view_error" style="color:#ff3000;margin:0 0 10px 2px;">Email đăng nhập hoặc mật khẩu không đúng</p>';
+		}
+	}
+?>
+<form name="appForm" method="post" action="" enctype="multipart/form-data">
+	<div class="memberLogin">
+		<div class="title">Thành viên đăng nhập</div>
+		<div class="loginform">
+			<?php echo $msg;?>
+			<table id="LoginThis" cellspacing="10" cellpadding="5">
+				<tr>
+					<td colspan="2">
+						<b>Hãy đăng nhập thành viên để quản lý thông tin của bạn.</b><br><br>
+					</td>
+				</tr>
+				<tr>
+					<td class="label" style="width: 120px;">Email Đăng nhập (<span class="star">*</span>)</td>
+					<td><?php echo $this->formText('user_name','',array('class'=>'txtmedium'));?><div class="view_error" id="view_user_name"></div></td>
+				</tr>
+				<tr>
+					<td class="label">Mật khẩu (<span class="star">*</span>)</td>
+					<td><?php echo $this->formPassword('password','',array('class'=>'txtmedium'));?><div class="view_error" id="view_password"></div></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<font color="#666666"><input type="checkbox" value="1" name="set_cookie_this" id="set_cookie_this"><label for="set_cookie_this">Ghi nhớ mật khẩu</label> (Không check nếu bạn dùng máy tính công cộng!)</font>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<?php echo $this->formSubmit('submit','Đăng nhập',array('class'=>'user_button goc10'));?>
+					</td>
+				</tr>
+				<tr>
+	                <td colspan="2"><br>
+	                    <a rel="nofollow" id="thanhvien_dangky" href="javascript:void(0)" onclick="showRegistry()">
+	                    	<img border="0" alt="" src="<?php echo $this->imgUrl . '/pointer.gif';?>">Bạn muốn trở thành thành viên, xin vui lòng đăng ký tại đây.
+	                    </a>
+	                </td>
+	            </tr>
+			</table>
+			<div class="clr"></div>
+		</div>
+	</div>
+</form>
+<script type="text/javascript">
+	$("div.listError").each(function (i) {
+	    $('#view_' + $(this).attr('id')).html($(this).attr('rel'));
+	});
+</script>

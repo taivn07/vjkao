@@ -1,0 +1,62 @@
+.module_user{}
+.module_user .left_user{width: 220px; float: left;}
+.module_user .center_user{width: 780px; float: right; background: #FFF;}
+
+.block_cpanel{ margin-bottom: 10px; background: #FFF;}
+.block_cpanel .block_title{color: #005C99;font-size: 12px;font-weight: bold;height: 29px;line-height: 29px;padding-left: 10px;border-bottom: 1px solid #DEDEDE;}
+.block_cpanel .block_content{ padding-bottom: 10px;}
+.block_cpanel .block_content ul{margin: 0; padding: 0; list-style: none; margin: 7px 0 15px;}
+.block_cpanel .block_content ul li{display: block;height: 20px;line-height: 20px; padding-left: 10px;}
+.block_cpanel .block_content ul li a{background: url("../images/user/icon_1.png") no-repeat 0px 6px #FFFFFF;color: #444444;display: block;height: 20px;line-height: 20px;padding-left: 10px;}
+.block_cpanel .block_content ul li a:hover,.block_cpanel .block_content ul li a.selected{background: url("../images/user/icon_2.png") no-repeat 0px 6px #FFFFFF;color: #FF8A66;}
+
+.userlist{ width: 100%; border: 1px solid #CCC;}
+.userlist th{border: 1px solid #CCC; padding: 5px; background: #999; color: #FFF;}
+.userlist td{border: 1px solid #CCC; padding: 5px;}
+
+.block_thongTinTaiKhoan{ margin-bottom: 10px;}
+.block_thongTinTaiKhoan .block_title{color: #005C99;font-size: 12px;font-weight: bold;height: 29px;line-height: 29px;padding-left: 10px;border-bottom: 1px solid #DEDEDE; position: relative;}
+.block_thongTinTaiKhoan .block_title .viewall{position: absolute; right: 10px; top: 0;}
+.block_thongTinTaiKhoan .block_title .viewall .noibat{color: #FF3000;}
+.block_thongTinTaiKhoan .block_content{padding: 10px;}
+.block_thongTinTaiKhoan .note{ color: #24549b; padding-bottom: 10px; line-height: 17px;}
+.block_thongTinTaiKhoan .label{}
+.block_thongTinTaiKhoan .item{ padding-top: 10px;}
+.block_thongTinTaiKhoan .item .item_title{background:#F0E9F9;border-bottom: 1px solid #E2D5F3;border-top: 1px solid #E2D5F3;color: #782DB6;font-size: 14px;font-weight: bold;padding: 5px 10px;position: relative;}
+.block_thongTinTaiKhoan .item .item_content{ padding: 10px;}
+.block_thongTinTaiKhoan td{ padding: 7px;}
+.block_thongTinTaiKhoan select{border: 1px solid #CCC; padding: 3px; background: #FFF;}
+
+.memberLogin{ min-height: 300px; margin: 0 auto; border: 1px solid #EFEFEF; background: #FFF;}
+.memberLogin .title{padding: 6px 15px; font-weight: bold; font-size: 18px;border-bottom: 1px solid #EFEFEF; color: #DD127B; position: relative;}
+.memberLogin .loginform{padding: 20px;}
+.memberLogin .loginform td{ padding: 3px; vertical-align: top;}
+.memberLogin .loginform .label{padding-top: 8px;}
+.memberLogin .registry{ width: 500px; margin: 0 auto; padding: 20px; text-align: center;}
+.memberLogin .msg{ text-align: center; padding: 10px 5px 5px; color: #0785ad;}
+
+.memberRegistry{ min-height: 300px; margin: 0 auto; border: 1px solid #EFEFEF; background: #FFF;}
+.memberRegistry .title{padding: 6px 15px; font-weight: bold; font-size: 18px;border-bottom: 1px solid #EFEFEF; color: #DD127B; position: relative;}
+.memberRegistry .title .viewall{position:  absolute; top: 8px; right: 10px; font-size: 13px; color: #FF0000;}
+.memberRegistry .note{ color: #24549b; padding-bottom: 10px; line-height: 17px;}
+.memberRegistry .registryForm{ padding: 10px;}
+.memberRegistry .registryForm td{ padding: 4px; vertical-align: top;}
+.memberRegistry .registryForm .label{padding-top: 9px;}
+.memberRegistry .listError{display: none;}
+.memberRegistry select{border: 1px solid #CCC; padding: 3px; background: #FFF;}
+.memberRegistry .item{ padding-top: 10px;}
+.memberRegistry .item .item_title{background:#F0E9F9;border-bottom: 1px solid #E2D5F3;border-top: 1px solid #E2D5F3;color: #DD127B;font-size: 14px;font-weight: bold;padding: 5px 10px;position: relative;}
+.memberRegistry .item .item_content{ padding: 10px;}
+.memberRegistry .item .item_thoaThuan{border: 1px solid #DDDDDD;color: #666666;height: 120px;line-height: 18px;margin: 10px;overflow: auto;padding: 10px;}
+
+.block_botton{ text-align: right; margin: 10px 0;}
+
+.userImg {border: 1px solid #C6DBE0;}
+.user_button { background:#387C7D;border: 0 none;color: #FFFFFF;cursor: pointer;font-weight: normal;padding: 5px 15px 5px; font-size: 14px;}
+.user_button:hover{background:#72A52B;}
+
+.txtshort{ width: 150px;border: 1px solid #CCC; padding: 3px;}
+.txtmedium{ width: 250px;border: 1px solid #CCC; padding: 3px;}
+.txtlong{ width: 350px;border: 1px solid #CCC; padding: 3px;}
+.star{ color: #ff0000;}
+.view_error{ font-size: 11px; color: #FF0000; background: url("../images/user/warning.gif") no-repeat left 1px; padding-left: 14px;margin-top: 2px;}

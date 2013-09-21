@@ -1,0 +1,64 @@
+<?php
+if(count($this->Items) > 0){
+echo '<table>';
+	$avatar = '<img alt="avatar" src="'.$this->imgUrl . '/user/no-avatar.jpg">';
+	foreach ($this->Items AS $key => $val){
+		$name = $val['name']; 
+		$content = $val['content']; 
+		$date = $val['date'];
+?>
+<tr class="comment_item">
+	<td class="avatar">
+		<?php echo $avatar;?>
+	</td>
+	<td class="noidung">
+		<p class="title"><?php echo $name;?> - <span class="date"><?php echo $date;?></span></p>
+		<div class="chitiet"><?php echo $content;?></div>
+	</td>
+</tr>
+	<?php
+		$tblCommentReply = new Default_Model_CommentReply();
+		$commentReply = $tblCommentReply->listItem(array('comment_id' => $val['id']), array('task'=>'public-list')); 
+	
+		if(count($commentReply) > 0){
+			foreach ($commentReply AS $key_reply => $val_reply){ 
+	?>
+	<tr class="comment_result">
+		<td></td>
+		<td>
+			<table>
+				<tr>
+					<td class="avatar">
+						<?php echo $avatar;?>
+					</td>
+					<td class="noidung">
+						<div class="title"><?php echo $val_reply['name'] . ' - <span class="date">' . $val_reply['date'] . '</span>';?></div>
+						<div class="chitiet"><?php echo nl2br($val_reply['content']);?></div>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<?php
+			}
+		} 
+	?>
+<?php
+	}
+echo '</table>';
+} 
+?>
+
+<?php
+	$c_module = '';
+	if (!empty($this->arrParam ['c_module'])) {
+		$c_module = '/c_module/' . $this->arrParam ['c_module'];
+	}
+	
+	$c_id = '';
+	if (!empty($this->arrParam ['c_id'])) {
+		$c_id = '/c_id/' . $this->arrParam ['c_id'];
+	}
+	$currentUrl = $this->baseUrl ( $this->currentController . '/' . $this->arrParam ['action'] . $c_module . $c_id );
+	echo $this->paginationControl ( $this->paginator, 'Sliding', 'pagination-ajax.phtml', array ('currentUrl' => $currentUrl ) );
+?>

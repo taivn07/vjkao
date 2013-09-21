@@ -1,0 +1,54 @@
+<?php
+	//----------------------- INPUT ELEMENTS -------------------//
+	$lang_code		= $this->Item['lang_code'];
+	$name 			= $this->Item['name'];
+	$tel 			= $this->Item['tel'];
+	$fax 			= $this->Item['fax'];
+	$phone 			= $this->Item['phone'];
+	$address 		= $this->Item['address'];
+	$email	 		= $this->Item['email'];
+	$created	 	= $this->Item['created'];
+	
+	$status 		= $this->Item['status'];
+	if($status == 1){
+		$status = $this->cmsIconButton('Đang được hiển thị', $this->imgUrl . '/admin/tick.png');
+	}else{
+		$status = $this->cmsIconButton('Đã tắt hiển thị', $this->imgUrl . '/admin/publish_x.png');
+	}
+	
+	$content 		= htmlspecialchars_decode($this->Item['content']);
+	
+	$arrInput = array(
+				array('label' => 'Ngôn ngữ','input' => $lang_code),
+				array('label' => 'Họ tên','input' => $name),
+				array('label' => 'Số điện thoại','input' => $tel),
+				array('label' => 'Fax','input' => $fax),
+				array('label' => 'Phone','input' => $phone),
+				array('label' => 'Địa chỉ','input' => $address),
+				array('label' => 'Email','input' => $email),
+				array('label' => 'Ngày gửi','input' => $created),
+				array('label' => 'Nội dung','input' => $content, 'style' => 'margin-top: 22px;margin-left: 50px;'),
+			);
+	
+	//-------------------- SESSAGES ERROR ------------------
+	if(count($this->messageError)>0){
+		$errors = $this->formErrors($this->messageError,array('id'=>'errors'));
+	}
+?>
+<form name="appForm" method="post" action="" enctype="multipart/form-data">
+	<?php echo $this->render('admin-contact/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-contact/sublink/index.php');?>
+	<?php echo $errors;?>
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<fieldset class="adminform">
+			<legend>Chi tiết</legend>
+			<table class="adminformlist">
+				<?php echo $this->partialLoop('row.php', $arrInput);?>
+			</table>
+		</fieldset>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

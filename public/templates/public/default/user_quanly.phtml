@@ -1,0 +1,42 @@
+<?php echo $this->render('html/header.php');?>
+<?php 
+	$siteConfig = Zend_Registry::get('siteConfig');
+?>
+<div class="content">
+   	<div class="width_wrapper clearfix">
+   		<?php echo $this->blkMenu('top_menu','top_menu');?>
+   		<?php echo $this->blkHeader();?>
+   		<?php echo $this->blkMenu('main_menu','main_menu');?>
+		<div class="main_content clearfix">
+			<div class="module_user">
+    			<div class="left_user">
+    				<div class="block_cpanel">
+    					<div class="block_title">Quản lý tài khoản</div>
+    					<div class="block_content">
+    						<ul>
+    							<li><a href="<?php echo $this->baseUrl('default/user/index')?>" <?php if($this->arrParam['controller'] == 'user' && $this->arrParam['action'] == 'index') echo 'class="selected"';?>>Thông tin tài khoản</a></li>
+    							<li><a href="<?php echo $this->baseUrl('default/user/password')?>" <?php if($this->arrParam['controller'] == 'user' && $this->arrParam['action'] == 'password') echo 'class="selected"';?>>Đổi mật khẩu</a></li>
+    						</ul>
+    					</div>
+    				</div>
+    				<div class="block_cpanel">
+    					<div class="block_title">Sản phẩm</div>
+    					<div class="block_content">
+    						<ul>
+    							<li><a href="<?php echo $this->baseUrl('default/user/order')?>" <?php if($this->arrParam['controller'] == 'user' && $this->arrParam['action'] == 'order') echo 'class="selected"';?>>Quản lý đơn hàng</a></li>
+    							<li><a href="<?php echo $this->baseUrl('default/user/wishlist')?>" <?php if($this->arrParam['controller'] == 'user' && $this->arrParam['action'] == 'wishlist') echo 'class="selected"';?>>Danh sách ưa thích</a></li>
+    							<li><a href="<?php echo $this->baseUrl('shopping/public/view-cart')?>">Giỏ hàng</a></li>
+    						</ul>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="center_user">
+					<?php echo $this->layout()->content;?>
+				</div>
+				<div class="clr"></div>
+			</div>
+        </div>
+        <?php echo $this->blkFooter();?>
+   	</div>
+</div>
+<?php echo $this->render('html/footer.php');?>

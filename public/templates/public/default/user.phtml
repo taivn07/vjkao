@@ -1,0 +1,16 @@
+<?php echo $this->render('html/header.php');?>
+	<?php 
+		$siteConfig = Zend_Registry::get('siteConfig');
+	?>
+    <div class="content">
+    	<div class="width_wrapper clearfix">
+    		<?php echo $this->blkMenu('top_menu','top_menu');?>
+    		<?php echo $this->blkHeader();?>
+    		<?php echo $this->blkMenu('main_menu','main_menu');?>
+			<div class="main_content clearfix">
+				<?php echo $this->layout()->content;?>
+            </div>
+            <?php echo $this->blkFooter();?>
+    	</div>
+    </div>
+<?php echo $this->render('html/footer.php');?>

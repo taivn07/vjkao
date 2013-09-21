@@ -1,0 +1,309 @@
+<?php
+	//----------------------- INPUT ELEMENTS -------------------//
+	$ssFilter 		= $this->arrParam['ssFilter'];
+	$selectLanguages = $ssFilter['lang_code'] . $this->formHidden('lang_code',$ssFilter['lang_code']);
+	$code 			= $this->formText ( 'code', $this->Item['code'], array ('class' => 'txtshort') );
+	$name 			= $this->formText ( 'name', $this->Item['name'], array ('class' => 'txtlong active', 'onchange'=>"get_alias()") );
+	$imgName 		= explode('/editor-upload/images/', $this->Item['picture']);
+	$picture		= '<div><img src="' . $this->imgUrl . '/no-avatar.png" id="image_picture" class="hinh-anh"></div>';
+	if(!empty($this->Item['picture'])){
+		$picture	= '<div><img src="' . $this->Item['picture'] . '" id="image_picture" class="hinh-anh"></div>';
+	}
+	$picture 		= $this->cmsUserFiles('picture', $this->Item['picture'], 'Chọn ảnh', 'images', $options = array('class' => 'txtfile') ) . $picture ;
+	$option 		= array('Không','Có');
+	if(isset($this->Item['status'])){
+		$trangthai = $this->Item['status'];
+	}else{
+		$trangthai = 1;
+	}
+	$status 		= $this->formRadio('status',$trangthai,null,$option, ' ');
+	
+	$tinh_trang = array(
+			'1' => 'Còn hàng',
+			'0'=> 'Hết thàng',
+	);
+	$selectTinhTrang = $this->formSelect('tinh_trang',$this->Item['tinh_trang'],array(),$tinh_trang);
+	
+	if(isset($this->Item['order'])){
+		$order = $this->Item['order'];
+	}else{
+		$order = 255;
+	}
+	$order 			= $this->formText ('order', $order, array ('class' => 'txtshort auto_numberic' ) );
+	$selectCategory	= $this->cmsSelect('cat_id',$this->Item['cat_id'],$this->slbCategory,array('size'=>0,'style'=>'min-width:200px;','onchange'=>"loadShop(this.value)"));
+	
+	$optionsUnits 	= $this->slbProductUnits;
+	$slbMoney		= $this->formSelect('units_money',$this->Item['units_money'],array(),$this->slbMoney);
+	$selloff		= ' Giảm giá ' . $this->formText ('selloff', $this->Item['selloff'], array ('class' => 'txtshort auto_numberic' , 'style'=>'width:20px;', 'maxlength' => 2) ) . ' %';
+	$vat = array(
+			'1' => 'Đã bao gồm VAT',
+			'0'=> 'Chua bao gồm VAT',
+	);
+	$selectVat = $this->formSelect('vat',$this->Item['vat'],array(),$vat);
+	$price 			= $this->formText ('price',  Zend_Locale_Format::toNumber($this->Item['price'],array('precision' => 0)), array ('class' => 'txtshort auto_numberic') ) . ' ' . $slbMoney . ' ' . $selloff . ' ' .$selectVat;
+	
+	$tinh_trang = array(
+			'1' => 'Còn hàng',
+			'0'=> 'Hết thàng',
+	);
+	$selectTinhTrang = $this->formSelect('tinh_trang',$this->Item['tinh_trang'],array(),$tinh_trang);
+	$slbProductUnits= $this->formSelect('unit_id',$this->Item['unit_id'],array(),$this->slbProductUnits);
+	$product_number	= $this->formText ('product_number', $this->Item['product_number'], array ('class' => 'txtshort auto_numberic') ) . ' ' . $slbProductUnits;
+	
+	$baohanh_date = array(
+			'ngay' => 'Ngày',
+			'thang'=> 'Tháng',
+			'nam'=> 'Năm',
+	);
+	$baohanh_date_active = $this->Item['baohanh_date'];
+	if(empty($this->Item['baohanh_date'])){
+		$baohanh_date_active = 'thang';
+	}
+	$selectBaoHanhDate 	= $this->formSelect('baohanh_date',$baohanh_date_active,array(),$baohanh_date);
+	$baohanh_number		= $this->formText ('baohanh_number', $this->Item['baohanh_number'], array ('class' => 'txtshort auto_numberic') ) . ' ' . $selectBaoHanhDate;
+	
+	$vanchuyen			= $this->formText ( 'vanchuyen', $this->Item['vanchuyen'], array ('class' => 'txtlong') );
+	$khuyenmai			= $this->formTextarea('khuyenmai', $this->Item['khuyenmai'],array('rows'=>2,'class' => 'txtalong'));
+	
+	$slbSourcesMoney	= $this->formSelect('sources_money',$this->Item['sources_money'],array(),$this->slbMoney);
+	$moneySources		= ' Giá nhập vào ' . $this->formText ('money_sources', Zend_Locale_Format::toNumber($this->Item['money_sources'],array('precision'=>0)), array ('class' => 'txtshort auto_numberic') ) . ' ' . $slbSourcesMoney;
+	$slbProductSources	= $this->formSelect('sources_id',$this->Item['sources_id'],array('style'=>'width:250px;'),$this->slbProductSources) . ' ' . $moneySources;
+	$slbProductManu		= $this->formSelect('manu_id',$this->Item['manu_id'],array('style'=>'width:250px;'),$this->slbProductManu);
+	
+	$synopsis		= $this->formTextarea('synopsis', $this->Item['synopsis'],array('rows'=>4,'class' => 'textarea'));
+	$content 		= $this->cmsEditor('content',htmlspecialchars_decode($this->Item['content']),array('toolbar'=>'MyToolbar', 'language'=>'vi'));
+	
+	$arrInput = array(
+				array('label' => 'Chọn ngôn ngữ','input' => $selectLanguages),
+				array('label' => 'Mã sản phẩm','input' => $code, 'desc' => 'Không nhập nếu không có mã sản phẩm'),
+				array('label' => 'Tiêu đề','input' => $name, 'desc' => '<span class="red">*</span>'),
+				array('label' => 'Hình ảnh minh họa','input' => $picture),
+				array('label' => 'Thuộc danh mục','input' => '<span id="category">' . $selectCategory . '</span>'),
+				array('label' => 'Giá bán sản phẩm','input' => $price),
+				array('label' => 'Số lượng trong kho','input' => $product_number . ' Tình trạng ' . $selectTinhTrang),
+				array('label' => 'Bảo hành','input' => $baohanh_number),
+				array('label' => 'Vận chuyển','input' => $vanchuyen),
+				array('label' => 'Khuyễn mại','input' => $khuyenmai),
+				array('label' => 'Chọn hãng sản xuất','input' => $slbProductManu),
+				array('label' => 'Hiển thị','input' => $status),
+				array('label' => 'Thứ tự','input' => $order),
+				array('label' => 'Chọn nhà cung cấp','input' => $slbProductSources),
+				array('label' => 'Giới thiệu ngắn','input' => $synopsis,'cols' => 2,'style' => 'padding-top:0;','desc' => 'Được hiển thị khi xem chi tiết hoặc xem ở dạng danh sách'),
+				array('label' => 'Nội dung','input' => $content,'cols' => 2,'style' => 'padding-top:0;'),
+			);
+	
+	//--------------------- Blocks ---------------------
+	$option 			= array('Không','Có');
+	if(isset($this->Item['block_noibat'])){
+		$trangthai = $this->Item['block_noibat'];
+	}else{
+		$trangthai = 0;
+	}
+	$blockNoiBat		= $this->formRadio('block_noibat',$trangthai,null,$option, ' ');
+	
+	if(isset($this->Item['block_moi'])){
+		$trangthai = $this->Item['block_moi'];
+	}else{
+		$trangthai = 0;
+	}
+	$blockMoi 			= $this->formRadio('block_moi',$trangthai,null,$option, ' ');
+	
+	if(isset($this->Item['block_hot'])){
+		$trangthai = $this->Item['block_hot'];
+	}else{
+		$trangthai = 0;
+	}
+	$blockHot 			= $this->formRadio('block_hot',$trangthai,null,$option, ' ');
+	
+	if(isset($this->Item['block_banchay'])){
+		$trangthai = $this->Item['block_banchay'];
+	}else{
+		$trangthai = 0;
+	}
+	$blockBanChay		= $this->formRadio('block_banchay',$trangthai,null,$option, ' ');
+	
+	$arrBlock = array(
+			array('label' => 'Sản phẩm nổi bật','input' => $blockNoiBat),
+			array('label' => 'Sản phẩm mới','input' => $blockMoi),
+			array('label' => 'Sản phẩm hot','input' => $blockHot),
+			array('label' => 'Sản phẩm bán chạy','input' => $blockBanChay),
+	);
+
+	//--------------------- Meta Options ---------------------
+	$alias 				= $this->formText ( 'alias', $this->Item['alias'], array ('class' => 'textlong') );
+	$tags		 		= $this->formTextarea('tags',$this->Item['tags'],array('rows'=>2,'class' => 'txtalong'));
+	$meta_title 		= $this->formTextarea('meta_title',$this->Item['meta_title'],array('rows'=>2,'class' => 'txtalong'));
+	$meta_description 	= $this->formTextarea('meta_description',$this->Item['meta_description'],array('rows'=>3,'class' => 'txtalong'));
+	$meta_keywords 		= $this->formTextarea('meta_keywords',$this->Item['meta_keywords'],array('rows'=>3,'class' => 'txtalong'));
+	
+	$arrMeta = array(
+			array('label' => 'Liên kết tĩnh','input' => $alias),
+			array('label' => 'Tags','input' => $tags,'desc'=>'Mỗi Tags phân biệt nhau với dấu phẩy'),
+			array('label' => 'Meta Title','input' => $meta_title),
+			array('label' => 'Meta Description','input' => $meta_description),
+			array('label' => 'Meta Keywords','input' => $meta_keywords),
+		);
+	
+	//-------------------- SESSAGES ERROR ------------------
+	if(count($this->messageError)>0){
+		$errors = $this->formErrors($this->messageError,array('id'=>'errors'));
+	}
+?>
+<form name="appForm" method="post" action="" enctype="multipart/form-data">
+	<?php echo $this->render('admin-item/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-item/sublink/index.php');?>
+	<?php echo $errors;?>
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<div class="width-60 fl">
+			<script>
+				$(document).ready(function() {
+					$(".tabs-nav li:first a").addClass('selected');
+					$(".tabs:first").css('display','block');
+				    $(".tabs-nav li a").click(function() {
+				        $(".tabs-nav li a").removeClass('selected');
+				        $(this).addClass('selected');
+				        $(".tabs").css('display','none');
+				        $($(this).attr("rel")).css('display','block');
+				        
+				    	return false;
+				    });
+				});
+		    </script>
+			<ul class="tabs-nav clearfix">
+				<li><a rel="#tabs-1" href="javascript:void(0)">Thông tin chung</a></li>
+				<!-- <li><a rel="#tabs-2" href="javascript:void(0)">Thuộc tính</a></li> -->
+				<li><a rel="#tabs-3" href="javascript:void(0)">Hình ảnh</a></li>
+				<!-- <li><a rel="#tabs-4" href="javascript:void(0)">Video</a></li> -->
+			</ul>
+			<fieldset class="adminform tabs" id="tabs-1">
+				<table class="adminformlist">
+					<?php echo $this->partialLoop('row.php', $arrInput);?>
+				</table>
+			</fieldset>
+			<fieldset class="adminform tabs" id="tabs-2">
+				<ul class="adminformlist">
+					<li>Thuộc tính</li>
+				</ul>
+			</fieldset>
+			<fieldset class="adminform tabs" id="tabs-3">
+				<ul class="adminformlist" id="imagelist">
+				<?php
+					$numberImage = 0;
+					if($this->Item['picture_multi'] != ''){
+						$this->Item['picture_multi'] = unserialize($this->Item['picture_multi']);
+					}else{
+						$this->Item['picture_multi'] = array();
+					}
+					if(count($this->Item['picture_multi']) > 0){
+						$numberImage = count($this->Item['picture_multi']);
+						foreach($this->Item['picture_multi'] AS $key => $val){
+				?>
+					<li id="picture<?php echo $key;?>">
+						<script type="text/javascript">
+						function openKCFinder<?php echo $key;?>(field) {
+							$('#formLoading').removeClass().addClass('loading').fadeIn();
+							window.KCFinder = {
+								callBack: function(url) {
+									field.value = url;
+									window.KCFinder = null;
+									document.getElementById('image_picture_multi<?php echo $key;?>').src = url;
+								}
+							};
+							window.open('<?php echo SCIPTS_URL . '/media_files/browse.php?type=images&lng=vi';?>', 'kcfinder_textbox','status=0, toolbar=0, location=0, menubar=0, directories=0,resizable=1, scrollbars=0, width=950, height=450' );
+							$('#formLoading').removeClass().fadeOut();
+						}</script>
+						<div>
+							<input value="<?php echo $val[0];?>" type="text" name="picture_multi[]" id="picture_multi<?php echo $key;?>" class="txtfile"><a href="javascript:void(0);" onclick="openKCFinder<?php echo $key;?>(appForm.picture_multi<?php echo $key;?>)" class="btnMedia">Chọn ảnh</a><span class="pdl20">Thứ tự <input type="text" name="orderImage[]" style="width: 50px;" value="<?php echo $val[1];?>"></span><span class="pdl20"><a href="javascript:void(0);" onclick="javascript:Delete(<?php echo $key;?>);">[Xóa]</a></span>
+						</div>
+						<div><img src="<?php echo $val[0];?>" style="width: 60px;" id="image_picture_multi<?php echo $key;?>"></div>
+						<div class="clr"></div>
+					</li>
+					<?php
+						}
+					} 
+					?>
+				</ul>
+				<div class="fr">
+					<a href="javascript:void(0);" onclick="creatImage()" class="btnMedia">Thêm ảnh</a>
+				</div>
+				<input type="hidden" name="numberImage" id="numberImage" value="<?php echo $numberImage;?>">
+				<script type="text/javascript">
+					function creatImage(){
+						//alert('hic');
+						var picture = '<li id="picture{i}">'+
+							'<script type="text/javascript">'+
+							'function openKCFinder{i}(field) {'+
+								'$(\'#formLoading\').removeClass().addClass(\'loading\').fadeIn();'+
+								'window.KCFinder = {'+
+									'callBack: function(url) {'+
+										'field.value = url;'+
+										'window.KCFinder = null;'+
+										'document.getElementById(\'image_picture_multi{i}\').src = url;'+
+									'}'+
+								'};'+
+								'window.open(\'<?php echo SCIPTS_URL . '/media_files/browse.php?type=images&lng=vi';?>\', \'kcfinder_textbox\',\'status=0, toolbar=0, location=0, menubar=0, directories=0,resizable=1, scrollbars=0, width=950, height=450\');'+
+								'$(\'#formLoading\').removeClass().fadeOut();'+
+							'}<\/script>'+
+							'<div>'+
+								'<input value="" type="text" name="picture_multi[]" id="picture_multi{i}" class="txtfile">'+
+								'<a href="javascript:void(0);" onclick="openKCFinder{i}(appForm.picture_multi{i})" class="btnMedia">Chọn ảnh</a>'+
+								'<span class="pdl20">Thứ tự <input type="text" name="orderImage[]" style="width: 50px;" value="0"></span>'+
+								'<span class="pdl20">'+
+									'<a href="javascript:void(0);" onclick="javascript:Delete({i});">[Xóa]</a>'+
+								'</span>'+
+							'</div>'+
+							'<div class="clr"></div>'+
+							'<div><img src="<?php echo $this->imgUrl . '/no-avatar.png';?>" id="image_picture_multi{i}" class="hinh-anh" style="width: 60px;"></div>'+
+						'</li>';
+						var i = parseInt($('#numberImage').val());
+						var str = picture;
+						str = str.replace(/{i}/gi,i);
+						str = str.replace(/{i2}/gi,i+1);
+						$('#imagelist').append(str);
+						$('#numberImage').val(i+1);
+					}
+					function Delete(i) {
+						$('#picture'+i).remove();
+					}
+				</script>
+			</fieldset>
+			<fieldset class="adminform tabs" id="tabs-4">
+				<ul class="adminformlist">
+					<li>Video</li>
+				</ul>
+			</fieldset>
+			</div>
+		<div class="width-40 fr">
+			<div id="pane-sliders" class="pane-sliders">
+				
+				<div class="panel">
+					<h3 id="metadata-options" class="title pane-toggler-down"><a href="javascript:void(0);"><span>Sản phẩm thuộc các block</span></a></h3>
+					<div class="panel_content">
+						<fieldset class="panelform">
+							<table class="panelformlist">
+								<?php echo $this->partialLoop('row.php', $arrBlock);?>
+							</table>
+						</fieldset>
+					</div>
+				</div>
+				
+				<div class="panel">
+					<h3 id="metadata-options" class="title pane-toggler-down"><a href="javascript:void(0);"><span>Cấu hình dữ liệu nâng cao</span></a></h3>
+					<div class="panel_content">
+						<fieldset class="panelform">
+							<table class="panelformlist">
+								<?php echo $this->partialLoop('row.php', $arrMeta);?>
+							</table>
+						</fieldset>
+					</div>
+				</div>
+					
+			</div>
+		</div>
+		<div class="clr"></div>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

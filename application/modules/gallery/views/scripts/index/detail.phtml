@@ -1,0 +1,181 @@
+<?php
+	$urlOptions = array ('module' => 'gallery', 'controller' => 'index', 'action' => 'detail', 
+				'cid' => $this->arrParam['cid'], 
+				'tcat' => $this->arrParam['tcat'], 
+				'title' => $this->arrParam['title'], 
+				'id' => $this->arrParam['id'] );
+	$linkDetial = $this->url ( $urlOptions, 'gallery-detail' );
+
+	$album_name 	= $this->Item['name'];
+	$album_picture 	= $this->Item['picture'];
+	$album_content 	= htmlspecialchars_decode($this->Item['content']);
+	$album_synopsis	= nl2br($this->Item['synopsis']);
+?>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->cssUrl; ?>/gallery.css" />
+<script type="text/javascript" src="<?php echo $this->jsUrl; ?>/highslide-with-gallery.js"></script>
+<script type="text/javascript">
+	hs.graphicsDir = '<?php echo $this->imgUrl; ?>/graphics/';
+	hs.align = 'center';
+	hs.transitions = ['expand', 'crossfade'];
+	hs.outlineType = 'rounded-white';
+	hs.fadeInOut = true;
+	hs.numberPosition = 'caption';
+	hs.dimmingOpacity = 0.75;
+
+	// Add the controlbar
+	if (hs.addSlideshow) hs.addSlideshow({
+		//slideshowGroup: 'group1',
+		interval: 5000,
+		repeat: false,
+		useControls: true,
+		fixedControls: true,
+		overlayOptions: {
+			opacity: .75,
+			position: 'bottom center',
+			hideOnMouseOut: true
+		}
+	});
+</script>
+<div class="module_gallery">
+	<div class="module_title clearfix">
+		<span class="icon"></span>
+		<h1 class="title"><a href="<?php echo $linkDetial;?>" title="<?php echo $this->Item['name'];?>"><?php echo $this->Item['name'];?></a></h1>
+	</div>
+	<div class="module_content">
+		<?php
+		if($this->moduleConfig['showSynopsis'] == 1){
+			echo '<div class="line180 pd5 dam">' . $album_synopsis . '</div>';
+		} 
+		?>
+		<div class="line180 pd5">
+			<?php echo $album_content;?>
+			<div class="clr"></div>
+		</div>
+		<ul class="listGallery clearfix">
+			<?php
+			foreach ($this->Items AS $key => $val){
+				$name = $val ['name'];
+				$picture = '<img class="img" src="' . $val ['picture'] . '" alt="' . $val ['name'] . '"/>';
+				if($val ['thumb'] != ''){
+					$picture = '<img class="img" src="' . $val ['picture'] . '" alt="' . $val ['name'] . '"/>';
+				}
+			?>
+			<li>
+				<div class="item">
+					<a id="thumb1" class="highslide viewanh" onclick="return hs.expand(this)" href="<?php echo $val ['picture']; ?>" title="<?php echo $name;?>"> 
+						<?php echo $picture;?>
+					</a>
+					<?php
+					if($this->moduleConfig['showTitleImage'] == 1){
+					?>
+					<div class="info">
+						<h4 class="title">
+							<?php echo $name;?>
+						</h4>
+					</div>
+					<?php
+					}
+					?>
+				</div>
+			</li>
+			<?php
+			} 
+			?>
+		</ul>
+		<?php
+			if (! empty ( $this->arrParam ['cid'] )) {
+				$urlOptions = array ('module' => 'gallery', 
+								'controller' => 'index', 
+								'action' => 'detail', 
+								'cid' => $this->arrParam['cid'], 
+								'tcat' => $this->arrParam['tcat'], 
+								'title' => $this->arrParam['title'], 
+								'id' => $this->arrParam['id'] );
+				$currentUrl = $this->url ( $urlOptions, 'gallery-detail' );
+			} else {
+				$currentUrl = $this->baseUrl ( $this->currentController . '/' . $this->arrParam ['action'] );
+			}
+			echo $this->paginationControl ( $this->paginator, 'Sliding', 'pagination-index.phtml', array ('currentUrl' => $currentUrl ) );
+		?>
+		<?php
+		if($this->moduleConfig['showMxh'] == 1){ 
+			echo $this->blkMxh();
+		}
+		?>
+	</div>
+	<div class="module_bottom"></div>
+</div>
+
+<?php
+	if($this->moduleConfig['showComment'] == 1){
+?>
+<div class="module_article" id="comment">
+	<div class="module_title clearfix">
+		<span class="icon"></span>
+		<div class="title"><?php echo $this->language['galleryBinhLuan'];?></div>
+	</div>
+	<div class="module_content">
+		<?php
+		if($this->moduleConfig['typeComment'] == 'facebook'){
+			echo $this->blkComment('facebook',array('url' => $linkDetial));
+		}else{
+			echo $this->blkComment('default',array('c_module' => $this->arrParam['module'], 'c_id' => $this->arrParam['id']));
+		}
+		?>
+	</div>
+	<div class="module_bottom"></div>
+</div>
+<?php
+	}
+?>
+
+<?php
+	if(count($this->itemKhac)>0){ 
+?>
+<div class="module_gallery">
+	<div class="module_title clearfix">
+		<span class="icon"></span> 
+		<div class="title"><?php echo $this->language['galleryKhac'];?></div>
+	</div>
+	<div class="module_content">
+		<ul class="listGallery clearfix">
+			<?php
+			foreach ($this->itemKhac AS $key => $val){
+				$name = $val ['name'];
+				$picture = '<img class="img" src="' . $val ['picture'] . '" alt="' . $val ['name'] . '"/>';
+				if($val ['thumb'] != ''){
+					$picture = '<img class="img" src="' . $val ['picture'] . '" alt="' . $val ['name'] . '"/>';
+				}
+				$synopsis = $val ['synopsis'];
+							
+				$urlOptions = array ('module' => 'gallery', 'controller' => 'index', 'action' => 'detail', 'cid' => $val ['cat_id'], 'tcat' => $val ['category_alias'], 'title' => $val ['alias'], 'id' => $val ['id'] );
+				$linkDetial = $this->url ( $urlOptions, 'gallery-detail' );
+			?>
+			<li>
+				<div class="item">
+					<a href="<?php echo $linkDetial;?>" title="<?php echo $name;?>"> 
+						<?php echo $picture;?>
+					</a>
+					<?php
+					if($this->moduleConfig['showTitleAlbum'] == 1){
+					?>
+					<div class="info">
+						<h4 class="title">
+							<a href="<?php echo $linkDetial;?>" title="<?php echo $name;?>"><?php echo $name;?></a>
+						</h4>
+					</div>
+					<?php
+					}
+					?>
+				</div>
+			</li>
+			<?php
+			} 
+			?>
+		</ul>
+	</div>
+	<div class="module_bottom"></div>
+</div>
+<?php
+	} 
+?>

@@ -1,0 +1,122 @@
+<?php
+//----------------------- INPUT ELEMENTS -------------------//
+	$name 			= $this->Item['full_name'];
+	$phone 			= $this->Item['phone'];
+	$email	 		= $this->Item['email'];
+	$address 		= $this->Item['address'];
+	$shipping	 	= $this->Item['shipping'];
+	$created	 	= $this->Item['created'];
+	
+	$status 		= $this->Item['status'];
+	if($status == 1){
+		$status = $this->cmsIconButton('Đang được hiển thị', $this->imgUrl . '/admin/tick.png');
+	}else{
+		$status = $this->cmsIconButton('Đã tắt hiển thị', $this->imgUrl . '/admin/publish_x.png');
+	}
+	
+	$content 		= htmlspecialchars_decode($this->Item['comment']);
+	
+	$arrInput = array(
+				array('label' => 'Họ tên','input' => $name),
+				array('label' => 'Phone','input' => $phone),
+				array('label' => 'Email','input' => $email),
+				array('label' => 'Địa chỉ','input' => $address),
+				array('label' => 'Địa chỉ nhận hàng','input' => $shipping),
+				array('label' => 'Trạng thái','input' => $status),
+				array('label' => 'Ngày gửi','input' => $created),
+				array('label' => 'Nội dung','input' => $content),
+			);
+	//-------------------- SESSAGES ERROR ------------------
+	if(count($this->messageError)>0){
+		$errors = $this->formErrors($this->messageError,array('id'=>'errors'));
+	}
+?>
+<form name="appForm" method="post" action="" enctype="multipart/form-data">
+	<?php echo $this->render('admin-bill/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-bill/sublink/index.php');?>
+	<?php echo $errors;?>
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<fieldset class="adminform">
+			<legend>Chi tiết</legend>
+			<table class="adminformlist">
+				<?php echo $this->partialLoop('row.php', $arrInput);?>
+			</table>
+			<div style="padding: 10px 0; font-size: 14px; font-weight: bold; text-transform: uppercase;">Thông tin sản phẩm</div>
+			<table class="adminlist">
+				<tr>
+					<th width="25">STT</th>
+					<th width="70">Hình ảnh</th>
+					<th>Tên sản phẩm</th>
+					<th>Số lượng</th>
+					<th>Giá lúc đặt</th>
+					<th>Thành tiền</th>
+				</tr>
+				<?php
+					$totalPrice = 0;
+					foreach ($this->Item['product'] as $key => $val){
+						$id 			= $val['product_id'];
+						$name 			= $val['product_name'];
+						$alias 			= $val['alias'];
+						$cat_id 		= $val['cat_id'];
+						$shop_id		= $val['shop_id'];
+						$quantity		= $val['quantity'];
+						$picture		= $val['picture'];
+						$thumb			= $val['thumb'];
+						if($thumb != ''){
+							$picture = $thumb;
+						}
+						$units_money	= $val['units_money'];
+						$price = '';
+						if($val['price'] != 0){
+							$price = Zend_Locale_Format::toNumber($val['price'],array('precision' => 0)) . ' ' . $units_money;
+						}
+							
+						$thanhtien = Zend_Locale_Format::toNumber($quantity * $val['price'],array('precision' => 0)) . ' ' . $units_money;
+						$totalPrice += $quantity * $val['price'];
+							
+						$urlOptions = array (
+							'module' => 'shopping',
+							'controller' => 'index',
+							'action' => 'detail',
+							'tcat' => $val ['category_alias'],
+							'title' => $val ['alias'],
+							'cid' => $val ['cat_id'],
+							'id' => $val ['product_id'] );
+						$linkDetial = $this->url( $urlOptions, 'shop-detail' );
+						
+						$alias = '<p class="smallsub">(Alias: ' . $val['alias'] . ' )</p>';
+						$name 	= '<b><a href="' . $linkDetial . '" target="_blank">' . $name . '</a></b>' . $alias;
+						$classRow = 'row1';
+						if($key % 2 == 0)
+							$classRow = 'row0';
+								
+				?>
+				<tr class="<?php echo $classRow;?>">
+					<td align="center"><?php echo $key + 1;?></td>
+					<td align="center"><img src="<?php echo $picture;?>" style="width: 66px;"></td>
+					<td align="left"><?php echo $name;?></td>
+					<td align="center"><?php echo $quantity;?></td>
+					<td align="center"><?php echo $price;?></td>
+					<td align="center"><?php echo $thanhtien;?></td>
+				</tr>
+				<?php
+					} 
+				?>
+				<tr class="tbl_footer">
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td style="text-align: right;">Thành tiền: </td>
+					<td style="color: #F00; font-weight: bold;">
+						<?php echo Zend_Locale_Format::toNumber($totalPrice,array('precision' => 0)) . ' ' . $units_money;?>
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

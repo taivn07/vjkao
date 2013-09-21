@@ -1,0 +1,305 @@
+<?php
+	$moduleConfig = $this->arrParam['moduleConfig'];
+
+	$urlOptionsDetial = array (
+			'module' => 'shopping',
+			'controller' => 'index',
+			'action' => 'detail',
+			'tcat' => $this->Item['category_alias'],
+			'title' => $this->Item['alias'],
+			'cid' => $this->Item['cat_id'],
+			'id' => $this->Item['id'] );
+	$linkDetial = $this->url( $urlOptionsDetial, 'shop-detail' );
+	
+	$name 			= $this->Item['name'];
+	$code = '';
+	if($this->Item['code'] != ''){
+		$code = '<p class="code">'.$this->language['productMaSanPham'].': ' . $this->Item['code'] . '</p>';
+	}
+	$picture 		= $this->Item['picture'];
+	$units_money 	= $this->Item['units_money'];
+	$price = '';
+	$selloff = '';
+	if($moduleConfig['showPrice'] == 1){
+		if($this->Item['price'] != 0){
+			if($this->Item['selloff'] == 0){
+				$price = '<p class="price">'.$this->language['productGiaBan'].': '.Zend_Locale_Format::toNumber($this->Item['price'],array('precision' => 0)) . ' ' . $units_money.'</p>';
+			}else{
+				$selloff = ($this->Item['price']) - ($this->Item['price'] * ($this->Item['selloff']/100));
+				$selloff = '<span class="selloff">' . Zend_Locale_Format::toNumber($selloff,array('precision' => 0)) . ' ' . $units_money.'</span>';
+				$price = '<p class="price">'.$this->language['productGiaBan'].': <span class="price1">'.Zend_Locale_Format::toNumber($this->Item['price'],array('precision' => 0)) . ' ' . $units_money.'</span>'.$selloff.'</p>';
+			}
+		}
+	}
+	$vat = '';
+	if($moduleConfig['showVat'] == 1){
+		$vat = '<p class="showvat">('.$this->language['productVat' . $this->Item['vat']].')</p>';
+	}
+	
+	$baohanh_number = '';
+	if($moduleConfig['showBaoHanh'] == 1){
+		if($this->Item['baohanh_number'] > 0){
+			$baohanh_number = '<p class="baohanh"><span class="label">'.$this->language['productBaoHanh'].':</span> <b>'.$this->Item['baohanh_number'] . '</b> ' .$this->language[$this->Item['baohanh_date']].'</p>';
+		}
+	}
+	
+	$vanchuyen = '';
+	if($moduleConfig['showVanChuyen'] == 1){
+		if($this->Item['vanchuyen'] != ''){
+			$vanchuyen = '<p class="vanchuyen"><span class="label">'.$this->language['productVanChuyen'].':</span> '.$this->Item['vanchuyen'] .'</p>';
+		}
+	}
+	
+	$khuyenmai = '';
+	if($moduleConfig['showKhuyenMai'] == 1){
+		if($this->Item['khuyenmai'] != ''){
+			$khuyenmai = '<div class="khuyenmai"><p><span class="label">'.$this->language['productKhuyenMai'].':</span></p><p>'.nl2br($this->Item['khuyenmai']) .'</p></div>';
+		}
+	}
+	
+	$tinhtrang = '';
+	if($moduleConfig['showTinhTrang'] == 1){
+		$tinhtrang = '<p class="tinhtrang"><span class="label">'.$this->language['productTinhTrang'].': </span>'.$this->language['productTinhTrang' . $this->Item['tinh_trang']].'</p>';
+	}
+	
+	if($moduleConfig['showSynopsis'] == 1){
+		if($this->Item['synopsis'] != ''){
+			$synopsis = '<div class="synopsis">'.nl2br($this->Item['synopsis']).'</div>';
+		}
+	}
+	
+	if($moduleConfig['showHuongDan'] == 1){
+		$huongdan = '<div class="huongdan"><a href="'.$this->baseUrl('huong-dan-mua-hang.html').'" title="'.$this->language['productHuongDanMuaHang'].'">'.$this->language['productHuongDanMuaHang'].'</a></div>';
+	}
+	
+	$addCart = '';
+	if($moduleConfig['showAddCart'] == 1){
+		$linkCart = $this->baseUrl('shopping/public/add-item/id/' . $this->Item['id']);
+		$addCart = '<div class="addcart"><table height="30px"><tr><td><b>'.$this->language['productSoLuong'].':</b> <input type="text" name="txtnum" style="width:40px;" value="1"></td><td class="pdl10"><a href="'.$linkCart.'" title="'.$this->language['productDatHang'].'" rel="nofollow">'.$this->language['productDatHang'].'</a></td><tr></table></div>';
+	}
+	$content = htmlspecialchars_decode($this->Item['content']);
+?>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->cssUrl; ?>/gallery.css" />
+<script type="text/javascript" src="<?php echo $this->jsUrl; ?>/highslide-with-gallery.js"></script>
+<script type="text/javascript">
+	hs.graphicsDir = '<?php echo $this->imgUrl; ?>/graphics/';
+	hs.align = 'center';
+	hs.transitions = ['expand', 'crossfade'];
+	hs.outlineType = 'rounded-white';
+	hs.fadeInOut = true;
+	hs.numberPosition = 'caption';
+	hs.dimmingOpacity = 0.75;
+
+	// Add the controlbar
+	if (hs.addSlideshow) hs.addSlideshow({
+		//slideshowGroup: 'group1',
+		interval: 5000,
+		repeat: false,
+		useControls: true,
+		fixedControls: true,
+		overlayOptions: {
+			opacity: .75,
+			position: 'bottom center',
+			hideOnMouseOut: true
+		}
+	});
+</script>
+<div class="module_shop">
+	<div class="module_title clearfix">
+		<span class="icon"></span> 
+		<h1 class="title goc5"><a href="<?php echo $linkDetial;?>" title="<?php echo $name;?>"><?php echo $name;?></a></h1>
+	</div>
+	<div class="module_content bgtrang pd10">
+		<div class="detail_image">
+			<div class="image">
+				<a id="thumb1" class="highslide viewanh" onclick="return hs.expand(this)" href="<?php echo $this->Item['picture']; ?>" title="<?php echo $name;?>">
+					<img alt="<?php echo $name;?>" src="<?php echo $picture;?>">
+				</a>
+			</div>
+			<?php
+				if($this->Item['picture_multi'] != ''){
+					$picture_multi = unserialize($this->Item['picture_multi']);
+			?>
+            <div class="clr"></div>
+            <div class="pdt10 clearfix">
+                <ul id="thumblist" class="clearfix" >
+                    <?php
+					foreach($picture_multi AS $key => $val){
+					?>
+                    <li>
+                        <a id="thumb1" class="highslide viewanh" onclick="return hs.expand(this)" href="<?php echo $val[0]; ?>" title="<?php echo $name;?>">
+                            <img src="<?php echo $val[0]; ?>" alt="<?php echo $name; ?>">
+                        </a>
+                    </li>
+                    <?php
+					}
+					?>
+                </ul>
+            </div>
+            <?php
+				}
+			?>
+		</div>
+		<div class="detail_info">
+			<?php echo $price;?>
+			<?php echo $vat;?>
+			<?php echo $code;?>
+			<?php echo $baohanh_number;?>
+			<?php echo $vanchuyen;?>
+			<?php echo $tinhtrang;?>
+			<?php echo $addCart;?>
+			<?php echo $khuyenmai;?>
+			<?php echo $synopsis;?>
+			<?php echo $huongdan;?>
+		</div>
+		<div class="clr"></div>
+		<div class="product_content">
+			<script type="text/javascript">
+			$(document).ready(function() {
+				$(".tabs-nav li:first a").addClass('selected');
+				$(".tabs:first").css('display','block');
+			    $(".tabs-nav li a").click(function() {
+			        $(".tabs-nav li a").removeClass('selected');
+			        $(this).addClass('selected');
+			        $(".tabs").css('display','none');
+			        $($(this).attr("rel")).css('display','block');
+			        
+			    	return false;
+			    });
+			});
+		    </script>
+	    	<div class="tab_description">
+			    <ul class="tabs-nav clearfix">
+			        <li><a rel="#tabs-1" href="javascript:void(0)"><?php echo $this->language['productThongTinSanPham'];?></a></li>
+			    <?php
+			    	if($this->moduleConfig['showComment'] == 1){ 
+			    ?>
+			        <li><a rel="#tabs-2" href="javascript:void(0)"><?php echo $this->language['productYKienKhachHang'];?></a></li>
+			    <?php
+			    	} 
+			    ?>
+			    </ul>
+			    <div id="tabs-1" class="tabs line180">
+			        <?php echo $content;?>
+			    </div>
+			    <div id="tabs-2" class="tabs line180">
+			    <?php
+					if($this->moduleConfig['showComment'] == 1){
+						if($this->moduleConfig['typeComment'] == 'facebook'){
+							echo $this->blkComment('facebook',array('url' => $linkDetial));
+						}else{
+							echo $this->blkComment('default',array('c_module' => $this->arrParam['module'], 'c_id' => $this->arrParam['id']));
+						}
+					}
+				?>
+			    </div>
+			</div>
+			<?php 
+				if($this->moduleConfig['showTags'] == 1){
+					if($this->Item ['tags'] != ''){
+						$tags = explode(',', $this->Item ['tags']);
+						echo '<div class="tags">Tags: ';
+						foreach ($tags AS $key => $val){
+							$keyword = @trim($val);
+							if($key == 0){
+								echo '<span><a href="'.$this->baseUrl($this->arrParam['module'] . '/public/tags/key/' . $keyword).'" title="' . $keyword . '">' . $keyword . '</a></span>';
+							}else{
+								echo '<span>, <a href="'.$this->baseUrl($this->arrParam['module'] . '/public/tags/key/' . $keyword).'" title="' . $keyword . '">' . $keyword . '</a></span>';
+							}
+						} 
+						echo '</div>';
+					}
+				}
+			?>
+			<?php
+			if($moduleConfig['showMxh'] == 1){
+				echo $this->blkMxh();
+			} 
+            ?>
+		</div>
+	</div>
+	<div class="module_bottom"></div>
+</div>
+<?php
+	if(count($this->itemKhac)>0){ 
+		$urlOptionsCategory = array('module'=>'shopping','controller'=>'index','action'=>'category',
+				'cid'=>$this->arrParam['cid'],
+				'alias'=>$this->arrParam['tcat'],
+		);
+		$linkCategory = $this->url($urlOptionsCategory,'shop-category');
+?>
+<div class="module_shop">
+	<div class="module_title clearfix">
+		<span class="icon"></span> 
+		<div class="title"><?php echo $this->language['productKhac'];?></div>
+	</div>
+	<div class="module_content">
+		<ul class="products clearfix">
+		<?php
+			foreach ($this->itemKhac as $key => $val){
+				$name = $val['name'];
+				$code = '';
+				if($val['code'] != ''){
+					$code = '<p class="code">'.$this->language['productMaSanPham'].': ' . $val['code'] . '</p>';
+				}
+				$picture = '<img class="img" src="' . $val['picture'] . '" alt="'.$val['name'].'"/>';
+					
+				$synopsis = $val['synopsis'];
+				$units_money = $val['units_money'];
+				$price = '';
+				
+				if($val['price'] != 0){
+					$price = '<p class="price">'.$this->language['productGiaBan'].': <span class="value">'.Zend_Locale_Format::toNumber($val['price'],array('precision' => 0)) . ' ' . $units_money.'</span></p>';
+				}else{
+					$price = '<p class="price">'.$this->language['productGiaBan'].': <span class="value">'.$this->language['lienHe'].'</span></p>';
+				}
+				
+				$selloff = '';
+				if($val['selloff'] > 0){
+					$selloff = '<p class="p_selloff"><span>' . $val['selloff'] . '%</span></p>';
+				}
+				
+				$addCart = '';
+				if($moduleConfig['showAddCart'] == 1){
+					$linkCart = $this->baseUrl('shopping/public/add-item/id/' . $val['id']);
+					$addCart = '<a href="'.$linkCart.'" title="'.$this->language['productDatHang'].' '.$name.'" class="addCart" rel="nofollow">'.$this->language['productDatHang'].'</a>';
+				}
+					
+				$urlOptions = array (
+						'module' => 'shopping',
+						'controller' => 'index',
+						'action' => 'detail',
+						'tcat' => $val ['category_alias'],
+						'title' => $val ['alias'],
+						'cid' => $val ['cat_id'],
+						'id' => $val ['id'] );
+				$linkDetial = $this->url( $urlOptions, 'shop-detail' );
+			?>
+				<li class="item">
+					<div class="p_content">
+						<div class="p_images">
+							<a href="<?php echo $linkDetial;?>" title="<?php echo $name;?>">
+								<?php echo $picture;?>
+							</a>
+						</div>
+						<h4 class="p_title"><a href="<?php echo $linkDetial;?>" title="<?php echo $name;?>"><?php echo $name;?></a></h4>
+						<div class="p_price">
+							<?php echo $price;?>
+						</div>
+						<p class="p_detail">
+							<?php echo $addCart;?>
+							<a href="<?php echo $linkDetial;?>" title="<?php echo $name;?>" class="detail"><?php echo $this->language['chiTiet'];?></a>
+						</p>
+						<?php echo $selloff;?>
+					</div>
+				</li>
+			<?php
+				} 
+			?>			
+		</ul>
+	</div>
+	<div class="module_bottom"></div>
+</div>
+<?php
+	} 
+?>

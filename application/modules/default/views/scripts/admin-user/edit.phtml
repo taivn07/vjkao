@@ -1,0 +1,68 @@
+<?php
+	//----------------------- INPUT ELEMENTS -------------------//
+	$user_name 		= $this->formText ( 'user_name', $this->Item['user_name'], array ('class' => 'txtmedium active' ) );
+	$alias	 		= $this->formText ( 'alias', $this->Item['alias'], array ('class' => 'txtmedium' ) );
+	if(!empty($this->Item['user_avatar'])){
+		$urlAvatar 	= FILE_URL . '/users/img100x100/' . $this->Item['user_avatar'];
+		$imgAvatar	= '<br><img src="' . $urlAvatar . '"><br>' . $this->Item['user_avatar'];
+	}
+	
+	$current_user_avatar = $this->formHidden('current_user_avatar',$this->Item['user_avatar']);
+	
+	$user_avatar 	= $this->formFile ( 'user_avatar', array ('style' => 'width:250px;' ) ) . $imgAvatar . $current_user_avatar;
+	
+	
+	$password 		= $this->formPassword('password', '', array ('class' => 'txtshort' ) );
+	$email 			= $this->formText ( 'email', $this->Item['email'], array ('class' => 'txtmedium' ) );
+	$first_name 	= $this->formText ( 'first_name', $this->Item['first_name'], array ('class' => 'txtmedium' ) );
+	$last_name 		= $this->formText ( 'last_name', $this->Item['last_name'], array ('class' => 'txtmedium' ) );
+	$birthday 		= $this->formText ( 'birthday', $this->Item['birthday'], array ('class' => 'txtshort' ) );
+	
+	$option 		= array('Không','Có');
+	$status 		= $this->formRadio('status',$this->Item['status'],null,$option, ' ');
+	
+	$options = $this->slbGroup;
+	$slbGroup = $this->formSelect('group_id',$this->Item['group_id'],array('stype'=>"min-width:200px"),$options);
+	
+	$sign = $this->cmsEditor('sign',htmlspecialchars_decode($this->Item['sign']),array('toolbar'=>'Full', 'language'=>'vi'));
+
+	$arrInput = array(
+				array(
+						'label' => 'User name',
+						'input' => $user_name,
+						'desc' => 'Chấp nhận các kỹ tự từ a-Z, 0-9. Chiều dài từ 3-32 ký tự'
+						),
+				array('label' => 'Avatar','input' => $user_avatar,'desc' => 'Kích thước từ 2-1000KB. Các định dạng jpg,gif,png', 'style' => 'margin-left: 151px;'),
+				array('label' => 'Password','input' => $password,'desc' => 'Chấp nhận các kỹ tự từ a-Z, 0-9,@,#,$,%,^,&,*,-,+. Chiều dài từ 3-32 ký tự'),
+				array('label' => 'Email','input' => $email),
+				array('label' => 'Chọn nhóm','input' => $slbGroup),
+				array('label' => 'First name','input' => $first_name),
+				array('label' => 'Last name','input' => $last_name),
+				array('label' => 'Birthday','input' => $birthday,'desc' => 'Định dạng: YYYY-mm-dd(năm - tháng - ngày)'),
+				array('label' => 'Hiển thị','input' => $status),
+				array('label' => 'Bút danh','input' => $alias),
+				array('label' => 'Chữ ký','input' => $sign, 'cols' => 2, 'style' => 'padding-top: 0;'),
+			);
+	
+	//-------------------- SESSAGES ERROR ------------------
+	if(count($this->messageError)>0){
+		$errors = $this->formErrors($this->messageError,array('id'=>'errors'));
+	}
+?>
+<form name="appForm" method="post" action="" enctype="multipart/form-data">
+	<?php echo $this->render('admin-user/toolbar/index.php');?>
+ 	<div class="clr"></div>
+	<?php echo $this->render('admin-user/sublink/index.php');?>
+	<?php echo $errors;?>
+
+	<!-- BEGIN: CONTENT -->
+	<div class="app_content goc10">
+		<fieldset class="adminform">
+			<legend>Chi tiết</legend>
+			<table class="adminformlist">
+				<?php echo $this->partialLoop('row.php', $arrInput);?>
+			</table>
+		</fieldset>
+	</div>
+	<!-- END: 	CONTENT -->
+</form>

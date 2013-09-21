@@ -1,0 +1,74 @@
+<?php
+if ($this->totalItem > 1) { 
+?>
+<div class="module_article">
+	<div class="module_title clearfix">
+		<span class="icon"></span>
+		<h1 class="title"><?php echo $this->language['ketQuaTimKiem'];?></h1>
+	</div>
+	<div class="module_content pd5">
+	<?php
+			foreach ( $this->Items as $key => $val ) {
+			$name = $val ['name'];
+			$picture = '<img class="img" src="' . $val ['picture'] . '" alt="' . $val ['name'] . '"/>';
+			if($val ['thumb'] != ''){
+				$picture = '<img class="img" src="' . $val ['thumb'] . '" alt="' . $val ['name'] . '"/>';
+			}
+			$synopsis = nl2br($val ['synopsis']);
+						
+			$urlOptions = array ('module' => 'article', 'controller' => 'index', 'action' => 'detail', 'cid' => $val ['cat_id'], 'tcat' => $val ['category_alias'], 'title' => $val ['alias'], 'id' => $val ['id'] );
+			$linkDetial = $this->url ( $urlOptions, 'article-detail' );
+							
+		?>
+		<div class="item">
+			<a href="<?php echo $linkDetial;?>" title="<?php echo $name;?>">
+				<?php echo $picture;?>
+			</a>
+			<div class="desc">
+				<h3 class="title">
+					<a href="<?php echo $linkDetial;?>" title="<?php echo $name;?>"><?php echo $name;?></a>
+				</h3>
+				<div><?php echo $synopsis;?></div>
+			</div>
+			<div class="readmore">
+				<a href="<?php echo $linkDetial;?>"><?php echo $this->language['xemThem']?></a>
+			</div>
+			<div class="clr"></div>
+		</div>
+		<?php
+			}
+		?>
+
+		<?php
+			if (! empty ( $this->arrParam ['cid'] )) {
+				$currentUrl = $this->baseUrl ( $this->currentController . '/' . $this->arrParam ['action'] . '/cid/' . $this->arrParam ['cid'] );
+			} else {
+				$currentUrl = $this->baseUrl ( $this->currentController . '/' . $this->arrParam ['action'] );
+			}
+			echo $this->paginationControl ( $this->paginator, 'Sliding', 'pagination-index.phtml', array ('currentUrl' => $currentUrl ) );
+		?>
+	</div>
+	<div class="module_bottom"></div>
+</div>
+<?php
+}else{
+?>
+	<div class="module_article">
+		<div class="module_title clearfix">
+			<span class="icon"></span> 
+			<h1 class="title"><?php echo $this->ItemArticle['name'];?></h1>
+		</div>
+		<div class="module_content line180 pd10">
+			<?php
+				$name 			= $this->ItemArticle['name'];
+				$content 		= htmlspecialchars_decode($this->ItemArticle['content']);
+				echo $content;
+			?>
+		</div>
+		<div class="module_bottom"></div>
+	</div>
+<?php			
+} 
+?>	
+
+

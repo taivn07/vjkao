@@ -1,0 +1,42 @@
+<div class="block_thongTinTaiKhoan">
+	<form name="appForm" method="post" action="" enctype="multipart/form-data">
+		<div class="block_title">
+			<?php echo $this->Title;?>
+		</div>
+		<div class="block_content">
+			<table class="userlist">
+				<tr>
+					<th width="40">#</th>
+					<th>Đơn hàng</th>
+					<th>Tổng sản phẩm</th>
+					<th>Tổng thành tiền</th>
+				</tr>
+				<?php
+				foreach ($this->Items as $key => $val){
+					$id 			= $val['id'];
+					$created		= $val['created'];
+					$total			= $val['total'];
+					$price			= $val['price'];
+					
+					$linkInfo		= $this->baseUrl($this->currentController . '/info/id/' . $id);
+					$name 	= '<a href="' . $linkInfo . '"><b>Đơn hàng ngày ' . $created . '</b></a>';
+					
+					$classRow = 'row1';
+					if($key % 2 == 0)
+						$classRow = 'row0';
+						
+				?>
+				<tr class="<?php echo $classRow;?>">
+					<td align="center"><?php echo $key + 1;?></td>
+					<td align="left"><?php echo $name;?></td>
+					<td align="center"><?php echo $total;?></td>
+					<td align="center"><?php echo Zend_Locale_Format::toNumber($price,array('precision' => 0));?></td>
+				</tr>
+				<?php
+					} 
+				?>
+			</table>
+			<div class="clr"></div>
+		</div>
+	</form>
+</div>

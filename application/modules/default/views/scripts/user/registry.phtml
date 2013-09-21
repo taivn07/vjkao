@@ -1,0 +1,162 @@
+<?php
+	//-------------------- SESSAGES ERROR ------------------
+	if(count($this->messageError)>0){
+		foreach ($this->messageError AS $key => $val){
+			echo '<div class="listError" id="'.$key.'" rel="' . $val . '"></div>';
+		}
+	}
+?>
+<div class="memberRegistry">
+	<form name="appForm" method="post" action="" enctype="multipart/form-data">
+		<div class="title">
+			<?php echo $this->Title;?>
+		</div>
+		<div class="registryForm">
+			<?php
+			$user_name = $this->formText('user_name',$this->Item['user_name'],array('class'=>'txtmedium')) . '<div class="view_error" id="view_user_name"></div>';
+			$password = $this->formPassword('password','',array('class'=>'txtmedium')) . '<div class="view_error" id="view_password"></div>';
+			$password_confirm = $this->formPassword('password_confirm','',array('class'=>'txtmedium')) . '<div class="view_error" id="view_password_confirm"></div>';
+			
+			$member_hoten = $this->formText('member_hoten',$this->Item['member_hoten'],array('class'=>'txtmedium')) . '<div class="view_error" id="view_member_hoten"></div>';
+			$slbNgaySinh = array('00' => 'Ngày','01' => '01','02' => '02','03' => '03','04' => '04','05' => '05','06' => '06','07' => '07','08' => '08','09' => '09');
+			for($i = 10; $i<=31; $i++){
+				$slbNgaySinh[$i] = $i;
+			}
+			$selectNgaySinh = $this->formSelect('ngaysinh',$this->Item['ngaysinh'],array(),$slbNgaySinh);
+			$slbThangSinh = array('00' => 'Tháng','01' => '01','02' => '02','03' => '03','04' => '04','05' => '05','06' => '06','07' => '07','08' => '08','09' => '09','10' => '10','11' => '11','12' => '12');
+			$selectThangSinh = $this->formSelect('thangsinh',$this->Item['thangsinh'],array(),$slbThangSinh);
+			$slbNamSinh = array('00' => 'Năm');
+			for($i = @date('Y') - 15; $i>=@date('Y') - 80; $i--){
+				$slbNamSinh[$i] = $i;
+			}
+			$selectNamSinh = $this->formSelect('namsinh',$this->Item['namsinh'],array(),$slbNamSinh);
+			$member_ngaysinh = $selectNgaySinh . ' ' . $selectThangSinh . ' ' . $selectNamSinh . '<div class="view_error" id="view_member_ngaysinh"></div>';
+			$option_gioitinh = array('Nam' => 'Nam','Nữ' => 'Nữ', 'Khác' => 'Khác');
+			$gioitinh = 'Nam';
+			if(!empty($this->Item['member_gioitinh'])){
+				$gioitinh = $this->Item['member_gioitinh'];
+			}
+			$member_gioitinh 		= $this->formRadio('member_gioitinh',$gioitinh,null,$option_gioitinh, ' ');
+			$slbHonNhan = array('Độc thân' => 'Độc thân', 'Đã có gia đình' =>'Đã có gia đình');
+			$member_honnhan = $this->formSelect('member_honnhan',$this->Item['member_honnhan'],array(),$slbHonNhan) . '<div class="view_error" id="view_member_honnhan"></div>';
+			
+			$member_diachi = $this->formText('member_diachi',$this->Item['member_diachi'],array('class'=>'txtlong')) . '<div class="view_error" id="view_member_diachi"></div>';
+			$slbCity = $this->city;
+			$member_tinh = $this->formSelect('member_tinh',$this->Item['member_tinh'],array(),$slbCity) . '<div class="view_error" id="view_member_tinh"></div>';
+			$member_dienthoai = $this->formText('member_dienthoai',$this->Item['member_dienthoai'],array('class'=>'txtmedium')) . '<div class="view_error" id="view_member_dienthoai"></div>';
+			$member_email = $this->formText('member_email',$this->Item['member_email'],array('class'=>'txtmedium')) . '<div class="view_error" id="view_member_email"></div>';
+			
+			$captcha 		= $this->captcha;
+			$txtID 			= $this->formHidden('captchaID',$this->captcha_id);
+			$lang_code		= $this->formHidden('lang',$this->arrParam['ssFilter']['lang_code']);
+			$txtCaptcha 	= $this->formText('captcha','', array ('class' => 'txtshort')) . '<div class="view_error" id="view_captcha"></div>';
+			
+			$chap_nhan_su_dung = 1;
+			if(isset($this->Item['chap_nhan_su_dung'])){
+				$chap_nhan_su_dung = $this->Item['chap_nhan_su_dung'];
+			}
+			$chapnhansudung = $this->formCheckbox('chap_nhan_su_dung',$chap_nhan_su_dung,array(),array(1)).'<span>Tôi đã đọc và đồng ý với thỏa thuận sử dụng</span>' . '<div class="view_error" id="view_chap_nhan_su_dung"></div>';
+			?>
+			<div class="note">
+				<p class="">Vui lòng điền đầy đủ thông tin</p>
+				<p>Những mục có dấu <span class="star">*</span> là bắt buộc phải nhập </p>
+			</div>
+			<div class="item">
+				<div class="item_title">Thông tin đăng nhập</div>
+				<div class="item_content">
+					<table style="width: 100%">
+						<tr>
+							<td style="width: 150px;" class="label"><b>Email Đăng nhập (<span class="star">*</span>)</b></td>
+							<td><?php echo $user_name;?></td>
+						</tr>
+						<tr>
+							<td class="label"><b>Mật khẩu (<span class="star">*</span>)</b></td>
+							<td><?php echo $password;?></td>
+						</tr>
+						<tr>
+							<td class="label"><b>Xác nhận lại mật khẩu (<span class="star">*</span>)</b></td>
+							<td><?php echo $password_confirm;?></td>
+						</tr>
+						<tr>
+							<td class="label"><b>Mã bảo mật</b></td>
+							<td><?php echo $captcha . $txtID . $lang_code;?></td>
+						</tr>
+						<tr>
+							<td class="label"><b>Nhập mã bảo mật (<span class="star">*</span>)</b></td>
+							<td><?php echo $txtCaptcha;?></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			
+			<div class="item">
+				<div class="item_title">Thông tin cá nhân</div>
+				<div class="item_content">
+					<table style="width: 100%">
+						<tr>
+							<td style="width: 150px;" class="label"><b>Họ và tên (<span class="star">*</span>)</b></td>
+							<td><?php echo $member_hoten;?></td>
+						</tr>
+						<tr>
+							<td class="label"><b>Ngày sinh</b></td>
+							<td><?php echo $member_ngaysinh;?></td>
+						</tr>
+						<tr>
+							<td class="label"><b>Giới tính</b></td>
+							<td><?php echo $member_gioitinh;?></td>
+						</tr>
+						<tr>
+							<td class="label"><b>Tình trạng hôn nhân</b></td>
+							<td><?php echo $member_honnhan;?></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			
+			<div class="item">
+				<div class="item_title">Thông tin liên hệ</div>
+				<div class="item_content">
+					<table style="width: 100%">
+						<tr>
+							<td style="width: 150px;" class="label"><b>Địa chỉ</b></td>
+							<td><?php echo $member_diachi;?></td>
+						</tr>
+						<tr>
+							<td class="label"><b>Tính/Thành phố</b></td>
+							<td><?php echo $member_tinh;?></td>
+						</tr>
+						<tr>
+							<td class="label"><b>Số điện thoại</b></td>
+							<td><?php echo $member_dienthoai;?></td>
+						</tr>
+						<tr>
+							<td class="label"><b>Email</b></td>
+							<td><?php echo $member_email;?></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			
+			<div class="item">
+				<div class="item_title">Thỏa thuận sử dụng</div>
+				<div class="item_thoaThuan">
+					<?php echo $this->blkHtml('default',5);?>
+				</div>
+				<div class="pd10 pdt0">
+					<?php echo $chapnhansudung;?>
+				</div>
+			</div>
+			<div class="pdl10">
+				<?php echo $this->formSubmit('btn_submit',$this->language['userDangKy'],array('class'=>'user_button goc10'));?>
+				<?php echo $this->formButton('btn_reset','Làm lại',array('class'=>'user_button goc10 mrl10', 'onclick' => "window.location.href = '".$this->baseUrl('register.html')."'"));?>
+			</div>
+			<div class="clr"></div>
+		</div>
+	</form>
+	<script type="text/javascript">
+		$("div.listError").each(function (i) {
+	        //alert($(this).attr('rel'));
+	        $('#view_' + $(this).attr('id')).html($(this).attr('rel'));
+	    });
+	</script>
+</div>

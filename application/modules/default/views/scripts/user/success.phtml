@@ -1,0 +1,30 @@
+<?php
+
+?>
+<div class="memberRegistry">
+	<div class="title">
+		<?php echo $this->Title;?>
+	</div>
+	<div class="registryForm" style="padding-left: 100px;">
+		<p style="font-size: 16px; padding: 20px 0 10px; color: #1D437C;">Chúc mừng bạn đã đăng ký thành công. Bây giờ bạn có thể <a href="<?php echo $this->baseUrl('login.html')?>" rel="nofollow">đăng nhập</a> vào quản lý tài khoản</p>
+		<div style="color: #1155CC; font-size: 14px; font-weight: bold;">Thông tin tài khoản của bạn:</div>
+		<table cellspacing="0" cellpadding="0" border="0" style="color: #333;">
+			<tr>
+				<td>Email đăng ký: </td>
+				<td><?php echo $this->UserInfo['user_name'];?></td>
+			</tr>
+			<tr>
+				<td>Họ tên: </td>
+				<td><?php echo $this->UserInfo['member_hoten'];?></td>
+			</tr>
+			<tr>
+				<td>Ngày sinh: </td>
+				<td><?php echo $this->UserInfo['member_ngaysinh'];?></td>
+			</tr>
+		</table>
+		<!-- 
+		<p style="padding: 10px 0 3px;">(Vui lòng kiểm tra trong bulk mail hoặc spam mail của bạn nếu bạn không nhận được email trong hộp thư đến)</p>
+		<p>(Trường hợp bạn không nhận được email kích hoạt vui lòng liên hệ: <span class="do"><?php echo $this->siteConfig['config_company']['hotline'];?></span> để được hỗ trợ.)</p>
+		 -->
+	</div>
+</div>

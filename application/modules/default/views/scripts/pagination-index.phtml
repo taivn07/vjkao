@@ -1,0 +1,28 @@
+<?php
+	$linkStart 		= $this->currentUrl . '/page/' . $this->first;
+	$linkPrevious 	= $this->currentUrl . '/page/' . $this->previous;
+	$linkNext 		= $this->currentUrl . '/page/' . $this->next;
+	$linkEnd 		= $this->currentUrl . '/page/' . $this->last;
+	
+	$current		= $this->current;
+	$pageCount		= $this->pageCount;
+	
+	$strPage = '';
+	foreach ($this->pagesInRange as $key){
+		if( $this->current == $key ){
+			$strPage .= '<span class="active">' . $key . '</span>';
+		}else{
+			$linkPage = $this->currentUrl . '/page/' . $key;
+			$strPage .= '<span class="link"><a href="' . $linkPage . '" title="Page ' . $key . '">' . $key . '</a></span>';
+		}
+	}
+	
+	$page = 'Page ' . $this->current . ' Of ' . $this->last;
+?>
+<div id="paging">
+	<div style="float: right;">
+		<span class="page-text">Trang:</span>
+		<?php echo $strPage;?>
+	</div>
+	<div class="clr"></div>
+</div>
