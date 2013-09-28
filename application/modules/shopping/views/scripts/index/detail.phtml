@@ -219,7 +219,7 @@
 			    <?php
 					if($this->moduleConfig['showComment'] == 1){
 						if($this->moduleConfig['typeComment'] == 'facebook'){
-							echo $this->blkComment('facebook',array('url' => $linkDetial));
+							echo $this->blkComment('facebook',array('url' => $linkDetial, 'width' => 560));
 						}else{
 							echo $this->blkComment('default',array('c_module' => $this->arrParam['module'], 'c_id' => $this->arrParam['id']));
 						}
