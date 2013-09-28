@@ -9,10 +9,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		$optionResources = $this->getOption('resources');
 		$dbOption = $optionResources['db'];
 		//Thiet lap lai thong tin database
-		$dbOption['params']['host'] = 'localhost';
+		$dbOption['params']['host'] = '127.0.0.1';
 		$dbOption['params']['username'] = 'root';
 		$dbOption['params']['password'] = '';
-		$dbOption['params']['dbname'] = 'vjkao_data';
+		$dbOption['params']['dbname'] = 'bb3027_thuoc';
 		$dbOption['params']['charset'] = 'utf8';
 
 		$adapter = $dbOption['adapter'];
@@ -38,7 +38,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		$error = new Zend_Controller_Plugin_ErrorHandler(array('module'=>'default','controller'=>'public','action'=>'error'));
 		
 		//Dang ky thong bao error
-		//$front->registerPlugin($error);
+		$front->registerPlugin($error);
 		return $front;
 	}
 	

@@ -1,0 +1,101 @@
+<div class="module_shop" style="position: relative;">
+	<div class="module_title clearfix">
+		<span class="icon"></span> 
+		<h1 class="title goc5"><?php echo $this->language['productGioHang'];?></h1>
+	</div>
+	<div class="module_content line180">
+	<?php
+	if($this->arrParam['save'] == 'ok'){
+		echo '<div class="note">' . $this->language['sendInfo'] . '</div>';
+	}
+	if(count($this->Items)){
+	?>
+		<form name="your-cart" id="your-cart" action="" method="post">
+			<div class="cartDetail">
+				<table>
+					<tr class="title">
+						<td style="width: 60px;"><?php echo $this->language['productHinhAnh'];?></td>
+						<td><?php echo $this->language['productTenSanPham'];?></td>
+						<td style="width: 60px;"><?php echo $this->language['productSoLuong'];?></td>
+						<td style="width: 80px;"><?php echo $this->language['productGiaBan'] . '('.$this->money['code'].')';?></td>
+						<td style="width: 100px;"><?php echo $this->language['productTongTien'] . '('.$this->money['code'].')';?></td>
+						<td style="width: 50px;">Control</td>
+					</tr>
+					<?php
+					$cart = $this->cart;
+					if(count($this->Items)){
+						$totalPrice = 0;
+						foreach ($this->Items as $key => $val){
+							$id 		= $val['id'];
+							$name 		= $val['name'];
+							$price 		= $val['price'];
+							$selloff 	= $val['selloff'];
+							$units_money = $val['units_money'];
+							$quantity	= $cart[$id];
+							$picture = '<img class="img" src="' . $val['thumb'] . '" alt="'.$val['name'].'" style="width:55px;"/>';
+
+							$total = 0;
+							if($selloff <= 0){
+								$total = $quantity * $val['price'];
+								$totalPrice += $total;
+								$total = Zend_Locale_Format::toNumber($total,array('precision' => 0));
+								$price = '<span>'.Zend_Locale_Format::toNumber($price,array('precision' => 0)).'</span>';
+								$selloff = '';
+							}else{
+								$total = $quantity * ($val['price']) - ($val['price'] * ($val['selloff']/100));
+								$totalPrice += $total;
+								$total = Zend_Locale_Format::toNumber($total,array('precision' => 0));
+								$price = '<span style="text-decoration: line-through; color:#666;">'.Zend_Locale_Format::toNumber($price,array('precision' => 0)).'</span>';
+								$selloff = Zend_Locale_Format::toNumber(($val['price']) - ($val['price'] * ($val['selloff']/100)),array('precision' => 0)) . '';
+							}
+							
+							$urlOptions = array (
+									'module' => 'shopping',
+									'controller' => 'index',
+									'action' => 'detail',
+									'tcat' => $val ['category_alias'],
+									'title' => $val ['alias'],
+									'cid' => $val ['cat_id'],
+									'id' => $val ['id'] );
+							$linkDetial = $this->url( $urlOptions, 'shop-detail' );
+							
+							$itemProduct = 'itemProduct[' . $val['id'] . ']';
+							$itemProduct = $this->formText($itemProduct,$quantity,array('style'=>'width: 35px; text-align: center; font-size: 11px; border: 1px solid #CCC;'));
+							
+					?>
+					<tr>
+						<td align="center"><?php echo $picture;?></td>
+						<td><a href="<?php echo $linkDetial;?>" class="itemLink" target="_blank"><?php echo $name;?></a></td>
+						<td align="center"><?php echo $itemProduct;?></td>
+						<td align="center"><?php echo $price . '<br>' . $selloff;?></td>
+						<td align="center"><?php echo $total;?></td>
+						<td align="center"><a href="<?php echo $this->baseUrl('/shopping/public/view-cart/delete/'.$id);?>">[Xóa]</a></td>
+					</tr>
+					<?php
+						}
+					} 
+					?>
+					<tr>
+						<td colspan="4" align="right"><?php echo $this->language['productTongThanhTien'];?>:</td>
+						<td class="price pdl10" colspan="2"><?php echo Zend_Locale_Format::toNumber($totalPrice,array('precision' => 0)) .' '. $this->money['code'];?></td>
+					</tr>
+					<?php
+						$linkOrder =  $this->baseUrl('/shopping/public/order/');
+						$linkBack =  $this->baseUrl('');
+					?>
+				</table>
+				<div class="cartDetail-button pdt10">
+					<input type="button" name="update" id="update" value="<?php echo $this->language['productMuaHangTiep'];?>" class="button goc7" onclick="window.location = '<?php echo $linkBack;?>'" />
+					<input type="submit" name="update" id="update" value="<?php echo $this->language['productCapNhatGioHang'];?>" class="button goc7" />
+					<input type="button" name="update" id="update" value="<?php echo $this->language['productHoanTatDatHang'];?>" class="button2 goc7" onclick="window.location = '<?php echo $linkOrder;?>'" />
+				</div>
+			</div>
+		</form>
+	<?php
+	}else{
+		echo '<div class="noteCart">' . $this->language['productGioHangRong'] . '</div>';
+	} 
+	?>
+	</div>
+	<div class="module_bottom"></div>
+</div>

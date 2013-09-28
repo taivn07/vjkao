@@ -1,0 +1,92 @@
+<div class="cartInfo" style="position: relative;">
+	<?php
+	if(count($this->Items)){
+	?>
+	<div>
+		<table>
+			<?php
+			$cart = $this->cart;
+			if(count($this->Items)){
+				$totalPrice = 0;
+				$c_tongsp = 0;
+				foreach ($this->Items as $key => $val){
+					$id 			= $val['id'];
+					$name 			= $val['name'];
+					$price 			= $val['price'];
+					$selloff 		= $val['selloff'];
+					$units_money 	= $val['units_money'];
+					$quantity		= $cart[$id];
+					$picture 		= '<img class="img" src="' . $val['thumb'] . '" alt="'.$val['name'].'" style="width:55px;"/>';
+					$c_tongsp 		= $c_tongsp + $quantity;
+
+					$total = 0;
+					if($selloff <= 0){
+						$total = $quantity * $val['price'];
+						$totalPrice += $total;
+						$total = Zend_Locale_Format::toNumber($total,array('precision' => 0));
+						$price = '<span class="price2">'.Zend_Locale_Format::toNumber($val['price'], array('precision' => 0)) . ' ' . $units_money.'<span>';
+						$giaban = $val['price'];
+					}else{
+						$total = $quantity * ($val['price'] - ($val['price'] * ($val['selloff']/100)));
+						$totalPrice += $total;
+						$total = Zend_Locale_Format::toNumber($total,array('precision' => 0));
+						$selloff = ($val['price']) - ($val['price'] * ($val['selloff']/100));
+						$selloff = '<span class="price2">' . Zend_Locale_Format::toNumber($selloff,array('precision' => 0)) . ' ' . $units_money.'</span>';
+						$price = $selloff;
+						$giaban = ($val['price']) - ($val['price'] * ($val['selloff']/100));
+					}
+					
+					$urlOptions = array (
+							'module' => 'shopping',
+							'controller' => 'index',
+							'action' => 'detail',
+							'tcat' => $val ['category_alias'],
+							'title' => $val ['alias'],
+							'cid' => $val ['cat_id'],
+							'id' => $val ['id'] );
+					$linkDetial = $this->url( $urlOptions, 'shop-detail' );
+					
+					$itemProduct = 'itemProduct[' . $val['id'] . ']';
+					$itemProduct = $this->formText($itemProduct,$quantity,array('style'=>'width: 35px; text-align: center; font-size: 11px; border: 1px solid #CCC;'));
+					
+			?>
+			<tr>
+				<td align="center"><?php echo $picture;?></td>
+				<td class="tensp">
+					<a href="javascript:;" onclick="xoaCart(<?php echo $val['id'];?>)" class="xoa" title="Xóa sản phẩm">
+						<img src="<?php echo $this->imgUrl . '/list_remove_btn.gif';?>">
+					</a>
+					<div><a href="<?php echo $linkDetial;?>" class="itemLink" target="_blank"><?php echo $name;?></a></div>
+					<div>
+						<?php echo '<span class="dam">' . $quantity . '</span> x ' . $price;?>
+					</div>
+				</td>
+			<?php
+				}
+			} 
+			?>
+		</table>
+		<?php
+			$linkOrder =  $this->baseUrl('/shopping/public/order');
+			$linkCart 	=  $this->baseUrl('/shopping/public/view-cart');
+			$linkBack =  $this->baseUrl('');
+		?>
+		<div class="cartQty">
+			<div class="sosanpham">
+				Có <b><a href="<?php echo $linkCart;?>"><?php echo $c_tongsp;?> sản phẩm</a></b> trong giỏ
+			</div>
+			<div class="tongtien">
+				Tổng tiền: <b><?php echo Zend_Locale_Format::toNumber($totalPrice,array('precision' => 0)) .' '. $this->money['code'];?></b>
+			</div>
+			<div class="cartDetail-button">
+				<input type="submit" name="update" id="update" value="Xem giỏ hàng" class="button goc10" onclick="window.location = '<?php echo $linkCart;?>'"/>
+				<input type="button" name="update" id="update" value="Đặt hàng" class="button goc10" onclick="window.location = '<?php echo $linkOrder;?>'" />
+			</div>
+		</div>
+	</div>
+	<?php
+	}else{
+		echo '<div class="noteCart">Chưa có sản phẩm nào trong giỏ hàng của bạn!</div>';
+	} 
+	?>
+</div>

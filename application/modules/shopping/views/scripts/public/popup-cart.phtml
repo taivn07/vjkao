@@ -1,0 +1,162 @@
+<?php
+	$cart = $this->cart;
+
+	$urlOptionsDetial = array (
+			'module' => 'shopping',
+			'controller' => 'index',
+			'action' => 'detail',
+			'tcat' => $this->Item['category_alias'],
+			'title' => $this->Item['alias'],
+			'cid' => $this->Item['cat_id'],
+			'id' => $this->Item['id'] );
+	$linkDetial = $this->url( $urlOptionsDetial, 'shop-detail' );
+	
+	$name 			= $this->Item['name'];
+	$code = '';
+	if($this->Item['code'] != ''){
+		$code = '<p class="code">'.$this->language['productMaSanPham'].': ' . $this->Item['code'] . '</p>';
+	}
+	$picture 		= $this->Item['picture'];
+	$units_money 	= $this->Item['units_money'];
+	$price = '';
+	$selloff = '';
+	$giaban = 0;
+	if($this->Item['price'] != 0){
+		if($this->Item['selloff'] == 0){
+			$price = '<p class="price"><span class="price2">'.Zend_Locale_Format::toNumber($this->Item['price'], array('precision' => 0)) . ' ' . $units_money.'<span></p>';
+			$giaban = $this->Item['price'];
+		}else{
+			$selloff = ($this->Item['price']) - ($this->Item['price'] * ($this->Item['selloff']/100));
+			$selloff = '<span class="price2">' . Zend_Locale_Format::toNumber($selloff,array('precision' => 0)) . ' ' . $units_money.'</span>';
+			$price = '<p class="price"><span class="price1">'.Zend_Locale_Format::toNumber($this->Item['price'],array('precision' => 0)) . ' ' . $units_money.'</span>'.$selloff.'</p>';
+			$giaban = ($this->Item['price']) - ($this->Item['price'] * ($this->Item['selloff']/100));
+		}
+	}
+	
+	if(count($this->Items)){
+		$c_totalPrice = 0;
+		$c_tongsp = 0;
+		foreach ($this->Items as $key => $val){
+			$id 			= $val['id'];
+			$c_selloff 		= $val['selloff'];
+			$c_units_money 	= $val['units_money'];
+			$c_quantity		= $cart[$id];
+			$c_tongsp 		= $c_tongsp + $c_quantity;
+	
+			$c_total = 0;
+			if($c_selloff <= 0){
+				$c_total = $c_quantity * $val['price'];
+				$c_totalPrice += $c_total;
+				$c_total = Zend_Locale_Format::toNumber($c_total,array('precision' => 0));
+			}else{
+				$c_total = $c_quantity * ($val['price'] - ($val['price'] * ($val['selloff']/100)));
+				$c_totalPrice += $c_total;
+				$c_total = Zend_Locale_Format::toNumber($c_total,array('precision' => 0));
+			}
+		}
+	}
+?>
+<div class="popup-cart">
+	<h2 class="title">1 sản phẩm đã được thêm vào giỏ hàng.</h2>
+	<div class="fastCartTop">
+		<div class="fastCartThumb">
+			<a href="<?php echo $this->Item['picture']; ?>" title="<?php echo $name;?>">
+				<img alt="<?php echo $name;?>" src="<?php echo $picture;?>">
+			</a>
+		</div>
+		<div class="fastCartItemBox">
+			<div>
+				<a class="tensp" href="<?php echo $linkDetial;?>" title="<?php echo $name;?>"><?php echo $name;?></a>
+			</div>
+			<div>
+				<?php echo $price;?>
+			</div>
+			<div class="quantity">
+				Số lượng: <span><?php echo $cart[$this->Item['id']];?></span>
+			</div>
+		</div>
+		<div style="" class="fastCartSummaryBox">
+			<div class="subtotal">Trị giá đơn hàng: <em class="productPrice"><?php echo Zend_Locale_Format::toNumber($c_totalPrice,array('precision' => 0));?> ₫</em></div>
+			<div>Giỏ hàng của bạn hiện có <span class="fastCartNumItemsTxt" id="total_Cart"><?php echo $c_tongsp;?></span> sản phẩm</div>
+		</div>
+		<div class="cartDetail-button">
+			<?php
+				$linkOrder 	=  $this->baseUrl('/shopping/public/order/');
+				$linkCart 	=  $this->baseUrl('/shopping/public/view-cart/');
+				$linkBack 	=  $this->baseUrl('');
+			?>
+			<input type="button" name="update" id="update" value="Tiếp tục mua hàng" class="button popup_dong goc10" />
+			<input type="submit" name="update" id="update" value="Xem giỏ hàng" class="button goc10" onclick="window.location = '<?php echo $linkCart;?>'"/>
+			<input type="button" name="update" id="update" value="Đặt hàng và thanh toán" class="button goc10" onclick="window.location = '<?php echo $linkOrder;?>'" />
+		</div>
+		<div class="clr"></div>
+	</div>
+	
+	<h3 class="title2">Một số sản phẩm có thể bạn quan tâm</h3>
+	<div class="sanphamkhac">
+		<ul class="products clearfix">
+		<?php
+			foreach ($this->itemKhac as $key => $val){
+				$name = $val['name'];
+				$code = '';
+				if($val['code'] != ''){
+					$code = '<p class="code">'.$this->language['productMaSanPham'].': ' . $val['code'] . '</p>';
+				}
+				$picture = '<img class="img" src="' . $val['picture'] . '" alt="'.$val['name'].'"/>';
+					
+				$synopsis = $val['synopsis'];
+				$units_money = $val['units_money'];
+				$price = '';
+				$price_old = '';
+				$selloff = '';
+				if($val['price'] != 0){
+					if($val['selloff'] > 0){
+						$price = '<p class="price"><span class="value">'.Zend_Locale_Format::toNumber($val['price'] - ($val['selloff']/100*$val['price']),array('precision' => 0)) . ' ' . $units_money.'</span></p>';
+						$selloff = '<p class="p_selloff"><span>-' . $val['selloff'] . '%</span></p>';
+						$price_old = '<p class="price_old"><span class="value">'.Zend_Locale_Format::toNumber($val['price'],array('precision' => 0)) . ' ' . $units_money.'</span></p>';
+					} else {
+						$price = '<p class="price"><span class="value">'.Zend_Locale_Format::toNumber($val['price'],array('precision' => 0)) . ' ' . $units_money.'</span></p>';
+					}
+				}else{
+					$price = '<p class="price"><span class="value">'.$this->language['lienHe'].'</span></p>';
+				}
+				
+				$addCart = '';
+				$linkCart = $this->baseUrl('shopping/public/add-item/id/' . $val['id']);
+				$addCart = '<a href="javascript:;" title="'.$this->language['productDatHang'].' '.$name.'" class="addCart" rel="nofollow" onclick="popupCart('.$val['id'].')">'.$this->language['productDatHang'].'</a>';
+					
+				$urlOptions = array (
+						'module' => 'shopping',
+						'controller' => 'index',
+						'action' => 'detail',
+						'tcat' => $val ['category_alias'],
+						'title' => $val ['alias'],
+						'cid' => $val ['cat_id'],
+						'id' => $val ['id'] );
+				$linkDetial = $this->url( $urlOptions, 'shop-detail' );
+			?>
+				<li class="item" style="width: 20%;">
+					<div class="p_content">
+						<div class="p_images">
+							<a href="<?php echo $linkDetial;?>" title="<?php echo $name;?>">
+								<?php echo $picture;?>
+							</a>
+						</div>
+						<h4 class="p_title"><a href="<?php echo $linkDetial;?>" title="<?php echo $name;?>"><?php echo $name;?></a></h4>
+						<div class="p_price">
+							<?php echo $price_old;?>
+							<?php echo $price;?>
+						</div>
+						<div class="danhgia"><div class="<?php echo 'sao_' . $val['danhgia'];?>"></div></div>
+						<p class="p_detail">
+							<?php echo $addCart;?>
+						</p>
+						<?php echo $selloff;?>
+					</div>
+				</li>
+			<?php
+				} 
+			?>			
+		</ul>
+	</div>
+</div>
